@@ -1,0 +1,3 @@
+string1="The quick brown dog jumps over the lazy dog which is a fish\
+\\fowl as appropriate"
+

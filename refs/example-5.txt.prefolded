@@ -1,0 +1,10 @@
+[NOTE: '\\' line wrapping per BCP XX (RFC XXXX)]
+
+<request>::= <RP> \
+             \<END-POINTS> \
+             \[<LSPA>] \
+             \[<BANDWIDTH>] \
+             \[<metric-list>] \
+             \[<RRO>[<BANDWIDTH>]] \
+             \[<IRO>] \
+             \[<LOAD-BALANCING>]
