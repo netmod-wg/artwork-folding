@@ -49,7 +49,8 @@ fold_it() {
   grep $'\t' $infile >> /dev/null 2>&1
   if [ $? -eq 0 ]; then
     echo
-    echo "Error: infile contains a TAB character, which is not allowed."
+    echo "Error: infile contains a TAB character, which is not"
+    echo "allowed."
     echo
     return 1
   fi
@@ -58,9 +59,10 @@ fold_it() {
   pcregrep -M  "\\\\\n[\ ]*\\\\" $infile >> /dev/null 2>&1
   if [ $? -eq 0 ]; then
     echo
-    echo "Error: infile has a line ending with a '\' character followed"
-    echo "       by '\' as the first non-space character on the next line."
-    echo "       This file cannot be folded."
+    echo "Error: infile has a line ending with a '\' character"
+    echo "       followed by a '\' character as the first non-space"
+    echo "       character on the next line.  This file cannot be"
+    echo "       folded."
     echo
     return 1
   fi
@@ -69,14 +71,16 @@ fold_it() {
   length=`expr ${#hdr_txt} + 2`
   left_sp=`expr \( "$maxcol" - "$length" \) / 2`
   right_sp=`expr "$maxcol" - "$length" - "$left_sp"`
-  header=`printf "%.*s %s %.*s" "$left_sp" "$equal_chars" "$hdr_txt" "$right_sp" "$equal_chars"`
+  header=`printf "%.*s %s %.*s" "$left_sp" "$equal_chars"\
+                   "$hdr_txt" "$right_sp" "$equal_chars"`
 
   # fold using recursive passes ('g' didn't work)
   if [ -z "$1" ]; then
     # init recursive env
     cp $infile /tmp/wip
   fi
-  gsed "/.\{$testcol\}/s/\(.\{$foldcol\}\)/\1\\\\\n\\\\/" < /tmp/wip >> /tmp/wip2
+  gsed "/.\{$testcol\}/s/\(.\{$foldcol\}\)/\1\\\\\n\\\\/" < /tmp/wip\
+        >> /tmp/wip2
   diff /tmp/wip /tmp/wip2 > /dev/null 2>&1
   if [ $? -eq 1 ]; then
     mv /tmp/wip2 /tmp/wip
@@ -88,14 +92,15 @@ fold_it() {
     rm /tmp/wip*
   fi
 
-  ## following two lines represent a non-functional variant to the recursive
-  ## logic presented in the block above.  It used to work before the '\'
-  ## on the next line was added to the format (i.e., the trailing '\\\\'
-  ## in the substitution below), but now there is an off-by-one error. 
-  ## Leaving here in case anyone can fix it.
+  ## following two lines represent a non-functional variant to the
+  ## recursive logic presented in the block above.  It used to work
+  ## before the '\' on the next line was added to the format (i.e.,
+  ## the trailing '\\\\' in the substitution below), but now there
+  ## is an off-by-one error. Leaving here in case anyone can fix it.
   #echo "$header" > $outfile
   #echo "" >> $outfile
-  #gsed "/.\{$testcol\}/s/\(.\{$foldcol\}\)/\1\\\\\n\\\\/g" < $infile >> $outfile
+  #gsed "/.\{$testcol\}/s/\(.\{$foldcol\}\)/\1\\\\\n\\\\/g"\
+          < $infile >> $outfile
 
   return 0
 }
@@ -112,11 +117,13 @@ unfold_it() {
     return -1
   fi
 
-  # output all but the first two lines (the header) to wip (work in progress) file
+  # output all but the first two lines (the header) to wip (work
+  # in progress) file
   awk "NR>2" $infile > /tmp/wip
 
   # unfold wip file
-  gsed ":x; /.*\\\\\$/N; s/\\\\\n[ ]*\\\\//; tx; s/\t//g" /tmp/wip > $outfile
+  gsed ":x; /.*\\\\\$/N; s/\\\\\n[ ]*\\\\//; tx; s/\t//g" /tmp/wip\
+         > $outfile
 
   # clean up and return
   rm /tmp/wip
@@ -175,15 +182,18 @@ process_input() {
   min_supported=`expr ${#hdr_txt} + 8`
   if [ $maxcol -lt $min_supported ]; then
     echo
-    echo "Error: the folding column cannot be less than $min_supported"
+    echo "Error: the folding column cannot be less than"
+    echo "$min_supported"
     echo
     exit 1
   fi
 
-  max_supported=`expr ${#equal_chars} + 1 + ${#hdr_txt} + 1 + ${#equal_chars}`
+  max_supported=`expr ${#equal_chars} + 1 + ${#hdr_txt} + 1\
+       + ${#equal_chars}`
   if [ $maxcol -gt $max_supported ]; then
     echo
-    echo "Error: the folding column cannot be more than $max_supported"
+    echo "Error: the folding column cannot be more than"
+    echo "$max_supported"
     echo
     exit 1
   fi

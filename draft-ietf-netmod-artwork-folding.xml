@@ -18,14 +18,14 @@
      ipr="trust200902"
      docName="draft-ietf-netmod-artwork-folding-latest">
     <front>
-        <title abbrev="Handling Long Lines in Artwork">Handling Long Lines in Artwork in Internet-Drafts and RFCs</title>
-        <author initials="K.W." surname="Watsen" fullname="Kent Watsen">
-            <organization>Juniper Networks</organization>
+      <title abbrev="Handling Long Lines in Inclusions">Handling Long Lines in Inclusions in Internet-Drafts and RFCs</title>
+        <author initials="K." surname="Watsen" fullname="Kent Watsen">
+            <organization>Watsen Networks</organization>
             <address>
-                <email>kwatsen@juniper.net</email>
+                <email>kent+ietf@watsen.net</email>
             </address>
         </author>
-        <author initials="Q.W." surname="Wu" fullname="Qin Wu">
+        <author initials="Q." surname="Wu" fullname="Qin Wu">
             <organization>Huawei Technologies</organization>
             <address>
                 <email>bill.wu@huawei.com</email>
@@ -41,66 +41,77 @@
            <organization abbrev="Cisco Systems, Inc.">Cisco Systems,
            Inc.</organization>
            <address>
-<!--
-             <postal>
-                 <street>De Kleetlaan 6a b1</street>
-                 <city>1831 Diegem</city>
-                 <country>Belgium</country>
-             </postal>
-             <phone>+32 2 704 5622</phone>
--->
              <email>bclaise@cisco.com</email>
            </address>
-        </author>  
+        </author>
 
         <date/>
         <area>Operations</area>
         <workgroup>NETMOD Working Group</workgroup>
-        <keyword>artwork</keyword>
         <keyword>sourcecode</keyword>
+        <keyword>artwork</keyword>
         <abstract>
           <t>This document introduces a simple and yet time-proven strategy for
-          handling long lines in artwork in drafts using a backslash ('\')
+          handling long lines in inclusions in drafts using a backslash ('\')
           character where line-folding has occurred.  The strategy works on any
-          text based artwork, but is primarily intended for sample text and
-          formatted examples and code, rather than for graphical artwork.  The
-          approach produces consistent results regardless of the content and
-          uses a per-artwork header.  The strategy is both self-documenting and
-          enables automated reconstitution of the original artwork.</t>
+          text-based content, but is primarily intended for a structured
+          sequence of lines, such as would be referenced by the &lt;sourcecode&gt;
+          element defined in Section 2.48 of RFC 7991, rather than for two-dimensional
+          imagery, such as would be referenced by the &lt;artwork&gt; element
+          defined in Section 2.5 of RFC 7991.  The approach produces consistent
+          results, regardless of the content, that is both self-documenting and
+          enables automated reconstitution of the original content.</t>
         </abstract>
     </front>
 
     <middle>
       <section title="Introduction">
-        <t><xref target="RFC7994"/>sets out the requirements for 
-        plain-text RFCs and states that each line of an RFC (and hence of 
-        an Internet-Draft) must be limited to 72 characters followed by 
+        <t><xref target="RFC7994"/> sets out the requirements for
+        plain-text RFCs and states that each line of an RFC (and hence of
+        an Internet-Draft) must be limited to 72 characters followed by
         the character sequence that denotes an end-of-line (EOL).</t>
-           
+
         <t>Internet-Drafts and RFCs often include example text or code
         fragments.  In order to render the formatting of such text it is
-        usually presented as a figure using the "&lt;artwork&gt;" element in the
-        source XML.  Many times the example text or code exceeds the 72
-        character line-length limit and the "xml2rfc" utility does not
-        attempt to wrap the content of artwork, simply issuing a warning
-        whenever artwork lines exceed 69 characters.  According to the RFC
-        Editor, there is currently no convention in place for how to handle
-        long lines, other than advising authors to clearly indicate what
-        manipulation has occurred.</t>
+        usually presented as a figure using the "&lt;sourcecode&gt;"
+        element in the source XML.  Many times the example text or code
+        exceeds the 72 character line-length limit and the `xml2rfc`
+        utility does not attempt to wrap the content of such inclusions,
+        simply issuing a warning whenever lines exceed 69 characters.
+        According to the RFC Editor, there is currently no convention
+        in place for how to handle long lines, other than advising
+        authors to clearly indicate what manipulation has occurred.</t>
 
         <t>This document introduces a simple and yet time-proven strategy for
-        handling long lines using a backslash ('\') character where line-
-        folding has occurred.  The strategy works on any text based artwork,
-        but is primarily intended for sample text and formatted examples and
-        code, rather than for graphical artwork.  The approach produces
-        consistent results regardless of the content and uses a per-artwork
-        header.  The strategy is both self-documenting and enables automated
-        reconstitution of the original artwork.</t>
-             
+        handling long lines in inclusions in drafts using a backslash ('\')
+        character where line-folding has occurred.  The strategy works on any
+        text based inclusion, but is primarily intended for a structured
+        sequence of lines, such as would be referenced by the &lt;sourcecode&gt;
+        element defined in Section 2.48 of <xref target="RFC7991"/>, rather
+        than for two-dimensional imagery, such as would be referenced by the
+        &lt;artwork&gt; element defined in Section 2.5 of <xref target="RFC7991"/>.
+        The approach produces consistent results, regardless of the content,
+        that is both self-documenting and enables automated reconstitution
+        of the original content.</t>
+
         <t>Note that text files are represent as lines having their first
         character in column 1, and a line length of N where the last
         character is in the Nth column and is immediately followed by an end
         of line character sequence.</t>
+      </section>
+
+      <section title="Applicability Statement">
+        <t>The format and algorithm defined in this document may be used
+          in any context, whether for IETF documents or in other situations
+          where structured folding is desired.</t>
+        <t>Within the IETF, this work is primarily targeted to xml2rfc v3
+          &lt;sourcecode&gt; element (Section 2.48 of <xref target="RFC7991"/>)
+          and xml2rfc v2 &lt;artwork&gt; element (Section 2.5 of
+          <xref target="RFC7749"/>) that, for lack of a better option, is
+          currently used for both source code and artwork.  This work may
+          be also be used for the xml2rfc v3 &lt;artwork&gt; element
+          (Section 2.5 of <xref target="RFC7991"/>) but, as described in
+          <xref target="not-for-art"/>, it is generally not recommended.</t>
       </section>
 
       <section title="Requirements Language" anchor="requirements-language">
@@ -112,7 +123,7 @@
       </section>
 
       <section title="Goals">
-        <section title="Automated Folding of Long Lines in Artwork">
+        <section title="Automated Folding of Long Lines in Text Content">
           <t>Automated folding of long lines is needed in order to support
           draft compilations that entail a) validation of source input
           files (e.g., XML, JSON, ABNF, ASN.1) and/or b) dynamic
@@ -131,37 +142,37 @@
           again SHOULD be automated to reduce effort and errors
           resulting from manual effort.</t>
         </section>
-        <section title="Automated Reconstitution of Original Artwork">
-          <t>Automated reconstitution of the original artwork is needed to
-          support validation of artwork extracted from documents.  YANG 
+        <section title="Automated Reconstitution of the Original Text Content">
+          <t>Automated reconstitution of the original content is needed to
+          support validation of artwork extracted from documents.  YANG
           <xref target="RFC7950"/> modules are already extracted from
           Internet-Drafts and validated as part of the draft-submission
           process.  Additionally, there has been some discussion regarding
-          needing to do the same for example YANG fragments contained
-          within Internet-Drafts (<xref target="yang-doctors-thread"/>).
-          Thus, it SHOULD be possible to mechanically reconstitute artwork
-          in order to satisfy the tooling input parsers.</t>
+          needing to do the same for instance examples (i.e., XML/JSON
+          documents) contained within Internet-Drafts (<xref target="yang-doctors-thread"/>).
+          Thus, it SHOULD be possible to mechanically reconstitute the
+          original text content in order to satisfy tooling input parsers.</t>
         </section>
       </section>
 
       <section title="Limitations">
-        <section title="Not Recommended for Graphical Artwork">
+        <section title="Not Recommended for Graphical Artwork" anchor="not-for-art">
           <t>While the solution presented in this document will work on any
-          kind of text-based artwork, it is most useful on artwork that
+          kind of text-based content, it is most useful on content that
           represents sourcecode (XML, JSON, etc.) or, more generally, on
-          artwork that has not been laid out in two dimensions (e.g., diagrams).</t>
-          <t>Fundamentally, the issue is whether the artwork remains readable
-          once folded.  Artwork that is unpredictable is especially susceptible
+          content that has not been laid out in two dimensions (e.g., diagrams).</t>
+          <t>Fundamentally, the issue is whether the text content remains readable
+          once folded.  Text content that is unpredictable is especially susceptible
           to looking bad when folded; falling into this category are most
-          UML diagrams.</t>
+          UML diagrams, YANG tree diagrams, and ASCII art in general.</t>
           <t>It is NOT RECOMMENDED to use the solution presented in
           this document on graphical artwork.</t>
         </section>
         <section title="Doesn't Work as Well as Format-Specific Options">
-          <t>The solution presented in this document works generically 
-          for all artwork, as it only views artwork as plain text.
-          However, various formats sometimes have built-in mechanisms
-          that can be used to prevent long lines.</t>
+          <t>The solution presented in this document works generically
+          for all text-based content, as it only views content as plain
+          text.  However, various formats sometimes have built-in mechanisms
+          that are better suited to prevent long lines.</t>
           <t>For instance, both the `pyang` and `yanglint` utilities
           have the command line option "--tree-line-length" that can
           be used to indicate a desired maximum line length for when
@@ -172,17 +183,17 @@
           character (e.g., '+'), any of which can be on a different
           line.</t>
           <t>In yet another example, some languages allow factoring
-          chunks of code into call outs, such as functions.  Using
+          blocks of code into call outs, such as functions.  Using
           such call outs is especially helpful when in some deeply-nested
           code, as they typically reset the indentation back to the first
           column.</t>
-          <t>As such, it is RECOMMENDED that authors do as much as
-          possible within the selected format to avoid long lines.</t>
+          <t>It is RECOMMENDED that authors do as much as possible
+          within the selected format to avoid long lines.</t>
         </section>
       </section>
 
       <section title="Folded Structure" anchor="folded-structure">
-        <t>Artwork that has been folded as specified by this document
+        <t>Text content that has been folded as specified by this document
          MUST contain the following structure.</t>
         <section title="Header" anchor="header">
           <t>The header is two lines long.</t>
@@ -214,26 +225,35 @@ NOTE: '\\' line wrapping per BCP XX (RFC XXXX)
       </section>
 
       <section title="Algorithm" anchor="algorithm">
+        <t>This section describes the processes for folding and unfolding long
+          lines when they are encountered in a single instance of text content.
+          It is assumed that another process inserts/extracts the individual
+          text content instances to/from an Internet-Draft or RFC.  For example,
+          the `xiax` utility <xref target="xiax"/> does just this.</t>
         <section title="Automated Folding">
-          <t>Determine the desired maximum line length from input.  If no
-          value is explicitly specified, the value "69" SHOULD be used.</t>
+          <t>Determine the desired maximum line length from input to the
+          automated line-wrapping process, such as from a command line
+          parameter.  If no value is explicitly specified, the value "69"
+          SHOULD be used.</t>
           <t>Ensure that the desired maximum line length is not less than
           the minimum header, which is 46 characters.  If the desired
-          maximum line length is less than this minimum, exit (this artwork
-          can not be folded).</t>
-          <t>Scan the artwork to see if any line exceeds the desired maximum.
-          If no line exceeds the desired maximum, exit (this artwork does not
-          need to be folded).</t>
-          <t>Scan the artwork for horizontal tab characters.  If any
+          maximum line length is less than this minimum, exit (this text-based
+          content cannot be folded).</t>
+          <t>Scan the text content for horizontal tab characters.  If any
           horizontal tab characters appear, either resolve them to space
           characters or exit, forcing the input provider to convert them
           to space characters themselves first.</t>
-          <t>Scan the artwork to ensure no existing lines already end with a 
-          backslash ('\') character when the subsequent line starts with a 
+          <t>Scan the text content to see if any line exceeds the desired maximum.
+          If no line exceeds the desired maximum, exit (this text content does not
+          need to be folded).</t>
+          <t>Scan the text content to ensure no existing lines already end with a
+          backslash ('\') character when the subsequent line starts with a
           backslash ('\') character as the first non-space (' ') character,
-          as this would lead to an ambiguous result.
-          If such a line is found, exit (this artwork cannot be folded).</t>
-          <t>For each line in the artwork, from top-to-bottom, if the line exceeds
+          as this would lead to an ambiguous result.  If such a line is found,
+          exit (this text content cannot be folded).</t>
+          <t>If this text content needs to and can be folded, insert the header as
+          described in <xref target="header" />.</t>
+          <t>For each line in the text content, from top-to-bottom, if the line exceeds
           the desired maximum, then fold the line at the desired maximum column
           by 1) inserting the character backslash ('\') character at the maximum
           column, 2) inserting the end of line character sequence, inserting any
@@ -243,64 +263,59 @@ NOTE: '\\' line wrapping per BCP XX (RFC XXXX)
           with an arbitrary number of space (' ') characters, followed by a
           backslash ('\') character, immediately followed by the character that
           was previously in the maximum column.</t>
-          <t>Continue in this manner until reaching the end of the artwork.  Note
+          <t>Continue in this manner until reaching the end of the text content.  Note
           that this algorithm naturally addresses the case where the remainder
           of a folded line is still longer than the desired maximum, and hence
           needs to be folded again, ad infinitum.</t>
+          <t>The process described in this section is illustrated by the "fold_it()"
+          function in <xref target="script" />.</t>
           <section title="Manual Folding">
             <t>Authors may choose to fold text examples and source code by
-            hand to produce a document that is more pleasant for a human reader
+            hand to produce a text content that is more pleasant for a human reader
             but which can still be automatically unfolded (as described in
             <xref target="unfold-alg"/>) to produce single lines that are
             longer than the maximum document line length.</t>
             <t>For example, an author may choose to make the fold at convenient
             gaps between words such that the backslash is placed in a lower
-            column number than the artwork's maximum column value.</t>
+            column number than the text content's maximum column value.</t>
             <t>Additionally, an author may choose to indent the start of a
             continuation line by inserting space characters before the line
             continuation marker backslash character.</t>
             <t>Manual folding may also help handle the cases that cannot be
-            automatically folded as described in Section 6.</t>
-        </section>
+            automatically folded as described in <xref target="algorithm" />.</t>
+            <t>Authors MUST produce a result that adheres to the structure
+            described in <xref target="folded-structure"/>.</t>
+          </section>
         </section>
         <section title="Automated Unfolding" anchor="unfold-alg">
           <t>All unfolding is assumed to be automated although a reader will
           mentally perform the act of unfolding the text to understand the true
-          nature of the artwork or source code.</t>
-          <t>Scan the beginning of the artwork for the header described in
+          nature of the original text content.</t>
+          <t>Scan the beginning of the text content for the header described in
           <xref target="header"/>.  If the header is not present, starting
-          on the first line of the artwork, exit (this artwork does not
+          on the first line of the text content, exit (this artwork does not
           need to be unfolded).</t>
-          <t>Remove the 2-line header from the artwork.</t>
-          <t>For each line in the artwork, from top-to-bottom, if the line has
+          <t>Remove the 2-line header from the text content.</t>
+          <t>For each line in the text content, from top-to-bottom, if the line has
           a backslash ('\') character immediately followed by the end of line
           character sequence, and if the next line has a backslash ('\') character
           as the first non-space (' ') character, then the lines can be unfolded.
           Remove the first backslash ('\') character, the end of line character
           sequence, any leading space (' ') characters, and the second backslash
           ('\') character, which will bring up the next line.  Then continue to
-          scan each line in the artwork starting with the current line (in case
+          scan each line in the text content starting with the current line (in case
           it was multiply folded).</t>
-          <t>Continue in this manner until reaching the end of the artwork.</t>
+          <t>Continue in this manner until reaching the end of the text content.</t>
+          <t>The process described in this section is illustrated by the "unfold_it()"
+          function in <xref target="script" />.</t>
         </section>
       </section>
-           
-      <section title="Considerations for xml2rfc v3">
-        <t><xref target="RFC7991"/> introduces the vocabulary for version 3 of
-        the xml2rfc tool. This includes a new element, "&lt;sourcecode&gt;"
-        used to present sourcecode examples and fragments and to distinguish
-        them from general artwork and in particular figures and graphics.</t>
 
-        <t>The folding and unfolding described in this document is applicable to
-        the "&lt;artwork&gt;" element in both v2 and v3 of xml2rfc, and is
-        equally applicable to the "&lt;sourcecode&gt;" element in xml2rfc v3.</t>
-      </section>
-      
       <section anchor="example" title="Examples">
-        <t>The following self-documenting examples illustrate a folded
-        document.</t>
+        <t>The following self-documenting examples illustrate folded
+        text-based content.</t>
 
-        <t>The source artwork cannot be presented here, as it would again need
+        <t>The source text content cannot be presented here, as it would again need
         to be folded. Alas, only the result can be provided.</t>
 
         <t>The examples in Sections 8.1 through 8.4 were automatically folded
@@ -379,7 +394,7 @@ INSERT_TEXT_FROM_FILE(refs/example-5.txt.prefolded.unfolded)
         </figure>
       </section>
     </section>
-                 
+
       <section title="Security Considerations" anchor="sec-cons">
         <t>This BCP has no Security Considerations.</t>
       </section>
@@ -399,6 +414,7 @@ INSERT_TEXT_FROM_FILE(refs/example-5.txt.prefolded.unfolded)
 
       <references title="Informative References">
         <?rfc include="reference.RFC.7950.xml"?>
+        <?rfc include="reference.RFC.7749.xml"?>
         <?rfc include="reference.RFC.7991.xml"?>
         <?rfc include="reference.RFC.7994.xml"?>
         <?rfc include="reference.RFC.8340.xml"?>
@@ -409,14 +425,17 @@ INSERT_TEXT_FROM_FILE(refs/example-5.txt.prefolded.unfolded)
             <date/>
           </front>
         </reference>
-
+        <reference anchor="xiax" target="https://pypi.org/project/xiax/">
+          <front><title>The `xiax` Python Package</title><author/><date/></front>
+        </reference>
       </references>
 
 
       <!-- APPENDICIES -->
-      <section title="POSIX Shell Script" anchor="foobar">
+      <section title="POSIX Shell Script" anchor="script">
         <t>This non-normative appendix section includes a shell script
-        that can both fold and unfold artwork.</t>
+          that can both fold and unfold text content.  Note that this
+          script is applied only to single text content instances.</t>
         <t>
           <figure>
             <artwork><![CDATA[
@@ -433,7 +452,7 @@ INSERT_TEXT_FROM_FILE(fold-artwork.sh)
         Lou Berger, Martin Bjorklund, Italo Busi, and Rob Wilton.</t>
         <t>The authors additionally thank the RFC Editor for confirming
         that there is no set convention today for handling long lines in
-        artwork. </t>
+        artwork/sourcecode inclusions. </t>
       </section>
     </back>
 
