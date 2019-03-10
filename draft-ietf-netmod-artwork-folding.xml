@@ -159,7 +159,7 @@
         <section title="Not Recommended for Graphical Artwork" anchor="not-for-art">
           <t>While the solution presented in this document will work on any
           kind of text-based content, it is most useful on content that
-          represents sourcecode (XML, JSON, etc.) or, more generally, on
+          represents source code (XML, JSON, etc.) or, more generally, on
           content that has not been laid out in two dimensions (e.g., diagrams).</t>
           <t>Fundamentally, the issue is whether the text content remains readable
           once folded.  Text content that is unpredictable is especially susceptible
