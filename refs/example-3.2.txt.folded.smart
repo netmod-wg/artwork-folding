@@ -1,4 +1,4 @@
-===== NOTE: '\\' line wrapping per BCP XX (RFC XXXX) =====
+[NOTE: '\\' line wrapping per BCP XX (RFC XXXX)]
 
 <yang-library
     xmlns="urn:ietf:params:xml:ns:yang:ietf-yang-library"

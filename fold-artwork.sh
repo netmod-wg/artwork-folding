@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash --posix   # must be `bash` (not `sh`)
 
 print_usage() {
   echo
@@ -20,7 +20,6 @@ print_usage() {
   echo
 }
 
-
 # global vars, do not edit
 strategy=0 # auto
 debug=0
@@ -32,8 +31,6 @@ hdr_txt_1="NOTE: '\\' line wrapping per BCP XX (RFC XXXX)"
 hdr_txt_2="NOTE: '\\\\' line wrapping per BCP XX (RFC XXXX)"
 equal_chars="=============================================="
 space_chars="                                              "
-
-
 
 fold_it_1() {
   # ensure input file doesn't contain the fold-sequence already
@@ -76,8 +73,6 @@ fold_it_1() {
   return 0
 }
 
-
-
 fold_it_2() {
   # ensure input file doesn't contain the fold-sequence already
   pcregrep -M  "\\\\\n[\ ]*\\\\" $infile >> /dev/null 2>&1
@@ -119,8 +114,6 @@ fold_it_2() {
   return 0
 }
 
-
-
 fold_it() {
   # ensure input file doesn't contain a TAB
   grep $'\t' $infile >> /dev/null 2>&1
@@ -159,9 +152,6 @@ fold_it() {
   return 0
 }
 
-
-
-
 unfold_it_1() {
   # output all but the first two lines (the header) to wip file
   awk "NR>2" $infile > /tmp/wip
@@ -174,7 +164,6 @@ unfold_it_1() {
   return 0
 }
 
-
 unfold_it_2() {
   # output all but the first two lines (the header) to wip file
   awk "NR>2" $infile > /tmp/wip
@@ -186,7 +175,6 @@ unfold_it_2() {
   rm /tmp/wip
   return 0
 }
-
 
 unfold_it() {
   # check if file needs unfolding
@@ -207,9 +195,6 @@ unfold_it() {
   cp $infile $outfile
   return -1
 }
-
-
-
 
 process_input() {
   while [ "$1" != "" ]; do
@@ -287,7 +272,6 @@ process_input() {
     exit 1
   fi
 }
-
 
 main() {
   if [ "$#" == "0" ]; then

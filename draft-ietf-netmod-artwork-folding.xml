@@ -37,14 +37,6 @@
                 <email>bill.wu@huawei.com</email>
             </address>
         </author>
-        <author initials="B." surname="Claise" fullname="Benoît Claise" >
-           <organization abbrev="Cisco Systems, Inc.">Cisco Systems,
-           Inc.</organization>
-           <address>
-             <email>bclaise@cisco.com</email>
-           </address>
-        </author>
-
         <date/>
         <area>Operations</area>
         <workgroup>NETMOD Working Group</workgroup>
@@ -195,9 +187,9 @@
               ('\') character at the end of the line where folding occurs, and
               assumes that the continuation begins at the first non-whitespace
               character on the following line.</t>
-            <t hangText="   The Double Backslash Strategy ('\'):">Uses a backslash
+            <t hangText="   The Double Backslash Strategy ('\\'):">Uses a backslash
               ('\') character at the end of the line where folding occurs, and
-              assumes that the continuation after a second backslash ('\')
+              assumes that the continuation begins after a second backslash ('\')
               character on the following line.</t>
           </list>
         </t>
@@ -205,10 +197,10 @@
           <t>The first strategy produces more readable output, however it is
             significantly more likely to encounter unfoldable input (e.g.,
             there is exists a line anywhere in the input ending with a backslash
-            character, or there exists a long line containing only space and
-            backslash characters) and, for long lines that can be folded,
-            automation implementations are likely to encounter scenarios that
-            will produce errors without special care.</t>
+            character, or there exists a long line containing only space
+            characters) and, for long lines that can be folded, automation
+            implementations are likely to encounter scenarios that will
+            produce errors without special care.</t>
           <t>The second strategy produces less readable output, but is
             unlikely to encounter unfoldable input, there are no long lines
             that cannot be folded, and no special care is required for when
@@ -451,17 +443,14 @@ NOTE: '\\' line wrapping per BCP XX (RFC XXXX)
         <t>The following self-documenting examples illustrate folded
         text-based content.</t>
 
-        <t>The source text content cannot be presented here, as it would again need
-        to be folded. Alas, only the result can be provided.</t>
-
-        <t>The examples in Sections 8.1 through 8.4 were automatically folded
-        on column 69, the default value.  Section 8.5 shows an example of
-        manual folding.</t>
+        <t>The source text content cannot be presented here, as it would
+        again be folded. Alas, only the results can be provided.</t>
 
         <section title="Example Showing Boundary Conditions">
-          <t>This example illustrates a boundary condition test using
-          numbers for counting purposes.  The input contains 5 lines,
-          each line one character longer than the previous.</t>
+          <t>This example illustrates boundary condition.  The input contains
+            seven lines, each line one character longer than the previous line.
+            Numbers for counting purposes.  The default desired maximum column
+            value "69" is used.</t>
           <section title="Using '\'">
             <figure>
               <artwork><![CDATA[
@@ -479,7 +468,10 @@ INSERT_TEXT_FROM_FILE(refs/example-1.2.txt.folded)
         </section>
 
         <section title="Example Showing Multiple Wraps of a Single Line">
-          <t>This example illustrates one very long line (280 characters).</t>
+          <t>This example illustrates what happens when very long line needs to
+            be folded multiple times.  The input contains one line containing
+            280 characters.  Numbers for counting purposes.  The default
+            desired maximum column value "69" is used.</t>
           <section title="Using '\'">
             <figure>
               <artwork><![CDATA[
@@ -496,14 +488,14 @@ INSERT_TEXT_FROM_FILE(refs/example-2.2.txt.folded)
           </section>
         </section>
 
-        <section title="Example Smart Folding">
-          <t>This example illustrates how readability can be improved via smart folding,
-            whereby folding occurs at format-specific locations and format-specific
-            indentations are used.</t>
+        <section title="Example Showing Smart Folding">
+          <t>This example illustrates how readability can be improved via "smart"
+            folding, whereby folding occurs at format-specific locations and
+            format-specific indentations are used.</t>
           <t>The text content was manually folded, since the script in the appendix
-            does not implement format-specific folding.</t>
-          <t>Also note that the header is surrounded by different printable
-            characters then shown in the other examples.</t>
+            does not implement smart folding.</t>
+          <t>Note that the header is surrounded by different printable characters
+            then shown in the script-generated examples.</t>
           <section title="Using '\'">
             <figure>
               <artwork><![CDATA[
@@ -588,8 +580,8 @@ INSERT_TEXT_FROM_FILE(fold-artwork.sh)
       <section title="Acknowledgements" numbered="no">
         <t>The authors thank the following folks for their various
         contributions (sorted by first name):
-        Gianmarco Bruno, Italo Busi, Jonathan Hansford, Joel Jaeggli,
-        Lou Berger, Martin Bjorklund, Italo Busi, and Rob Wilton.</t>
+        Benoît Claise, Gianmarco Bruno, Italo Busi, Joel Jaeggli,
+        Jonathan Hansford, Lou Berger, Martin Bjorklund, and Rob Wilton.</t>
         <t>The authors additionally thank the RFC Editor for confirming
         that there is no set convention today for handling long lines in
         artwork/sourcecode inclusions. </t>
