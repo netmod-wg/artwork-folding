@@ -1,0 +1,13 @@
+# This block is okay
+123456789012345678901234567890123456789012345678901234567890123456789012
+1234567890123456789012345678901234567890123456789012345678901234567890123
+
+# This block is NOT okay
+12345678901234567890123456789012345678901234567890123456789012345678901\
+1234567890123456789012345678901234567890123456789012345678901234567890123
+
+# The reason is because, because the backslash is not occurring *AFTER*
+# a fold column.  Since the `gsed` logic is activated (due to unfolding
+# first line), it brings up the next line, but because it doesn't begin
+# "[ ]*\\", it exits, WITHOUT realizing that the end of the second line
+# was also folded...

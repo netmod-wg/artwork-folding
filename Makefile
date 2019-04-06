@@ -53,7 +53,7 @@ $(next).xml: $(draft).xml
 	cd refs; ./validate-all.sh; cd ..;
 	cd refs; ./gen-folded.sh; cd ..;
 	./.insert-figures.sh $@ > tmp; mv tmp $@
-	rm refs/example-[1-4].txt.folded refs/example-[5].txt.prefolded.unfolded # removes gen-folded.sh cruft
+	rm refs/*.folded refs/*.unfolded # removes gen-folded.sh cruft
 
 .INTERMEDIATE: $(draft).xml
 %.xml: %.md

@@ -25,19 +25,19 @@
                 <email>kent+ietf@watsen.net</email>
             </address>
         </author>
+        <author initials="A." surname="Farrel" fullname="Adrian Farrel" >
+            <organization>Old Dog Consulting</organization>
+            <address>
+                <email>adrian@olddog.co.uk</email>
+            </address>
+        </author>
         <author initials="Q." surname="Wu" fullname="Qin Wu">
             <organization>Huawei Technologies</organization>
             <address>
                 <email>bill.wu@huawei.com</email>
             </address>
         </author>
-        <author initials="A." surname="Farrel" fullname="Adrian Farrel" >
-            <organization>Old Dog Consulting</organization>
-            <address>
-                <email>adrian@olddog.co.uk</email>
-            </address>
-       </author>
-       <author initials="B." surname="Claise" fullname="Benoît Claise" >
+        <author initials="B." surname="Claise" fullname="Benoît Claise" >
            <organization abbrev="Cisco Systems, Inc.">Cisco Systems,
            Inc.</organization>
            <address>
@@ -51,14 +51,11 @@
         <keyword>sourcecode</keyword>
         <keyword>artwork</keyword>
         <abstract>
-          <t>This document introduces a simple and yet time-proven strategy for
-          handling long lines in inclusions in drafts using a backslash ('\')
-          character where line-folding has occurred.  The strategy works on any
+          <t>This document defines a simple and yet time-proven strategy for
+          handling long lines in inclusions in internet drafts and RFCs using a backslash ('\')
+          character to indicate where line-folding has occurred.  The strategy works on any
           text-based content, but is primarily intended for a structured
-          sequence of lines, such as would be referenced by the &lt;sourcecode&gt;
-          element defined in Section 2.48 of RFC 7991, rather than for two-dimensional
-          imagery, such as would be referenced by the &lt;artwork&gt; element
-          defined in Section 2.5 of RFC 7991.  The approach produces consistent
+          sequence of lines rather than for two-dimensional imagery.  The approach produces consistent
           results, regardless of the content, that is both self-documenting and
           enables automated reconstitution of the original content.</t>
         </abstract>
@@ -72,19 +69,17 @@
         the character sequence that denotes an end-of-line (EOL).</t>
 
         <t>Internet-Drafts and RFCs often include example text or code
-        fragments.  In order to render the formatting of such text it is
-        usually presented as a figure using the "&lt;sourcecode&gt;"
-        element in the source XML.  Many times the example text or code
-        exceeds the 72 character line-length limit and the `xml2rfc`
+        fragments.  Many times the example text or code
+        exceeds the 72 character line-length limit.  The `xml2rfc`
         utility does not attempt to wrap the content of such inclusions,
         simply issuing a warning whenever lines exceed 69 characters.
         According to the RFC Editor, there is currently no convention
-        in place for how to handle long lines, other than advising
+        in place for how to handle long lines in such inclusions, other than advising
         authors to clearly indicate what manipulation has occurred.</t>
 
         <t>This document introduces a simple and yet time-proven strategy for
-        handling long lines in inclusions in drafts using a backslash ('\')
-        character where line-folding has occurred.  The strategy works on any
+        handling long lines using a backslash ('\')
+        character to indicate where line-folding has occurred.  The strategy works on any
         text based inclusion, but is primarily intended for a structured
         sequence of lines, such as would be referenced by the &lt;sourcecode&gt;
         element defined in Section 2.48 of <xref target="RFC7991"/>, rather
@@ -94,7 +89,7 @@
         that is both self-documenting and enables automated reconstitution
         of the original content.</t>
 
-        <t>Note that text files are represent as lines having their first
+        <t>Note that text files are represented as lines having their first
         character in column 1, and a line length of N where the last
         character is in the Nth column and is immediately followed by an end
         of line character sequence.</t>
@@ -104,9 +99,9 @@
         <t>The format and algorithm defined in this document may be used
           in any context, whether for IETF documents or in other situations
           where structured folding is desired.</t>
-        <t>Within the IETF, this work is primarily targeted to xml2rfc v3
+        <t>Within the IETF, this work primarily targets the xml2rfc v3
           &lt;sourcecode&gt; element (Section 2.48 of <xref target="RFC7991"/>)
-          and xml2rfc v2 &lt;artwork&gt; element (Section 2.5 of
+          and the xml2rfc v2 &lt;artwork&gt; element (Section 2.5 of
           <xref target="RFC7749"/>) that, for lack of a better option, is
           currently used for both source code and artwork.  This work may
           be also be used for the xml2rfc v3 &lt;artwork&gt; element
@@ -131,27 +126,27 @@
           lengths, that is stitched into the final document to be submitted.</t>
           <t>Generally, in order for tooling to be able to process input
           files, the files must be in their original/natural state, which
-          may include having some long lines.  Thus, these source files
+          may entail them having some long lines.  Thus, these source files
           need to be modified before inclusion in the document in order to
           satisfy the line length limits.  This modification SHOULD be
           automated to reduce effort and errors resulting from manual
-          effort.</t>
+          processing.</t>
           <t>Similarly, dynamically generated output (e.g., tree diagrams)
           must also be modified, if necessary, in order for the resulting
           document to satisfy the line length limits.  When needed, this effort
           again SHOULD be automated to reduce effort and errors
-          resulting from manual effort.</t>
+          resulting from manual processing.</t>
         </section>
         <section title="Automated Reconstitution of the Original Text Content">
           <t>Automated reconstitution of the original content is needed to
-          support validation of artwork extracted from documents.  YANG
+          support validation of text-based inclusions extracted from documents.  YANG
           <xref target="RFC7950"/> modules are already extracted from
           Internet-Drafts and validated as part of the draft-submission
           process.  Additionally, there has been some discussion regarding
-          needing to do the same for instance examples (i.e., XML/JSON
+          needing to also validate instance examples (i.e., XML/JSON
           documents) contained within Internet-Drafts (<xref target="yang-doctors-thread"/>).
           Thus, it SHOULD be possible to mechanically reconstitute the
-          original text content in order to satisfy tooling input parsers.</t>
+          original text content in order to utilize such tooling.</t>
         </section>
       </section>
 
@@ -192,122 +187,263 @@
         </section>
       </section>
 
-      <section title="Folded Structure" anchor="folded-structure">
-        <t>Text content that has been folded as specified by this document
-         MUST contain the following structure.</t>
-        <section title="Header" anchor="header">
-          <t>The header is two lines long.</t>
-          <t>The first line is the following 46-character string that
-          MAY be surrounded by any number of printable characters.
-          This first line cannot itself be folded.
-            <figure>
-              <artwork><![CDATA[
-NOTE: '\\' line wrapping per BCP XX (RFC XXXX)
-]]></artwork>
-            </figure>
-          </t>
-          <t>[Note to RFC Editor: Please replace XX and XXXX with the numbers
-          assigned to this document and delete this note.  Please make this
-          change in multiple places in this document.]</t>
-          <t>The second line is a blank line.  This line provides visual
-          separation for  readability.</t>
+      <section title="Two Folding Strategies" anchor="two-strategies">
+        <t>This document defines two nearly identical strategies for folding
+          text-based content.
+          <list style="hanging" hangIndent="6">
+            <t hangText="   The Single Backslash Strategy ('\'):">Uses a backslash
+              ('\') character at the end of the line where folding occurs, and
+              assumes that the continuation begins at the first non-whitespace
+              character on the following line.</t>
+            <t hangText="   The Double Backslash Strategy ('\'):">Uses a backslash
+              ('\') character at the end of the line where folding occurs, and
+              assumes that the continuation after a second backslash ('\')
+              character on the following line.</t>
+          </list>
+        </t>
+        <section title="Comparison">
+          <t>The first strategy produces more readable output, however it is
+            significantly more likely to encounter unfoldable input (e.g.,
+            there is exists a line anywhere in the input ending with a backslash
+            character, or there exists a long line containing only space and
+            backslash characters) and, for long lines that can be folded,
+            automation implementations are likely to encounter scenarios that
+            will produce errors without special care.</t>
+          <t>The second strategy produces less readable output, but is
+            unlikely to encounter unfoldable input, there are no long lines
+            that cannot be folded, and no special care is required for when
+            folding a long line.</t>
         </section>
-        <section title="Body">
-          <t>The character encoding is the same as described in Section 2
-          of <xref target="RFC7994"/>, except that, per <xref target="RFC7991"/>,
-          tab characters are prohibited.</t>
-          <t>Lines that have a backslash ('\') occurring as the last character in
-          a line immediately followed by the end of line character sequence, when
-          the subsequent line starts with a backslash ('\') as the first non-space
-          (' ') character, are considered "folded".</t>
-          <t>Really long lines may be folded multiple times.</t>
+        <section title="Recommendation">
+          <t>It is RECOMMENDED for implementations to first attempt to fold
+            content using the single backslash strategy and, only in the
+            unlikely event that it cannot fold the input or the folding
+            logic is unable to cope with a contingency occurring on the
+            desired folding column, then fallback to the double backslash
+            strategy.</t>
+        </section>
+      </section>
+          
+      <section title="The Single Backslash Strategy ('\')" anchor="single-slash">
+        <section title="Folded Structure">
+          <t>Text content that has been folded as specified by this strategy
+           MUST adhere to the following structure.</t>
+          <section title="Header" anchor="single-header">
+            <t>The header is two lines long.</t>
+            <t>The first line is the following 45-character string that
+            MAY be surrounded by any number of printable characters.
+            This first line cannot itself be folded.
+              <figure>
+                <artwork><![CDATA[
+NOTE: '\' line wrapping per BCP XX (RFC XXXX)
+]]></artwork>
+              </figure>
+            </t>
+            <t>[Note to RFC Editor: Please replace XX and XXXX with the numbers
+            assigned to this document and delete this note.  Please make this
+            change in multiple places in this document.]</t>
+            <t>The second line is a blank line.  This line provides visual
+            separation for readability.</t>
+          </section>
+          <section title="Body">
+            <t>The character encoding is the same as described in Section 2
+            of <xref target="RFC7994"/>, except that, per <xref target="RFC7991"/>,
+            tab characters are prohibited.</t>
+            <t>Lines that have a backslash ('\') occurring as the last character in
+            a line are considered "folded".</t>
+            <t>Really long lines may be folded multiple times.</t>
+          </section>
+        </section>
+  
+        <section title="Algorithm" anchor="single-algorithm">
+          <t>This section describes the process for folding and unfolding long
+            lines when they are encountered in a single instance of text content.
+            It is assumed that another process inserts/extracts the individual
+            text content instances to/from an Internet-Draft or RFC.  For example,
+            the `xiax` utility <xref target="xiax"/> does this.</t>
+          <section title="Folding">
+            <t>Folding is assumed to be automated although authors may perform
+            the folding steps manually.</t>
+            <t>Determine the desired maximum line length from input to the
+            automated line-wrapping process, such as from a command line
+            parameter.  If no value is explicitly specified, the value "69"
+            SHOULD be used.</t>
+            <t>Ensure that the desired maximum line length is not less than
+            the minimum header, which is 46 characters.  If the desired
+            maximum line length is less than this minimum, exit (this text-based
+            content cannot be folded).</t>
+            <t>Scan the text content for horizontal tab characters.  If any
+            horizontal tab characters appear, either resolve them to space
+            characters or exit, forcing the input provider to convert them
+            to space characters themselves first.</t>
+            <t>Scan the text content to see if any line exceeds the desired maximum.
+            If no line exceeds the desired maximum, exit (this text content does not
+            need to be folded).</t>
+            <t>Scan the text content to ensure no existing lines already end with a
+            backslash ('\') character, as this would lead to an ambiguous result.
+            If such a line is found, exit (this text content cannot be folded).</t>
+            <t>If this text content needs to and can be folded, insert the header
+            described in <xref target="single-header" />, ensuring that any additional
+            printable characters surrounding the header does not result in a
+            line exceeding the desired maximum..</t>
+            <t>For each line in the text content, from top-to-bottom, if the line
+              exceeds the desired maximum, then fold the line by:
+              <list style="numbers">
+                <t>Determine where the fold will occur.  This location MUST be before
+                  or at the desired maximum column, and MUST NOT precede a space
+                  (' ') character.</t>
+                <t>At the location where the fold is to occur, insert a backslash
+                  ('\') character followed by the end of line character
+                  sequence.</t>
+                <t>On the following line, insert any number of space (' ') characters.</t>
+              </list>
+            </t>
+            <t>The result of the previous operation is that the next line starts
+            with an arbitrary number of space (' ') characters, followed by the
+            character that was previously occupying the position where the fold
+            occurred.</t>
+            <t>Continue in this manner until reaching the end of the text content.  Note
+            that this algorithm naturally addresses the case where the remainder
+            of a folded line is still longer than the desired maximum, and hence
+            needs to be folded again, ad infinitum.</t>
+            <t>The process described in this section is illustrated by the "fold_it_1()"
+            function in <xref target="script" />.</t>
+          </section>
+          <section title="Unfolding">
+            <t>All unfolding is assumed to be automated, although a reader will
+            mentally perform the act of unfolding the text to understand the true
+            nature of the original text content.</t>
+            <t>Scan the beginning of the text content for the header described in
+            <xref target="single-header"/>.  If the header is not present, starting
+            on the first line of the text content, exit (this text contents does not
+            need to be unfolded).</t>
+            <t>Remove the 2-line header from the text content.</t>
+            <t>For each line in the text content, from top-to-bottom, if the line has
+            a backslash ('\') character immediately followed by the end of line
+            character sequence, then the line can be unfolded.
+            Remove the backslash ('\') character, the end of line character
+            sequence, and any leading space (' ') characters, which will bring up
+            the next line.  Then continue to scan each line in the text content
+            starting with the current line (in case it was multiply folded).</t>
+            <t>Continue in this manner until reaching the end of the text content.</t>
+            <t>The process described in this section is illustrated by the "unfold_it_1()"
+            function in <xref target="script" />.</t>
+          </section>
         </section>
       </section>
 
-      <section title="Algorithm" anchor="algorithm">
-        <t>This section describes the processes for folding and unfolding long
-          lines when they are encountered in a single instance of text content.
-          It is assumed that another process inserts/extracts the individual
-          text content instances to/from an Internet-Draft or RFC.  For example,
-          the `xiax` utility <xref target="xiax"/> does just this.</t>
-        <section title="Automated Folding">
-          <t>Determine the desired maximum line length from input to the
-          automated line-wrapping process, such as from a command line
-          parameter.  If no value is explicitly specified, the value "69"
-          SHOULD be used.</t>
-          <t>Ensure that the desired maximum line length is not less than
-          the minimum header, which is 46 characters.  If the desired
-          maximum line length is less than this minimum, exit (this text-based
-          content cannot be folded).</t>
-          <t>Scan the text content for horizontal tab characters.  If any
-          horizontal tab characters appear, either resolve them to space
-          characters or exit, forcing the input provider to convert them
-          to space characters themselves first.</t>
-          <t>Scan the text content to see if any line exceeds the desired maximum.
-          If no line exceeds the desired maximum, exit (this text content does not
-          need to be folded).</t>
-          <t>Scan the text content to ensure no existing lines already end with a
-          backslash ('\') character when the subsequent line starts with a
-          backslash ('\') character as the first non-space (' ') character,
-          as this would lead to an ambiguous result.  If such a line is found,
-          exit (this text content cannot be folded).</t>
-          <t>If this text content needs to and can be folded, insert the header as
-          described in <xref target="header" />.</t>
-          <t>For each line in the text content, from top-to-bottom, if the line exceeds
-          the desired maximum, then fold the line at the desired maximum column
-          by 1) inserting the character backslash ('\') character at the maximum
-          column, 2) inserting the end of line character sequence, inserting any
-          number of space (' ') characters, and 4) inserting a further backslash
-          ('\') character.</t>
-          <t>The result of this previous operation is that the next line starts
-          with an arbitrary number of space (' ') characters, followed by a
-          backslash ('\') character, immediately followed by the character that
-          was previously in the maximum column.</t>
-          <t>Continue in this manner until reaching the end of the text content.  Note
-          that this algorithm naturally addresses the case where the remainder
-          of a folded line is still longer than the desired maximum, and hence
-          needs to be folded again, ad infinitum.</t>
-          <t>The process described in this section is illustrated by the "fold_it()"
-          function in <xref target="script" />.</t>
-          <section title="Manual Folding">
-            <t>Authors may choose to fold text examples and source code by
-            hand to produce a text content that is more pleasant for a human reader
-            but which can still be automatically unfolded (as described in
-            <xref target="unfold-alg"/>) to produce single lines that are
-            longer than the maximum document line length.</t>
-            <t>For example, an author may choose to make the fold at convenient
-            gaps between words such that the backslash is placed in a lower
-            column number than the text content's maximum column value.</t>
-            <t>Additionally, an author may choose to indent the start of a
-            continuation line by inserting space characters before the line
-            continuation marker backslash character.</t>
-            <t>Manual folding may also help handle the cases that cannot be
-            automatically folded as described in <xref target="algorithm" />.</t>
-            <t>Authors MUST produce a result that adheres to the structure
-            described in <xref target="folded-structure"/>.</t>
+      <section title="The Double Backslash Strategy ('\\')" anchor="double-slash">
+
+        <section title="Folded Structure">
+          <t>Text content that has been folded as specified by this strategy
+           MUST adhere to the following structure.</t>
+          <section title="Header" anchor="double-header">
+            <t>The header is two lines long.</t>
+            <t>The first line is the following 46-character string that
+            MAY be surrounded by any number of printable characters.
+            This first line cannot itself be folded.
+              <figure>
+                <artwork><![CDATA[
+NOTE: '\\' line wrapping per BCP XX (RFC XXXX)
+]]></artwork>
+              </figure>
+            </t>
+            <t>[Note to RFC Editor: Please replace XX and XXXX with the numbers
+            assigned to this document and delete this note.  Please make this
+            change in multiple places in this document.]</t>
+            <t>The second line is a blank line.  This line provides visual
+            separation for readability.</t>
+          </section>
+          <section title="Body">
+            <t>The character encoding is the same as described in Section 2
+            of <xref target="RFC7994"/>, except that, per <xref target="RFC7991"/>,
+            tab characters are prohibited.</t>
+            <t>Lines that have a backslash ('\') occurring as the last character in
+            a line immediately followed by the end of line character sequence, when
+            the subsequent line starts with a backslash ('\') as the first non-space
+            (' ') character, are considered "folded".</t>
+            <t>Really long lines may be folded multiple times.</t>
           </section>
         </section>
-        <section title="Automated Unfolding" anchor="unfold-alg">
-          <t>All unfolding is assumed to be automated although a reader will
-          mentally perform the act of unfolding the text to understand the true
-          nature of the original text content.</t>
-          <t>Scan the beginning of the text content for the header described in
-          <xref target="header"/>.  If the header is not present, starting
-          on the first line of the text content, exit (this artwork does not
-          need to be unfolded).</t>
-          <t>Remove the 2-line header from the text content.</t>
-          <t>For each line in the text content, from top-to-bottom, if the line has
-          a backslash ('\') character immediately followed by the end of line
-          character sequence, and if the next line has a backslash ('\') character
-          as the first non-space (' ') character, then the lines can be unfolded.
-          Remove the first backslash ('\') character, the end of line character
-          sequence, any leading space (' ') characters, and the second backslash
-          ('\') character, which will bring up the next line.  Then continue to
-          scan each line in the text content starting with the current line (in case
-          it was multiply folded).</t>
-          <t>Continue in this manner until reaching the end of the text content.</t>
-          <t>The process described in this section is illustrated by the "unfold_it()"
-          function in <xref target="script" />.</t>
+  
+        <section title="Algorithm" anchor="double-algorithm">
+          <t>This section describes the process for folding and unfolding long
+            lines when they are encountered in a single instance of text content.
+            It is assumed that another process inserts/extracts the individual
+            text content instances to/from an Internet-Draft or RFC.  For example,
+            the `xiax` utility <xref target="xiax"/> does this.</t>
+          <section title="Folding">
+            <t>Folding is assumed to be automated, although authors may perform
+            the folding steps manually.</t>
+            <t>Determine the desired maximum line length from input to the
+            automated line-wrapping process, such as from a command line
+            parameter.  If no value is explicitly specified, the value "69"
+            SHOULD be used.</t>
+            <t>Ensure that the desired maximum line length is not less than
+            the minimum header, which is 45 characters.  If the desired
+            maximum line length is less than this minimum, exit (this text-based
+            content cannot be folded).</t>
+            <t>Scan the text content for horizontal tab characters.  If any
+            horizontal tab characters appear, either resolve them to space
+            characters or exit, forcing the input provider to convert them
+            to space characters themselves first.</t>
+            <t>Scan the text content to see if any line exceeds the desired maximum.
+            If no line exceeds the desired maximum, exit (this text content does not
+            need to be folded).</t>
+            <t>Scan the text content to ensure no existing lines already end with a
+            backslash ('\') character while the subsequent line starts with a
+            backslash ('\') character as the first non-space (' ') character,
+            as this would lead to an ambiguous result.  If such a line is found,
+            exit (this text content cannot be folded).</t>
+            <t>If this text content needs to and can be folded, insert the header
+            described in <xref target="double-header" />, ensuring that any additional
+            printable characters surrounding the header does not result in a
+            line exceeding the desired maximum..</t>
+            <t>For each line in the text content, from top-to-bottom, if the line
+              exceeds the desired maximum, then fold the line by:
+              <list style="numbers">
+                <t>Determine where the fold will occur.  This location MUST be before
+                  or at the desired maximum column.</t>
+                <t>At the location where the fold is to occur, insert a first
+                  backslash ('\') character followed by the end of line character
+                  sequence.</t>
+                <t>On the following line, insert any number of space (' ') characters
+                  followed by a second backslash ('\') character.</t>
+              </list>
+            </t>
+            <t>The result of the previous operation is that the next line starts
+            with an arbitrary number of space (' ') characters, followed by a
+            backslash ('\') character, immediately followed by the character that
+            was previously occupying the position where the fold occurred.</t>
+            <t>Continue in this manner until reaching the end of the text content.  Note
+            that this algorithm naturally addresses the case where the remainder
+            of a folded line is still longer than the desired maximum, and hence
+            needs to be folded again, ad infinitum.</t>
+            <t>The process described in this section is illustrated by the "fold_it_2()"
+            function in <xref target="script" />.</t>
+          </section>
+          <section title="Unfolding">
+            <t>All unfolding is assumed to be automated although a reader will
+            mentally perform the act of unfolding the text to understand the true
+            nature of the original text content.</t>
+            <t>Scan the beginning of the text content for the header described in
+            <xref target="double-header"/>.  If the header is not present, starting
+            on the first line of the text content, exit (this text content does not
+            need to be unfolded).</t>
+            <t>Remove the 2-line header from the text content.</t>
+            <t>For each line in the text content, from top-to-bottom, if the line has
+            a backslash ('\') character immediately followed by the end of line
+            character sequence, and if the next line has a backslash ('\') character
+            as the first non-space (' ') character, then the lines can be unfolded.
+            Remove the first backslash ('\') character, the end of line character
+            sequence, any leading space (' ') characters, and the second backslash
+            ('\') character, which will bring up the next line.  Then continue to
+            scan each line in the text content starting with the current line (in case
+            it was multiply folded).</t>
+            <t>Continue in this manner until reaching the end of the text content.</t>
+            <t>The process described in this section is illustrated by the "unfold_it_2()"
+            function in <xref target="script" />.</t>
+          </section>
         </section>
       </section>
 
@@ -322,78 +458,82 @@ NOTE: '\\' line wrapping per BCP XX (RFC XXXX)
         on column 69, the default value.  Section 8.5 shows an example of
         manual folding.</t>
 
-        <section title="Simple Example Showing Boundary Conditions">
+        <section title="Example Showing Boundary Conditions">
           <t>This example illustrates a boundary condition test using
           numbers for counting purposes.  The input contains 5 lines,
           each line one character longer than the previous.</t>
-
-          <t>Any printable character (including ' ' and '\') can be used
-          as a substitute for any number, except for on the 4th row,
-          the trailing '9' is not allowed to be a '\' character if the
-          first non-space character of the next line is a '\' character,
-          as that would lead to an ambiguous result.</t>
-
-          <figure>
-            <artwork><![CDATA[
-INSERT_TEXT_FROM_FILE(refs/example-1.txt.folded)
+          <section title="Using '\'">
+            <figure>
+              <artwork><![CDATA[
+INSERT_TEXT_FROM_FILE(refs/example-1.1.txt.folded)
 ]]></artwork>
-        </figure>
+            </figure>
+          </section>
+          <section title="Using '\\'">
+            <figure>
+              <artwork><![CDATA[
+INSERT_TEXT_FROM_FILE(refs/example-1.2.txt.folded)
+]]></artwork>
+            </figure>
+          </section>
+        </section>
+
+        <section title="Example Showing Multiple Wraps of a Single Line">
+          <t>This example illustrates one very long line (280 characters).</t>
+          <section title="Using '\'">
+            <figure>
+              <artwork><![CDATA[
+INSERT_TEXT_FROM_FILE(refs/example-2.1.txt.folded)
+]]></artwork>
+            </figure>
+          </section>
+          <section title="Using '\\'">
+            <figure>
+              <artwork><![CDATA[
+INSERT_TEXT_FROM_FILE(refs/example-2.2.txt.folded)
+]]></artwork>
+            </figure>
+          </section>
+        </section>
+
+        <section title="Example Smart Folding">
+          <t>This example illustrates how readability can be improved via smart folding,
+            whereby folding occurs at format-specific locations and format-specific
+            indentations are used.</t>
+          <t>The text content was manually folded, since the script in the appendix
+            does not implement format-specific folding.</t>
+          <t>Also note that the header is surrounded by different printable
+            characters then shown in the other examples.</t>
+          <section title="Using '\'">
+            <figure>
+              <artwork><![CDATA[
+INSERT_TEXT_FROM_FILE(refs/example-3.1.txt.folded.smart)
+]]></artwork>
+            </figure>
+            <t>Below is the equivalent to the above, but it was folded using the
+              script in the appendix.</t>
+            <figure>
+              <artwork><![CDATA[
+INSERT_TEXT_FROM_FILE(refs/example-3.1.txt.folded.smart.unfolded)
+]]></artwork>
+            </figure>
+          </section>
+          <section title="Using '\\'">
+            <figure>
+              <artwork><![CDATA[
+INSERT_TEXT_FROM_FILE(refs/example-3.2.txt.folded.smart)
+]]></artwork>
+            </figure>
+            <t>Below is the equivalent to the above, but it was folded using the
+              script in the appendix.</t>
+            <figure>
+              <artwork><![CDATA[
+INSERT_TEXT_FROM_FILE(refs/example-3.2.txt.folded.smart.unfolded.folded)
+]]></artwork>
+            </figure>
+          </section>
+        </section>
       </section>
-
-      <section title="Example Showing Multiple Wraps of a Single Line">
-
-        <t>This example illustrates one very long line (280 characters).</t>
-
-        <t>Any printable character (including ' ' and '\') can be used
-        as a substitute for any number.</t>
-        <figure>
-          <artwork><![CDATA[
-INSERT_TEXT_FROM_FILE(refs/example-2.txt.folded)
-]]></artwork>
-        </figure>
-      </section>
-
-      <section title="Example With Native Backslash">
-        <t>This example has a '\' character in the wrapping column.  The native text
-           includes the sequence "fish\fowl" with the '\' character occurring on the
-           69th column.</t>
-        <figure>
-          <artwork><![CDATA[
-INSERT_TEXT_FROM_FILE(refs/example-3.txt.folded)
-]]></artwork>
-        </figure>
-      </section>
-
-      <section title="Example With Native Whitespace">
-        <t>This example has whitespace spanning the wrapping column.  The native input
-        contains 15 space (' ') characters between "like" and "white".</t>
-        <figure>
-          <artwork><![CDATA[
-INSERT_TEXT_FROM_FILE(refs/example-4.txt.folded)
-]]></artwork>
-        </figure>
-      </section>
-
-      <section title="Example of Manual Wrapping">
-        <t>This example was manually wrapped to cause the folding to occur
-        after each term, putting each term on its own line.  Indentation
-        is used to additionally improve readability.  Also note that the
-        mandatory header is surrounded by different printable characters
-        than shown in the other examples.</t>
-        <figure>
-          <artwork><![CDATA[
-INSERT_TEXT_FROM_FILE(refs/example-5.txt.prefolded)
-]]></artwork>
-        </figure>
-        <t>The manual folding produces a more readable result than the following
-        equivalent folding that contains no indentation.</t>
-        <figure>
-          <artwork><![CDATA[
-INSERT_TEXT_FROM_FILE(refs/example-5.txt.prefolded.unfolded)
-]]></artwork>
-        </figure>
-      </section>
-    </section>
 
       <section title="Security Considerations" anchor="sec-cons">
         <t>This BCP has no Security Considerations.</t>
