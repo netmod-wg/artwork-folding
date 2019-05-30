@@ -31,13 +31,14 @@ hdr_txt_1="NOTE: '\\' line wrapping per BCP XX (RFC XXXX)"
 hdr_txt_2="NOTE: '\\\\' line wrapping per BCP XX (RFC XXXX)"
 equal_chars="=============================================="
 space_chars="                                              "
+temp_dir=""
 
 fold_it_1() {
   # ensure input file doesn't contain the fold-sequence already
   pcregrep -M  "\\\\\n" $infile >> /dev/null 2>&1
   if [ $? -eq 0 ]; then
     echo
-    echo "Error1: infile $infile has a line ending with a '\\'"
+    echo "Error: infile $infile has a line ending with a '\\'"
     echo "character. This file cannot be folded."
     echo
     return 1
@@ -51,7 +52,7 @@ fold_it_1() {
   grep "^.\{$foldcol\} " $infile >> /dev/null 2>&1
   if [ $? -eq 0 ]; then
     echo
-    echo "Error: infile has a space character occuring after the"
+    echo "Error: infile has a space character occuring on the"
     echo "folding column. This file cannot be folded."
     echo
     return 1
@@ -74,11 +75,15 @@ fold_it_1() {
 }
 
 fold_it_2() {
+  if [ "$temp_dir" == "" ]; then
+    temp_dir=`mktemp -d`
+  fi
+
   # ensure input file doesn't contain the fold-sequence already
   pcregrep -M  "\\\\\n[\ ]*\\\\" $infile >> /dev/null 2>&1
   if [ $? -eq 0 ]; then
     echo
-    echo "Error2: infile has a line ending with a '\\' character"
+    echo "Error: infile has a line ending with a '\\' character"
     echo "followed by a '\\' character as the first non-space"
     echo "character on the next line.  This file cannot be folded."
     echo
@@ -95,21 +100,21 @@ fold_it_2() {
   # fold using recursive passes ('g' used in fold_it_1 didn't work)
   if [ -z "$1" ]; then
     # init recursive env
-    cp $infile /tmp/wip
+    cp $infile $temp_dir/wip
   fi
   testcol=`expr "$maxcol" + 1`
   foldcol=`expr "$maxcol" - 1` # for the inserted '\' char
-  gsed "/.\{$testcol\}/s/\(.\{$foldcol\}\)/\1\\\\\n\\\\/" < /tmp/wip\
-        >> /tmp/wip2
-  diff /tmp/wip /tmp/wip2 > /dev/null 2>&1
+  gsed "/.\{$testcol\}/s/\(.\{$foldcol\}\)/\1\\\\\n\\\\/" \
+    < $temp_dir/wip >> $temp_dir/wip2
+  diff $temp_dir/wip $temp_dir/wip2 > /dev/null 2>&1
   if [ $? -eq 1 ]; then
-    mv /tmp/wip2 /tmp/wip
+    mv $temp_dir/wip2 $temp_dir/wip
     fold_it_2 "recursing"
   else
     echo "$header" > $outfile
     echo "" >> $outfile
-    cat /tmp/wip2 >> $outfile
-    rm /tmp/wip*
+    cat $temp_dir/wip2 >> $outfile
+    rm -rf $temp_dir
   fi
   return 0
 }
@@ -153,26 +158,31 @@ fold_it() {
 }
 
 unfold_it_1() {
+  temp_dir=`mktemp -d`
+
   # output all but the first two lines (the header) to wip file
-  awk "NR>2" $infile > /tmp/wip
+  awk "NR>2" $infile > $temp_dir/wip
 
   # unfold wip file
-  gsed ":x; /.*\\\\$/N; s/\\\\\n[ ]*//; tx" /tmp/wip > $outfile
+  gsed ":x; /.*\\\\$/N; s/\\\\\n[ ]*//; tx" $temp_dir/wip > $outfile
 
   # clean up and return
-  rm /tmp/wip
+  rm -rf $temp_dir
   return 0
 }
 
 unfold_it_2() {
+  temp_dir=`mktemp -d`
+
   # output all but the first two lines (the header) to wip file
-  awk "NR>2" $infile > /tmp/wip
+  awk "NR>2" $infile > $temp_dir/wip
 
   # unfold wip file
-  gsed ":x; /.*\\\\$/N; s/\\\\\n[ ]*\\\\//; tx" /tmp/wip > $outfile
+  gsed ":x; /.*\\\\$/N; s/\\\\\n[ ]*\\\\//; tx" $temp_dir/wip \
+    > $outfile
 
   # clean up and return
-  rm /tmp/wip
+  rm -rf $temp_dir
   return 0
 }
 
