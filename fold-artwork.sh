@@ -14,6 +14,7 @@ print_usage() {
   echo "  -i: the input filename"
   echo "  -o: the output filename"
   echo "  -d: show debug messages"
+  echo "  -q: quiet (suppress error messages)"
   echo "  -h: show this message"
   echo
   echo "Exit status code: zero on success, non-zero otherwise."
@@ -23,6 +24,7 @@ print_usage() {
 # global vars, do not edit
 strategy=0 # auto
 debug=0
+quiet=0
 reversed=0
 infile=""
 outfile=""
@@ -36,11 +38,14 @@ temp_dir=""
 fold_it_1() {
   # ensure input file doesn't contain the fold-sequence already
   pcregrep -M  "\\\\\n" $infile >> /dev/null 2>&1
-  if [ $? -eq 0 ]; then
-    echo
-    echo "Error: infile $infile has a line ending with a '\\'"
-    echo "character. This file cannot be folded."
-    echo
+  if [[ $? -eq 0 ]]; then
+    if [[ $quiet -eq 0 ]]; then
+      echo
+      echo "Error: infile $infile has a line ending with a '\\'"
+      echo "character. This file cannot be folded using the '\\'"
+      echo "strategy."
+      echo
+    fi
     return 1
   fi
 
@@ -50,11 +55,14 @@ fold_it_1() {
 
   # ensure input file doesn't contain whitespace on the fold column
   grep "^.\{$foldcol\} " $infile >> /dev/null 2>&1
-  if [ $? -eq 0 ]; then
-    echo
-    echo "Error: infile has a space character occuring on the"
-    echo "folding column. This file cannot be folded."
-    echo
+  if [[ $? -eq 0 ]]; then
+    if [[ $quiet -eq 0 ]]; then
+      echo
+      echo "Error: infile has a space character occuring on the"
+      echo "folding column. This file cannot be folded using the"
+      echo "'\\' strategy."
+      echo
+    fi
     return 1
   fi
 
@@ -81,12 +89,15 @@ fold_it_2() {
 
   # ensure input file doesn't contain the fold-sequence already
   pcregrep -M  "\\\\\n[\ ]*\\\\" $infile >> /dev/null 2>&1
-  if [ $? -eq 0 ]; then
-    echo
-    echo "Error: infile has a line ending with a '\\' character"
-    echo "followed by a '\\' character as the first non-space"
-    echo "character on the next line.  This file cannot be folded."
-    echo
+  if [[ $? -eq 0 ]]; then
+    if [[ $quiet -eq 0 ]]; then
+      echo
+      echo "Error: infile has a line ending with a '\\' character"
+      echo "followed by a '\\' character as the first non-space"
+      echo "character on the next line.  This file cannot be folded"
+      echo "using the '\\\\' strategy."
+      echo
+    fi
     return 1
   fi
 
@@ -122,11 +133,13 @@ fold_it_2() {
 fold_it() {
   # ensure input file doesn't contain a TAB
   grep $'\t' $infile >> /dev/null 2>&1
-  if [ $? -eq 0 ]; then
-    echo
-    echo "Error: infile contains a TAB character, which is not"
-    echo "allowed."
-    echo
+  if [[ $? -eq 0 ]]; then
+    if [[ $quiet -eq 0 ]]; then
+      echo
+      echo "Error: infile contains a TAB character, which is"
+      echo "not allowed."
+      echo
+    fi
     return 1
   fi
 
@@ -149,8 +162,15 @@ fold_it() {
     fold_it_2
     return $?
   fi
+  quiet_sav=$quite
+  quiet=1
   fold_it_1
-  if [ $? -ne 0 ]; then
+  result=$?
+  quiet=$quiet_sav
+  if [[ $result -ne 0 ]]; then
+    if [[ $debug -eq 1 ]]; then
+      echo "Folding strategy 1 didn't succeed, trying strategy 2..."
+    fi
     fold_it_2
     return $?
   fi
@@ -215,6 +235,9 @@ process_input() {
     if [ "$1" == "-d" ]; then
       debug=1
     fi
+    if [ "$1" == "-q" ]; then
+      quiet=1
+    fi
     if [ "$1" == "-s" ]; then
       strategy="$2"
       shift
@@ -237,25 +260,31 @@ process_input() {
     shift 
   done
 
-  if [ -z "$infile" ]; then
-    echo
-    echo "Error: infile parameter missing (use -h for help)"
-    echo
+  if [[ -z "$infile" ]]; then
+    if [[ $quiet -eq 0 ]]; then
+      echo
+      echo "Error: infile parameter missing (use -h for help)"
+      echo
+    fi
     exit 1
   fi
 
-  if [ -z "$outfile" ]; then
-    echo
-    echo "Error: outfile parameter missing (use -h for help)"
-    echo
-    exit 1
+  if [[ -z "$outfile" ]]; then
+    if [[ $quiet -eq 0 ]]; then
+      echo
+      echo "Error: outfile parameter missing (use -h for help)"
+      echo
+      exit 1
+    fi
   fi
 
-  if [ ! -f "$infile" ]; then
-    echo
-    echo "Error: specified file \"$infile\" is does not exist."
-    echo
-    exit 1
+  if [[ ! -f "$infile" ]]; then
+    if [[ $quiet -eq 0 ]]; then
+      echo
+      echo "Error: specified file \"$infile\" is does not exist."
+      echo
+      exit 1
+    fi
   fi
 
   if [[ $strategy -eq 2 ]]; then
@@ -263,22 +292,26 @@ process_input() {
   else
     min_supported=`expr ${#hdr_txt_1} + 8`
   fi
-  if [ $maxcol -lt $min_supported ]; then
-    echo
-    echo "Error: the folding column cannot be less than"
-    echo "$min_supported."
-    echo
+  if [[ $maxcol -lt $min_supported ]]; then
+    if [[ $quiet -eq 0 ]]; then
+      echo
+      echo "Error: the folding column cannot be less than"
+      echo "$min_supported."
+      echo
+    fi
     exit 1
   fi
 
   # this is only because the code otherwise runs out of equal_chars
   max_supported=`expr ${#equal_chars} + 1 + ${#hdr_txt_1} + 1\
        + ${#equal_chars}`
-  if [ $maxcol -gt $max_supported ]; then
-    echo
-    echo "Error: the folding column cannot be more than"
-    echo "$max_supported."
-    echo
+  if [[ $maxcol -gt $max_supported ]]; then
+    if [[ $quiet -eq 0 ]]; then
+      echo
+      echo "Error: the folding column cannot be more than"
+      echo "$max_supported."
+      echo
+    fi
     exit 1
   fi
 }
