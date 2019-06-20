@@ -285,12 +285,12 @@ NOTE: '\' line wrapping per BCP XX (RFC XXXX)
               exceeds the desired maximum, then fold the line by:
               <list style="numbers">
                 <t>Determine where the fold will occur.  This location MUST be before
-                  or at the desired maximum column, and MUST NOT be on top of a space
-                  (' ') character.  If no such location can be found, then exit (this
-                  text content cannot be folded)</t>
+                  or at the desired maximum column, and MUST NOT be chosen such that
+                  the character immediately after the fold is a space (' ') character.
+                  If no such location can be found, then exit (this text content cannot
+                  be folded)</t>
                 <t>At the location where the fold is to occur, insert a backslash
-                  ('\') character followed by the end of line character
-                  sequence.</t>
+                  ('\') character followed by the end of line character sequence.</t>
                 <t>On the following line, insert any number of space (' ') characters.</t>
               </list>
             </t>
