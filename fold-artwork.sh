@@ -1,4 +1,5 @@
-#!/bin/bash --posix   # must be `bash` (not `sh`)
+#!/bin/bash --posix
+# must be `bash` (not `sh`)
 
 print_usage() {
   echo
