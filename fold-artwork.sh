@@ -163,7 +163,7 @@ fold_it() {
     fold_it_2
     return $?
   fi
-  quiet_sav=$quite
+  quiet_sav=$quiet
   quiet=1
   fold_it_1
   result=$?
