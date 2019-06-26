@@ -1,6 +1,10 @@
 #!/bin/bash --posix
 # must be `bash` (not `sh`)
 
+# This script may need some adjustments to work on a given system:
+# * the utility `pcregrep` may need to be installed
+# * the utility `gsed` is called `sed` on e.g. GNU systems
+
 print_usage() {
   echo
   echo "Folds the text file, only if needed, at the specified"
