@@ -1,9 +1,9 @@
 #!/bin/bash --posix
-# must be `bash` (not `sh`)
+# must use `bash` (not `sh`)
 
-# This script may need some adjustments to work on a given system:
-# * the utility `pcregrep` may need to be installed
-# * the utility `gsed` is called `sed` on e.g. GNU systems
+# This script may need some adjustments to work on a given system.
+# For instance, the utility `pcregrep` may need to be installed,
+# and the utility `gsed` is called `sed` on e.g., GNU systems
 
 print_usage() {
   echo

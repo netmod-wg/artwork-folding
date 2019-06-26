@@ -618,9 +618,16 @@ INSERT_TEXT_FROM_FILE(fold-artwork.sh)
 
       <section title="Acknowledgements" numbered="no">
         <t>The authors thank the following folks for their various
-        contributions (sorted by first name):
-        Benoît Claise, Gianmarco Bruno, Italo Busi, Joel Jaeggli,
-        Jonathan Hansford, Lou Berger, Martin Bjorklund, and Rob Wilton.</t>
+          contributions (sorted by first name):
+          Benoît Claise,
+          Erik Auerswald,
+          Gianmarco Bruno,
+          Italo Busi,
+          Joel Jaeggli,
+          Jonathan Hansford,
+          Lou Berger,
+          Martin Bjorklund,
+          and Rob Wilton.</t>
         <t>The authors additionally thank the RFC Editor for confirming
         that there is no set convention today for handling long lines in
         artwork/sourcecode inclusions. </t>
