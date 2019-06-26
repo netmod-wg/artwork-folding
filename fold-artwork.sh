@@ -81,8 +81,8 @@ fold_it_1() {
   # generate outfile
   echo "$header" > $outfile
   echo "" >> $outfile
-  gsed "/.\{$testcol\}/s/\(.\{$foldcol\}\)/\1\\\\\n/g"\
-          < $infile >> $outfile
+  gsed -r 's/(.{68})(..)/\1\\\n\2/;tMORE;bEND;:MORE;P;D;:END'\
+    < $infile >> $outfile
 
   return 0
 }
@@ -113,25 +113,12 @@ fold_it_2() {
   header=`printf "%.*s %s %.*s" "$left_sp" "$equal_chars"\
                    "$hdr_txt_2" "$right_sp" "$equal_chars"`
 
-  # fold using recursive passes ('g' used in fold_it_1 didn't work)
-  if [ -z "$1" ]; then
-    # init recursive env
-    cp $infile $temp_dir/wip
-  fi
-  testcol=`expr "$maxcol" + 1`
-  foldcol=`expr "$maxcol" - 1` # for the inserted '\' char
-  gsed "/.\{$testcol\}/s/\(.\{$foldcol\}\)/\1\\\\\n\\\\/" \
-    < $temp_dir/wip >> $temp_dir/wip2
-  diff $temp_dir/wip $temp_dir/wip2 > /dev/null 2>&1
-  if [ $? -eq 1 ]; then
-    mv $temp_dir/wip2 $temp_dir/wip
-    fold_it_2 "recursing"
-  else
-    echo "$header" > $outfile
-    echo "" >> $outfile
-    cat $temp_dir/wip2 >> $outfile
-    rm -rf $temp_dir
-  fi
+  # generate outfile
+  echo "$header" > $outfile
+  echo "" >> $outfile
+  gsed -r 's/(.{68})(..)/\1\\\n\\\2/;tMORE;bEND;:MORE;P;D;:END'\
+    < $infile >> $outfile
+
   return 0
 }
 
