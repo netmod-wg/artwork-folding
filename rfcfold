@@ -181,7 +181,7 @@ unfold_it_1() {
   awk "NR>2" $infile > $temp_dir/wip
 
   # unfold wip file
-  "$SED" ":x; /.*\\\\$/N; s/\\\\\n[ ]*//; tx" $temp_dir/wip > $outfile
+  "$SED" ':START;$!N;s/\\\n *//;tSTART;P;D' $temp_dir/wip > $outfile
 
   # clean up and return
   rm -rf $temp_dir
