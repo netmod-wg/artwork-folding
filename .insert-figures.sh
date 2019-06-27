@@ -18,9 +18,9 @@ while ( grep INSERT_TEXT_FROM_FILE .tmp.new.txt >> /dev/null ); do
   if [ `echo $file | grep ","` ]; then
     col=`echo $file | sed 's/.*,//'`
     file=`echo $file | sed 's/,.*//'`
-    ./fold-artwork.sh -c $col -i $file -o $file.potentially-folded
+    ./rfcfold -c $col -i $file -o $file.potentially-folded
   else
-    ./fold-artwork.sh -i $file -o $file.potentially-folded
+    ./rfcfold -i $file -o $file.potentially-folded
   fi
 
   cat .tmp.pre.txt $file.potentially-folded .tmp.post.txt > .tmp.new.txt

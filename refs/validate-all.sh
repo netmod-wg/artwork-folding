@@ -25,9 +25,9 @@ test_file() {
   printf "testing $2..."
 
   if [ -z "$5" ]; then
-    command="../fold-artwork.sh -s $1 -d -i $2 -o $2.folded 2>&1"
+    command="../rfcfold -s $1 -d -i $2 -o $2.folded 2>&1"
   else
-    command="../fold-artwork.sh -s $1 -d -c $5 -i $2 -o $2.folded 2>&1"
+    command="../rfcfold -s $1 -d -c $5 -i $2 -o $2.folded 2>&1"
   fi
   expected_exit_code=$3
   run_cmd "$command" $expected_exit_code
@@ -36,7 +36,7 @@ test_file() {
     return
   fi
 
-  command="../fold-artwork.sh -d -r -i $2.folded -o $2.folded.unfolded 2>&1"
+  command="../rfcfold -d -r -i $2.folded -o $2.folded.unfolded 2>&1"
   expected_exit_code=$4
   run_cmd "$command" $expected_exit_code
 

@@ -608,8 +608,8 @@ character on the next line.  This file cannot be folded.
         <t>
           <figure>
             <preamble>&lt;CODE BEGINS&gt;</preamble>
-            <artwork><![CDATA[
-INSERT_TEXT_FROM_FILE(fold-artwork.sh)
+            <artwork name="rfcfold"><![CDATA[
+INSERT_TEXT_FROM_FILE(rfcfold)
 ]]></artwork>
           <postamble>&lt;CODE ENDS&gt;</postamble>
           </figure>

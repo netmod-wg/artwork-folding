@@ -1,14 +1,14 @@
 #/bin/bash
 
-../fold-artwork.sh -s 1 -i example-1.txt -o example-1.1.txt.folded
-../fold-artwork.sh -s 2 -i example-1.txt -o example-1.2.txt.folded
+../rfcfold -s 1 -i example-1.txt -o example-1.1.txt.folded
+../rfcfold -s 2 -i example-1.txt -o example-1.2.txt.folded
 
-../fold-artwork.sh -s 1 -i example-2.txt -o example-2.1.txt.folded
-../fold-artwork.sh -s 2 -i example-2.txt -o example-2.2.txt.folded
+../rfcfold -s 1 -i example-2.txt -o example-2.1.txt.folded
+../rfcfold -s 2 -i example-2.txt -o example-2.2.txt.folded
 
-../fold-artwork.sh -r -i example-3.1.txt.folded.smart -o example-3.1.txt.folded.smart.unfolded
-../fold-artwork.sh -r -i example-3.2.txt.folded.smart -o example-3.2.txt.folded.smart.unfolded
-../fold-artwork.sh -s 2 -i example-3.2.txt.folded.smart.unfolded -o example-3.2.txt.folded.smart.unfolded.folded
+../rfcfold -r -i example-3.1.txt.folded.smart -o example-3.1.txt.folded.smart.unfolded
+../rfcfold -r -i example-3.2.txt.folded.smart -o example-3.2.txt.folded.smart.unfolded
+../rfcfold -s 2 -i example-3.2.txt.folded.smart.unfolded -o example-3.2.txt.folded.smart.unfolded.folded
 
 
 run_cmd() {
