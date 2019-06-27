@@ -99,8 +99,11 @@ fold_it_2() {
       echo
       echo "Error: infile has a line ending with a '\\' character"
       echo "followed by a '\\' character as the first non-space"
-      echo "character on the next line.  This file cannot be folded"
-      echo "using the '\\\\' strategy."
+      echo "character on the next line.  This script cannot fold"
+      echo "this file using '\\\\' strategy without there being"
+      echo "false positives produced in the unfolding (i.e., this"
+      echo "script does not attempt to proactively force-fold such"
+      echo "lines, as described in RFC XXXX)."
       echo
     fi
     return 1

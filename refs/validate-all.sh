@@ -67,6 +67,8 @@ main() {
   test_file 2 only-2-can-fold-it-4.txt 0   0
   test_file 1 only-2-can-fold-it-5.txt 1
   test_file 2 only-2-can-fold-it-5.txt 0   0
+  test_file 1 only-2-can-fold-it-6.txt 1
+  test_file 2 only-2-can-fold-it-6.txt 0  0
   echo
   echo "starting strategy #1 tests..."
   test_file 1 contains-tab.txt         1
@@ -83,9 +85,6 @@ main() {
   test_file 2 nofold-needed.txt      255 255
   test_file 2 nofold-needed.txt        1   x  67
   test_file 2 nofold-needed-again.txt  0   0  67
-  echo
-  echo "starting neither tests..."
-  test_file 2 why-wont-2-unfold-this.txt 0  0
   echo
 }
 
