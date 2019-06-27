@@ -190,8 +190,7 @@ unfold_it_2() {
   awk "NR>2" $infile > $temp_dir/wip
 
   # unfold wip file
-  gsed ":x; /.*\\\\$/N; s/\\\\\n[ ]*\\\\//; tx" $temp_dir/wip \
-    > $outfile
+  gsed ':START;$!N;s/\\\n *\\//;tSTART;P;D' $temp_dir/wip > $outfile
 
   # clean up and return
   rm -rf $temp_dir
