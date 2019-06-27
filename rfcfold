@@ -2,8 +2,7 @@
 # must use `bash` (not `sh`)
 
 # This script may need some adjustments to work on a given system.
-# For instance, the utility `pcregrep` may need to be installed,
-# and the utility `gsed` is called `sed` on e.g., GNU systems
+# For instance, the utility `pcregrep` may need to be installed.
 
 print_usage() {
   echo
@@ -39,6 +38,14 @@ hdr_txt_2="NOTE: '\\\\' line wrapping per BCP XX (RFC XXXX)"
 equal_chars="=============================================="
 space_chars="                                              "
 temp_dir=""
+
+# determine name of [g]sed binary
+type gsed > /dev/null 2>&1 && SED=gsed || SED=sed
+
+cleanup() {
+  rm -rf "$temp_dir"
+}
+trap 'cleanup' EXIT
 
 fold_it_1() {
   # ensure input file doesn't contain the fold-sequence already
@@ -81,7 +88,7 @@ fold_it_1() {
   # generate outfile
   echo "$header" > $outfile
   echo "" >> $outfile
-  gsed -r 's/(.{68})(..)/\1\\\n\2/;tMORE;bEND;:MORE;P;D;:END'\
+  "$SED" 's/\(.\{68\}\)\(..\)/\1\\\n\2/;tMORE;bEND;:MORE;P;D;:END'\
     < $infile >> $outfile
 
   return 0
@@ -119,7 +126,7 @@ fold_it_2() {
   # generate outfile
   echo "$header" > $outfile
   echo "" >> $outfile
-  gsed -r 's/(.{68})(..)/\1\\\n\\\2/;tMORE;bEND;:MORE;P;D;:END'\
+  "$SED" 's/\(.\{68\}\)\(..\)/\1\\\n\\\2/;tMORE;bEND;:MORE;P;D;:END'\
     < $infile >> $outfile
 
   return 0
@@ -179,10 +186,8 @@ unfold_it_1() {
   awk "NR>2" $infile > $temp_dir/wip
 
   # unfold wip file
-  gsed ":x; /.*\\\\$/N; s/\\\\\n[ ]*//; tx" $temp_dir/wip > $outfile
+  "$SED" ':START;$!N;s/\\\n *//;tSTART;P;D' $temp_dir/wip > $outfile
 
-  # clean up and return
-  rm -rf $temp_dir
   return 0
 }
 
@@ -193,10 +198,8 @@ unfold_it_2() {
   awk "NR>2" $infile > $temp_dir/wip
 
   # unfold wip file
-  gsed ':START;$!N;s/\\\n *\\//;tSTART;P;D' $temp_dir/wip > $outfile
+  "$SED" ':START;$!N;s/\\\n *\\//;tSTART;P;D' $temp_dir/wip > $outfile
 
-  # clean up and return
-  rm -rf $temp_dir
   return 0
 }
 
