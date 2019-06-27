@@ -43,6 +43,16 @@ temp_dir=""
 # determine name of [g]sed binary
 type gsed > /dev/null 2>&1 && SED=gsed || SED=sed
 
+# warn if a non-GNU sed utility is used
+"$SED" --version < /dev/null 2> /dev/null \
+| grep GNU >/dev/null 2>&1 || echo 'Warning: not using GNU sed'
+
+# verify the availability of pcregrep
+type pcregrep > /dev/null 2>&1 || {
+  echo 'Error: missing utility `pcregrep`'
+  exit 1
+}
+
 cleanup() {
   rm -rf "$temp_dir"
 }
@@ -62,8 +72,7 @@ fold_it_1() {
     return 1
   fi
 
-  # stash some vars
-  testcol=`expr "$maxcol" + 1`
+  # where to fold
   foldcol=`expr "$maxcol" - 1` # for the inserted '\' char
 
   # ensure input file doesn't contain whitespace on the fold column
@@ -89,7 +98,7 @@ fold_it_1() {
   # generate outfile
   echo "$header" > $outfile
   echo "" >> $outfile
-  "$SED" 's/\(.\{68\}\)\(..\)/\1\\\n\2/;tMORE;bEND;:MORE;P;D;:END'\
+  "$SED" 's/\(.\{'"$foldcol"'\}\)\(..\)/\1\\\n\2/;t M;b;:M;P;D;'\
     < $infile >> $outfile
 
   return 0
@@ -99,6 +108,9 @@ fold_it_2() {
   if [ "$temp_dir" == "" ]; then
     temp_dir=`mktemp -d`
   fi
+
+  # where to fold
+  foldcol=`expr "$maxcol" - 1` # for the inserted '\' char
 
   # ensure input file doesn't contain the fold-sequence already
   pcregrep -M  "\\\\\n[\ ]*\\\\" $infile >> /dev/null 2>&1
@@ -127,7 +139,7 @@ fold_it_2() {
   # generate outfile
   echo "$header" > $outfile
   echo "" >> $outfile
-  "$SED" 's/\(.\{68\}\)\(..\)/\1\\\n\\\2/;tMORE;bEND;:MORE;P;D;:END'\
+  "$SED" 's/\(.\{'"$foldcol"'\}\)\(..\)/\1\\\n\\\2/;t M;b;:M;P;D;'\
     < $infile >> $outfile
 
   return 0
@@ -187,7 +199,7 @@ unfold_it_1() {
   awk "NR>2" $infile > $temp_dir/wip
 
   # unfold wip file
-  "$SED" ':START;$!N;s/\\\n *//;tSTART;P;D' $temp_dir/wip > $outfile
+  "$SED" ':S;$!N;s/\\\n *//;t S;P;D' $temp_dir/wip > $outfile
 
   return 0
 }
@@ -199,7 +211,7 @@ unfold_it_2() {
   awk "NR>2" $infile > $temp_dir/wip
 
   # unfold wip file
-  "$SED" ':START;$!N;s/\\\n *\\//;tSTART;P;D' $temp_dir/wip > $outfile
+  "$SED" ':S;$!N;s/\\\n *\\//;t S;P;D' $temp_dir/wip > $outfile
 
   return 0
 }
