@@ -2,7 +2,8 @@
 # must use `bash` (not `sh`)
 
 # This script may need some adjustments to work on a given system.
-# For instance, the utility `pcregrep` may need to be installed.
+# For instance, the utilities `pcregrep` and `gsed` may need to
+# be installed.
 
 print_usage() {
   echo
