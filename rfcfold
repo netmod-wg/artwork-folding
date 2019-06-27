@@ -43,6 +43,12 @@ temp_dir=""
 # determine name of [g]sed binary
 type gsed > /dev/null 2>&1 && SED=gsed || SED=sed
 
+# verify the availability of pcregrep
+type pcregrep > /dev/null 2>&1 || {
+  echo 'Error: missing utility `pcregrep`'
+  exit 1
+}
+
 cleanup() {
   rm -rf "$temp_dir"
 }
