@@ -99,16 +99,14 @@ fold_it_1() {
   echo "$header" > $outfile
   echo "" >> $outfile
   "$SED" 's/\(.\{'"$foldcol"'\}\)\(..\)/\1\\\n\2/;t M;b;:M;P;D;'\
-    < $infile >> $outfile
-
+    < $infile >> $outfile 2>/dev/null
+  if [[ $? -ne 0 ]]; then
+    return 1
+  fi
   return 0
 }
 
 fold_it_2() {
-  if [ "$temp_dir" == "" ]; then
-    temp_dir=`mktemp -d`
-  fi
-
   # where to fold
   foldcol=`expr "$maxcol" - 1` # for the inserted '\' char
 
@@ -140,8 +138,10 @@ fold_it_2() {
   echo "$header" > $outfile
   echo "" >> $outfile
   "$SED" 's/\(.\{'"$foldcol"'\}\)\(..\)/\1\\\n\\\2/;t M;b;:M;P;D;'\
-    < $infile >> $outfile
-
+    < $infile >> $outfile 2>/dev/null
+  if [[ $? -ne 0 ]]; then
+    return 1
+  fi
   return 0
 }
 
