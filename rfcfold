@@ -2,8 +2,7 @@
 # must use `bash` (not `sh`)
 
 # This script may need some adjustments to work on a given system.
-# For instance, the utility `pcregrep` may need to be installed,
-# and GNU sed needs to be available under the name `gsed` or `sed`.
+# For instance, the utility `pcregrep` may need to be installed.
 
 print_usage() {
   echo
@@ -84,7 +83,7 @@ fold_it_1() {
   # generate outfile
   echo "$header" > $outfile
   echo "" >> $outfile
-  "$SED" -r 's/(.{68})(..)/\1\\\n\2/;tMORE;bEND;:MORE;P;D;:END'\
+  "$SED" 's/\(.\{68\}\)\(..\)/\1\\\n\2/;tMORE;bEND;:MORE;P;D;:END'\
     < $infile >> $outfile
 
   return 0
@@ -122,7 +121,7 @@ fold_it_2() {
   # generate outfile
   echo "$header" > $outfile
   echo "" >> $outfile
-  "$SED" -r 's/(.{68})(..)/\1\\\n\\\2/;tMORE;bEND;:MORE;P;D;:END'\
+  "$SED" 's/\(.\{68\}\)\(..\)/\1\\\n\\\2/;tMORE;bEND;:MORE;P;D;:END'\
     < $infile >> $outfile
 
   return 0
