@@ -494,7 +494,7 @@ INSERT_TEXT_FROM_FILE(refs/example-2.2.txt.folded)
           </section>
         </section>
 
-        <section title="Example Showing Smart Folding">
+        <section title="Example Showing &quot;Smart&quot; Folding">
           <t>This example illustrates how readability can be improved via "smart"
             folding, whereby folding occurs at format-specific locations and
             format-specific indentations are used.</t>
@@ -570,14 +570,14 @@ INSERT_TEXT_FROM_FILE(refs/example-3.2.txt.folded.smart.unfolded.folded)
 
 
       <!-- APPENDICIES -->
-      <section title="POSIX Shell Script" anchor="script">
+      <section title="POSIX Shell Script: rfcfold" anchor="script">
         <t>This non-normative appendix section includes a shell script
           that can both fold and unfold text content using both the
           single and double backslash strategies described in
           <xref target="single-slash"/> and <xref target="double-slash"/>
           respectively.</t>
         <t>This script is intended to be applied to a single text content
-          instance.  If it is desired to fold or unfold test content instances
+          instance.  If it is desired to fold or unfold text content instances
           within a larger document (e.g., an Internet draft or RFC), then
           another tool must be used to extract the content from the larger
           document before utilizing this script.</t>
@@ -589,12 +589,17 @@ INSERT_TEXT_FROM_FILE(refs/example-3.2.txt.folded.smart.unfolded.folded)
           characters on each side of the raw header text.</t>
         <t>This script does not implement the "forced folding" logic
           described in <xref target="double-folding"/>.  In such cases
-          the script will exit with the message:
+          the script will exit with the message:</t>
+        <t>
           <figure>
             <artwork align="center"><![CDATA[
-Error: infile has a line ending with a '\\' character
-followed by a '\\' character as the first non-space
-character on the next line.  This file cannot be folded.
+Error: infile has a line ending with a '\' character
+followed by a '\' character as the first non-space
+character on the next line.  This script cannot fold
+this file using '\\' strategy without there being
+false positives produced in the unfolding (i.e., this
+script does not attempt to proactively force-fold such
+lines, as described in RFC XXXX).
 ]]></artwork>
           </figure>
         </t>
@@ -617,8 +622,12 @@ INSERT_TEXT_FROM_FILE(rfcfold)
       </section>
 
       <section title="Acknowledgements" numbered="no">
+        <t>The authors thank the RFC Editor for confirming that there was
+          previously no set convention for handling long lines in sourcecode
+          inclusions, thus instigating this work.</t>
+
         <t>The authors thank the following folks for their various
-          contributions (sorted by first name):
+          contributions while producing this document (sorted by first name):
           Benoît Claise,
           Erik Auerswald,
           Gianmarco Bruno,
@@ -628,9 +637,11 @@ INSERT_TEXT_FROM_FILE(rfcfold)
           Lou Berger,
           Martin Bjorklund,
           and Rob Wilton.</t>
-        <t>The authors additionally thank the RFC Editor for confirming
-        that there is no set convention today for handling long lines in
-        artwork/sourcecode inclusions. </t>
+
+        <t>Special acknowledgement to Erik Auerswald for his contributions
+          to the `rfcfold` script, especially for greatly improving the
+          `sed` one-liners used therein.</t>
+
       </section>
     </back>
 
