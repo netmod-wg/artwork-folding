@@ -43,6 +43,10 @@ temp_dir=""
 # determine name of [g]sed binary
 type gsed > /dev/null 2>&1 && SED=gsed || SED=sed
 
+# warn if a non-GNU sed utility is used
+"$SED" --version < /dev/null 2> /dev/null \
+| grep GNU >/dev/null 2>&1 || echo 'Warning: not using GNU sed'
+
 # verify the availability of pcregrep
 type pcregrep > /dev/null 2>&1 || {
   echo 'Error: missing utility `pcregrep`'
