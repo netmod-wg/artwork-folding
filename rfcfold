@@ -42,6 +42,11 @@ temp_dir=""
 # determine name of [g]sed binary
 type gsed > /dev/null 2>&1 && SED=gsed || SED=sed
 
+cleanup() {
+  rm -rf "$temp_dir"
+}
+trap 'cleanup' EXIT
+
 fold_it_1() {
   # ensure input file doesn't contain the fold-sequence already
   pcregrep -M  "\\\\\n" $infile >> /dev/null 2>&1
@@ -183,8 +188,6 @@ unfold_it_1() {
   # unfold wip file
   "$SED" ':START;$!N;s/\\\n *//;tSTART;P;D' $temp_dir/wip > $outfile
 
-  # clean up and return
-  rm -rf $temp_dir
   return 0
 }
 
@@ -197,8 +200,6 @@ unfold_it_2() {
   # unfold wip file
   "$SED" ':START;$!N;s/\\\n *\\//;tSTART;P;D' $temp_dir/wip > $outfile
 
-  # clean up and return
-  rm -rf $temp_dir
   return 0
 }
 
