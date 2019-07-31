@@ -48,13 +48,40 @@ test_file() {
   rm $2.folded*
 }
 
+test_prefolded_file() {
+  # $1 : strategy: 1, 2  (0 for auto)
+  # $2 : is the file to test
+  # $3 : is the original file (which the unfolding should match)
+
+  printf "testing $2..."
+
+  command="../rfcfold -r -i $2 -o $2.unfolded 2>&1"
+  expected_exit_code=0
+  run_cmd "$command" $expected_exit_code
+
+  command="diff -q $3 $2.unfolded"
+  expected_exit_code=0
+  run_cmd "$command" $expected_exit_code
+
+  printf "okay.\n"
+  rm $2.unfolded
+}
+
+
 main() {
   echo
   echo "starting neither tests..."
   test_file 1 neither-can-fold-it-1.txt 1
-  test_file 1 neither-can-fold-it-1.txt 1
   test_file 2 neither-can-fold-it-1.txt 1
-  test_file 2 neither-can-fold-it-1.txt 1
+  test_file 1 neither-can-fold-it-2.txt 1
+  test_file 2 neither-can-fold-it-2.txt 1
+  echo
+  echo "starting unfolding forced tests..."
+  #test_prefolded_file 1 neither-can-fold-it-1.force-folded.1.txt neither-can-fold-it-1.txt
+  test_prefolded_file 2 neither-can-fold-it-1.force-folded.2.txt neither-can-fold-it-1.txt
+  #test_prefolded_file 1 neither-can-fold-it-2.force-folded.1.txt neither-can-fold-it-2.txt
+  test_prefolded_file 2 neither-can-fold-it-2.force-folded.2.txt neither-can-fold-it-2.txt
+
   echo
   echo "starting only-2 tests..."
   test_file 1 only-2-can-fold-it-1.txt 1
@@ -86,6 +113,13 @@ main() {
   test_file 2 nofold-needed.txt        1   x  67
   test_file 2 nofold-needed-again.txt  0   0  67
   echo
+
+
+
+command="diff -q example-3.1.txt.folded.smart.unfolded example-3.2.txt.folded.smart.unfolded"
+expected_exit_code=0
+run_cmd "$command" $expected_exit_code
+
 }
 
 main "$@"
