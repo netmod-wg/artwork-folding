@@ -6,5 +6,6 @@
 
 # the following fails preconditions set for both strategies
 12345678\
-\9\
+\9\\
+\
    \567

@@ -77,9 +77,9 @@ main() {
   test_file 2 neither-can-fold-it-2.txt 1
   echo
   echo "starting unfolding forced tests..."
-  #test_prefolded_file 1 neither-can-fold-it-1.force-folded.1.txt neither-can-fold-it-1.txt
+  test_prefolded_file 1 neither-can-fold-it-1.force-folded.1.txt neither-can-fold-it-1.txt
   test_prefolded_file 2 neither-can-fold-it-1.force-folded.2.txt neither-can-fold-it-1.txt
-  #test_prefolded_file 1 neither-can-fold-it-2.force-folded.1.txt neither-can-fold-it-2.txt
+  test_prefolded_file 1 neither-can-fold-it-2.force-folded.1.txt neither-can-fold-it-2.txt
   test_prefolded_file 2 neither-can-fold-it-2.force-folded.2.txt neither-can-fold-it-2.txt
 
   echo
@@ -113,12 +113,16 @@ main() {
   test_file 2 nofold-needed.txt        1   x  67
   test_file 2 nofold-needed-again.txt  0   0  67
   echo
-
-
-
-command="diff -q example-3.1.txt.folded.smart.unfolded example-3.2.txt.folded.smart.unfolded"
-expected_exit_code=0
-run_cmd "$command" $expected_exit_code
+  printf "testing unfolding of smart folding examples 3.1 and 3.2..."
+  expected_exit_code=0
+  command="../rfcfold -r -i example-3.1.txt.folded.smart -o example-3.1.txt.folded.smart.unfolded"
+  run_cmd "$command" $expected_exit_code
+  command="../rfcfold -r -i example-3.2.txt.folded.smart -o example-3.2.txt.folded.smart.unfolded"
+  run_cmd "$command" $expected_exit_code
+  command="diff -q example-3.1.txt.folded.smart.unfolded example-3.2.txt.folded.smart.unfolded"
+  run_cmd "$command" $expected_exit_code
+  rm example-3.1.txt.folded.smart.unfolded example-3.2.txt.folded.smart.unfolded
+  echo "okay."
 
 }
 
