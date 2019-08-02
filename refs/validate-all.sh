@@ -6,7 +6,7 @@ run_cmd() {
 
   output=`$1`
   exit_code=$?
-  if [ $exit_code -ne $2 ]; then
+  if [[ $exit_code -ne $2 ]]; then
     printf "failed.\n"
     printf "  - exit code: $exit_code (expected $2)\n"
     printf "  - command: $1\n"
@@ -55,7 +55,7 @@ test_prefolded_file() {
 
   printf "testing $2..."
 
-  command="../rfcfold -r -i $2 -o $2.unfolded 2>&1"
+  command="../rfcfold -d -r -i $2 -o $2.unfolded 2>&1"
   expected_exit_code=0
   run_cmd "$command" $expected_exit_code
 
@@ -76,12 +76,19 @@ main() {
   test_file 1 neither-can-fold-it-2.txt 1
   test_file 2 neither-can-fold-it-2.txt 1
   echo
-  echo "starting unfolding forced tests..."
+  echo "starting unfolding smart tests..."
+  test_prefolded_file 1 example-3.1.txt.folded.smart example-3.txt
+  test_prefolded_file 2 example-3.2.txt.folded.smart example-3.txt
+  echo
+  echo "starting old unfolding forced tests..."
   test_prefolded_file 1 neither-can-fold-it-1.force-folded.1.txt neither-can-fold-it-1.txt
   test_prefolded_file 2 neither-can-fold-it-1.force-folded.2.txt neither-can-fold-it-1.txt
   test_prefolded_file 1 neither-can-fold-it-2.force-folded.1.txt neither-can-fold-it-2.txt
   test_prefolded_file 2 neither-can-fold-it-2.force-folded.2.txt neither-can-fold-it-2.txt
-
+  echo
+  echo "starting new unfolding forced tests..."
+  test_prefolded_file 1 example-4.1.txt.folded.forced example-4.txt
+  test_prefolded_file 2 example-4.2.txt.folded.forced example-4.txt
   echo
   echo "starting only-2 tests..."
   test_file 1 only-2-can-fold-it-1.txt 1

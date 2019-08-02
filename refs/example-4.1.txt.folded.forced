@@ -1,0 +1,19 @@
+# NOTE: '\' line wrapping per BCP XX (RFC XXXX)
+
+The following line exceeds a 68-char max, thus demands folding
+1234567890123456789012345678901234567890123456789012345678901234567\
+89
+
+This line ends with a backslash \\
+
+
+This line ends with a backslash \\
+
+\ This line begins with a backslash
+
+Following is an indented 3x3 block of backslashes:
+   \\\\
+
+   \\\\
+
+   \\\

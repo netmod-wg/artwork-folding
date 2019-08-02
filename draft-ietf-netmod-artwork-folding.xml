@@ -257,7 +257,7 @@ NOTE: '\' line wrapping per BCP XX (RFC XXXX)
             insert/extract the individual text content instances to/from the
             larger document prior to utilizing the algorithms described in this
             section.  For example, the `xiax` utility <xref target="xiax"/> does this.</t>
-          <section title="Folding">
+          <section title="Folding" anchor="single-folding">
             <t>Determine the desired maximum line length from input to the
             line-wrapping process, such as from a command line
             parameter.  If no value is explicitly specified, the value "69"
@@ -276,19 +276,23 @@ NOTE: '\' line wrapping per BCP XX (RFC XXXX)
             need to be folded).</t>
             <t>Scan the text content to ensure no existing lines already end with a
             backslash ('\') character, as this would lead to an ambiguous result.
-            If such a line is found, exit (this text content cannot be folded).</t>
+            If such a line is found, and its width is less than the desired maximum,
+            then it SHOULD be flagged for forced folding (folding even though
+            unnecessary). If the folding implementation doesn't support forced
+            foldings, it MUST exit.</t>
             <t>If this text content needs to and can be folded, insert the header
             described in <xref target="single-header" />, ensuring that any additional
             printable characters surrounding the header does not result in a
             line exceeding the desired maximum.</t>
             <t>For each line in the text content, from top-to-bottom, if the line
-              exceeds the desired maximum, then fold the line by:
+              exceeds the desired maximum, or requires a forced folding, then fold
+              the line by:
               <list style="numbers">
                 <t>Determine where the fold will occur.  This location MUST be before
                   or at the desired maximum column, and MUST NOT be chosen such that
                   the character immediately after the fold is a space (' ') character.
                   If no such location can be found, then exit (this text content cannot
-                  be folded)</t>
+                  be folded).</t>
                 <t>At the location where the fold is to occur, insert a backslash
                   ('\') character followed by the end of line character sequence.</t>
                 <t>On the following line, insert any number of space (' ') characters.</t>
@@ -500,8 +504,8 @@ INSERT_TEXT_FROM_FILE(refs/example-2.2.txt.folded)
             format-specific indentations are used.</t>
           <t>The text content was manually folded, since the script in the appendix
             does not implement smart folding.</t>
-          <t>Note that the header is surrounded by different printable characters
-            then shown in the script-generated examples.</t>
+          <t>Note that the headers are surrounded by different printable characters
+            than shown in the script-generated examples.</t>
           <section title="Using '\'">
             <figure>
               <artwork><![CDATA[
@@ -527,6 +531,38 @@ INSERT_TEXT_FROM_FILE(refs/example-3.2.txt.folded.smart)
             <figure>
               <artwork><![CDATA[
 INSERT_TEXT_FROM_FILE(refs/example-3.2.txt.folded.smart.unfolded.folded)
+]]></artwork>
+            </figure>
+          </section>
+        </section>
+
+        <section title="Example Showing &quot;Forced&quot; Folding">
+          <t>This example illustrates how invalid sequences in lines that do not
+            have to be folded can be handled via forced folding, whereby the folding
+            occurs even though unnecessary.</t>
+          <t>
+          <figure>
+            <artwork><![CDATA[
+INSERT_TEXT_FROM_FILE(refs/example-4.txt)
+]]></artwork>
+          </figure>
+          </t>
+          <t>The samples below were manually folded, since the script in the appendix
+            does not implement forced folding.</t>
+          <t>Note that the headers are prefixed by a pound ('#') character, rather 
+            than surrounded by equal ('=') characters as shown in the script-generated
+            examples.</t>
+          <section title="Using '\'">
+            <figure>
+              <artwork><![CDATA[
+INSERT_TEXT_FROM_FILE(refs/example-4.1.txt.folded.forced)
+]]></artwork>
+            </figure>
+          </section>
+          <section title="Using '\\'">
+            <figure>
+              <artwork><![CDATA[
+INSERT_TEXT_FROM_FILE(refs/example-4.2.txt.folded.forced)
 ]]></artwork>
             </figure>
           </section>
@@ -587,9 +623,30 @@ INSERT_TEXT_FROM_FILE(refs/example-3.2.txt.folded.smart.unfolded.folded)
           <xref target="double-header"/> so as to ensure that the header
           can be wrapped by a space (' ') character and three equal ('=')
           characters on each side of the raw header text.</t>
+        <t>This script does not implement the whitespace-avoidance logic
+          described in <xref target="single-folding"/>.  In such case,
+          the script will exit with one of the following message:</t>
+        <t>
+          <figure>
+            <artwork align="center"><![CDATA[
+Error: infile has a space character occuring on the
+folding column. This file cannot be folded using the
+'\' strategy.
+]]></artwork>
+          </figure>
+        </t>
         <t>This script does not implement the "forced folding" logic
-          described in <xref target="double-folding"/>.  In such cases
-          the script will exit with the message:</t>
+          described in <xref target="single-folding"/> or
+          <xref target="double-folding"/>.  In such cases
+          the script will exit with one of the following message:</t>
+        <t>
+          <figure>
+            <artwork align="center"><![CDATA[
+Error: infile has a line ending with a '\' character
+This file cannot be folded using the '\' strategy.
+]]></artwork>
+          </figure>
+        </t>
         <t>
           <figure>
             <artwork align="center"><![CDATA[
