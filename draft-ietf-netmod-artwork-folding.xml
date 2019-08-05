@@ -194,11 +194,9 @@
         <section title="Comparison">
           <t>The first strategy produces more readable output, however it is
             significantly more likely to encounter unfoldable input (e.g.,
-            there exists a line anywhere in the input ending with a backslash
-            character, or there exists a long line containing only space
-            characters) and, for long lines that can be folded, automation
-            implementations may encounter scenarios that will produce errors
-            without special care.</t>
+            a long line containing only space characters) and, for long lines
+            that can be folded, automation implementations may encounter
+            scenarios that will produce errors without special care.</t>
           <t>The second strategy produces less readable output, but is
             unlikely to encounter unfoldable input, there are no long lines
             that cannot be folded, and no special care is required for when
@@ -220,15 +218,15 @@
            MUST adhere to the following structure.</t>
           <section title="Header" anchor="single-header">
             <t>The header is two lines long.</t>
-            <t>The first line is the following 45-character string that
+            <t>The first line is the following 46-character string that
             MAY be surrounded by any number of printable characters.
             This first line cannot itself be folded.
               <figure>
                 <artwork><![CDATA[
-NOTE: '\' line wrapping per BCP XX (RFC XXXX)
+NOTE: '\' line wrapping per BCP XXX (RFC XXXX)
 ]]></artwork>
                 <postamble>
-                  [Note to RFC Editor: Please replace XX and XXXX with the numbers
+                  [Note to RFC Editor: Please replace XXX and XXXX with the numbers
                   assigned to this document and delete this note.  Please make this
                   change in multiple places in this document.]
                 </postamble>
@@ -263,7 +261,7 @@ NOTE: '\' line wrapping per BCP XX (RFC XXXX)
             parameter.  If no value is explicitly specified, the value "69"
             SHOULD be used.</t>
             <t>Ensure that the desired maximum line length is not less than
-            the minimum header, which is 45 characters.  If the desired
+            the minimum header, which is 46 characters.  If the desired
             maximum line length is less than this minimum, exit (this text-based
             content cannot be folded).</t>
             <t>Scan the text content for horizontal tab characters.  If any
@@ -336,15 +334,15 @@ NOTE: '\' line wrapping per BCP XX (RFC XXXX)
            MUST adhere to the following structure.</t>
           <section title="Header" anchor="double-header">
             <t>The header is two lines long.</t>
-            <t>The first line is the following 46-character string that
+            <t>The first line is the following 47-character string that
             MAY be surrounded by any number of printable characters.
             This first line cannot itself be folded.
               <figure>
                 <artwork><![CDATA[
-NOTE: '\\' line wrapping per BCP XX (RFC XXXX)
+NOTE: '\\' line wrapping per BCP XXX (RFC XXXX)
 ]]></artwork>
                 <postamble>
-                  [Note to RFC Editor: Please replace XX and XXXX with the numbers
+                  [Note to RFC Editor: Please replace XXX and XXXX with the numbers
                   assigned to this document and delete this note.  Please make this
                   change in multiple places in this document.]
                 </postamble>
@@ -381,7 +379,7 @@ NOTE: '\\' line wrapping per BCP XX (RFC XXXX)
             parameter.  If no value is explicitly specified, the value "69"
             SHOULD be used.</t>
             <t>Ensure that the desired maximum line length is not less than
-            the minimum header, which is 46 characters.  If the desired
+            the minimum header, which is 47 characters.  If the desired
             maximum line length is less than this minimum, exit (this text-based
             content cannot be folded).</t>
             <t>Scan the text content for horizontal tab characters.  If any

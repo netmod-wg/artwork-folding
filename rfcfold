@@ -40,7 +40,7 @@
 
 print_usage() {
   printf "\n"
-  printf "Folds or unfolds the input text file according to BCP XX"
+  printf "Folds or unfolds the input text file according to BCP XXX"
   printf " (RFC XXXX).\n"
   printf "\n"
   printf "Usage: rfcfold [-s <strategy>] [-c <col>] [-r] -i <infile>"
@@ -68,8 +68,8 @@ reversed=0
 infile=""
 outfile=""
 maxcol=69  # default, may be overridden by param
-hdr_txt_1="NOTE: '\\' line wrapping per BCP XX (RFC XXXX)"
-hdr_txt_2="NOTE: '\\\\' line wrapping per BCP XX (RFC XXXX)"
+hdr_txt_1="NOTE: '\\' line wrapping per BCP XXX (RFC XXXX)"
+hdr_txt_2="NOTE: '\\\\' line wrapping per BCP XXX (RFC XXXX)"
 equal_chars="======================================================="
 space_chars="                                                       "
 temp_dir=""
