@@ -144,23 +144,6 @@ fold_it_2() {
   # where to fold
   foldcol=`expr "$maxcol" - 1` # for the inserted '\' char
 
-  # ensure input file doesn't contain the fold-sequence already
-  pcregrep -M  "\\\\\n[\ ]*\\\\" $infile >> /dev/null 2>&1
-  if [[ $? -eq 0 ]]; then
-    if [[ $quiet -eq 0 ]]; then
-      echo
-      echo "Error: infile has a line ending with a '\\' character"
-      echo "followed by a '\\' character as the first non-space"
-      echo "character on the next line.  This script cannot fold"
-      echo "this file using '\\\\' strategy without there being"
-      echo "false positives produced in the unfolding (i.e., this"
-      echo "script does not attempt to proactively force-fold such"
-      echo "lines, as described in RFC XXXX)."
-      echo
-    fi
-    return 1
-  fi
-
   # center header text
   length=`expr ${#hdr_txt_2} + 2`
   left_sp=`expr \( "$maxcol" - "$length" \) / 2`
@@ -171,8 +154,9 @@ fold_it_2() {
   # generate outfile
   echo "$header" > $outfile
   echo "" >> $outfile
+  "$SED" '{H;$!d};x;s/^\n//;s/\\\(\n *\\\)/\\\\\n\\\1/g' <$infile|\
   "$SED" 's/\(.\{'"$foldcol"'\}\)\(..\)/\1\\\n\\\2/;t M;b;:M;P;D;'\
-    < $infile >> $outfile 2>/dev/null
+    >> $outfile 2>/dev/null
   if [[ $? -ne 0 ]]; then
     return 1
   fi

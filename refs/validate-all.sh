@@ -70,21 +70,15 @@ test_prefolded_file() {
 
 main() {
   echo
-  echo "starting neither tests..."
-  test_file 1 neither-can-fold-it-1.txt 1
-  test_file 2 neither-can-fold-it-1.txt 1
-  test_file 1 neither-can-fold-it-2.txt 1
-  test_file 2 neither-can-fold-it-2.txt 1
-  echo
   echo "starting unfolding smart tests..."
   test_prefolded_file 1 example-3.1.txt.folded.smart example-3.txt
   test_prefolded_file 2 example-3.2.txt.folded.smart example-3.txt
   echo
   echo "starting old unfolding forced tests..."
-  test_prefolded_file 1 neither-can-fold-it-1.force-folded.1.txt neither-can-fold-it-1.txt
-  test_prefolded_file 2 neither-can-fold-it-1.force-folded.2.txt neither-can-fold-it-1.txt
-  test_prefolded_file 1 neither-can-fold-it-2.force-folded.1.txt neither-can-fold-it-2.txt
-  test_prefolded_file 2 neither-can-fold-it-2.force-folded.2.txt neither-can-fold-it-2.txt
+  test_prefolded_file 1 only-2-can-fold-it-7.force-folded.1.txt only-2-can-fold-it-7.txt
+  test_prefolded_file 2 only-2-can-fold-it-7.force-folded.2.txt only-2-can-fold-it-7.txt
+  test_prefolded_file 1 only-2-can-fold-it-8.force-folded.1.txt only-2-can-fold-it-8.txt
+  test_prefolded_file 2 only-2-can-fold-it-8.force-folded.2.txt only-2-can-fold-it-8.txt
   echo
   echo "starting new unfolding forced tests..."
   test_prefolded_file 1 example-4.1.txt.folded.forced example-4.txt
@@ -102,7 +96,11 @@ main() {
   test_file 1 only-2-can-fold-it-5.txt 1
   test_file 2 only-2-can-fold-it-5.txt 0   0
   test_file 1 only-2-can-fold-it-6.txt 1
-  test_file 2 only-2-can-fold-it-6.txt 0  0
+  test_file 2 only-2-can-fold-it-6.txt 0   0
+  test_file 1 only-2-can-fold-it-7.txt 1
+  test_file 2 only-2-can-fold-it-7.txt 0   0
+  test_file 1 only-2-can-fold-it-8.txt 1
+  test_file 2 only-2-can-fold-it-8.txt 0   0
   echo
   echo "starting strategy #1 tests..."
   test_file 1 contains-tab.txt         1
@@ -114,10 +112,10 @@ main() {
   echo
   echo "starting strategy #2 tests..."
   test_file 2 contains-tab.txt         1
-  test_file 2 already-exists.txt       1
+  test_file 2 already-exists.txt       0   0
   test_file 2 folding-needed.txt       0   0
   test_file 2 nofold-needed.txt      255 255
-  test_file 2 nofold-needed.txt        1   x  67
+  test_file 2 nofold-needed.txt        0   0  67
   test_file 2 nofold-needed-again.txt  0   0  67
   echo
   printf "testing unfolding of smart folding examples 3.1 and 3.2..."
