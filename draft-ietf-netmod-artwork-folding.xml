@@ -130,9 +130,9 @@
           processing.</t>
           <t>Similarly, dynamically generated output (e.g., tree diagrams)
           must also be modified, if necessary, in order for the resulting
-          document to satisfy the line length limits.  When needed, this effort
-          again SHOULD be automated to reduce effort and errors
-          resulting from manual processing.</t>
+          document to satisfy the line length limits.  This work should
+          also be automated to reduce effort and errors resulting from
+          manual processing.</t>
         </section>
         <section title="Automated Reconstitution of the Original Text Content">
           <t>Automated reconstitution of the exact original text content is needed to
@@ -163,7 +163,7 @@
           for all text-based content, as it only views content as plain
           text.  However, various formats sometimes have built-in mechanisms
           that are better suited to prevent long lines.</t>
-          <t>For instance, both the `pyang` and `yanglint` utilities
+          <t>For instance, both the `pyang` <xref target="pyang"/> and `yanglint` <xref target="yanglint"/> utilities
           have the command line option "--tree-line-length" that can
           be used to indicate a desired maximum line length for when
           generating tree diagrams <xref target="RFC8340"/>.</t>
@@ -183,7 +183,7 @@
           <list style="hanging" hangIndent="6">
             <t hangText="   The Single Backslash Strategy ('\'):">Uses a backslash
               ('\') character at the end of the line where folding occurs, and
-              assumes that the continuation begins at the character that is not
+              assumes that the continuation begins at the first character that is not
               a space character (' ') on the following line.</t>
             <t hangText="   The Double Backslash Strategy ('\\'):">Uses a backslash
               ('\') character at the end of the line where folding occurs, and
@@ -232,8 +232,9 @@ NOTE: '\' line wrapping per BCP XXX (RFC XXXX)
                 </postamble>
               </figure>
             </t>
-            <t>The second line is a blank line.  This line provides visual
-            separation for readability.</t>
+            <t>The second line is a empty line, containing only the end-of-line
+              character sequence.  This line provides visual separation for
+              readability.</t>
           </section>
           <section title="Body">
             <t>The character encoding is the same as described in Section 2
@@ -273,14 +274,14 @@ NOTE: '\' line wrapping per BCP XXX (RFC XXXX)
             (this text content does not
             need to be folded).</t>
             <t>Scan the text content to ensure no existing lines already end with a
-            backslash ('\') character, as this would lead to an ambiguous result.
+            backslash ('\') character, as this could lead to an ambiguous result.
             If such a line is found, and its width is less than the desired maximum,
             then it SHOULD be flagged for forced folding (folding even though
             unnecessary). If the folding implementation doesn't support forced
             foldings, it MUST exit.</t>
             <t>If this text content needs to and can be folded, insert the header
             described in <xref target="single-header" />, ensuring that any additional
-            printable characters surrounding the header does not result in a
+            printable characters surrounding the header do not result in a
             line exceeding the desired maximum.</t>
             <t>For each line in the text content, from top-to-bottom, if the line
               exceeds the desired maximum, or requires a forced folding, then fold
@@ -289,8 +290,9 @@ NOTE: '\' line wrapping per BCP XXX (RFC XXXX)
                 <t>Determine where the fold will occur.  This location MUST be before
                   or at the desired maximum column, and MUST NOT be chosen such that
                   the character immediately after the fold is a space (' ') character.
-                  If no such location can be found, then exit (this text content cannot
-                  be folded).</t>
+                  For forced foldings, the location is between the '\' and the end of
+                  line sequence.  If no such location can be found, then exit (this
+                  text content cannot be folded).</t>
                 <t>At the location where the fold is to occur, insert a backslash
                   ('\') character followed by the end of line character sequence.</t>
                 <t>On the following line, insert any number of space (' ') characters.</t>
@@ -348,8 +350,9 @@ NOTE: '\\' line wrapping per BCP XXX (RFC XXXX)
                 </postamble>
               </figure>
             </t>
-            <t>The second line is a blank line.  This line provides visual
-            separation for readability.</t>
+            <t>The second line is a empty line, containing only the end-of-line
+              character sequence.  This line provides visual separation for
+              readability.</t>
           </section>
           <section title="Body">
             <t>The character encoding is the same as described in Section 2
@@ -399,14 +402,15 @@ NOTE: '\\' line wrapping per BCP XXX (RFC XXXX)
             exit.</t>
             <t>If this text content needs to and can be folded, insert the header
             described in <xref target="double-header" />, ensuring that any additional
-            printable characters surrounding the header does not result in a
+            printable characters surrounding the header do not result in a
             line exceeding the desired maximum.</t>
             <t>For each line in the text content, from top-to-bottom, if the line
               exceeds the desired maximum, or requires a forced folding, then
               fold the line by:
               <list style="numbers">
                 <t>Determine where the fold will occur.  This location MUST be before
-                  or at the desired maximum column.</t>
+                  or at the desired maximum column.  For forced foldings, the location
+                  is between the '\' and the end of line sequence on the first line.</t>
                 <t>At the location where the fold is to occur, insert a first
                   backslash ('\') character followed by the end of line character
                   sequence.</t>
@@ -600,6 +604,12 @@ INSERT_TEXT_FROM_FILE(refs/example-4.2.txt.folded.forced)
         <reference anchor="xiax" target="https://pypi.org/project/xiax/">
           <front><title>The `xiax` Python Package</title><author/><date/></front>
         </reference>
+        <reference anchor="pyang" target="https://pypi.org/project/pyang/">
+          <front><title>An extensible YANG (RFC 6020/7950) validator.</title><author/><date/></front>
+        </reference>
+        <reference anchor="yanglint" target="https://github.com/CESNET/libyang#yanglint">
+          <front><title>A feature-rich tool for validation and conversion of the schemas and YANG modeled data.</title><author/><date/></front>
+        </reference>
       </references>
 
 
@@ -633,15 +643,20 @@ folding column. This file cannot be folded using the
 ]]></artwork>
           </figure>
         </t>
-        <t>This script does not implement the "forced folding" logic
-          described in <xref target="single-folding"/> or
-          <xref target="double-folding"/>.  In such cases
-          the script will exit with one of the following message:</t>
+        <t>While this script can unfold input that contains forced foldings,
+          it unable to fold files that would require forced foldings.  Forced
+          folding is described in <xref target="single-folding"/> and
+          <xref target="double-folding"/>.  When being asked to fold a file
+          that would require forced folding, the script will instead exit
+          with one of the following messages:</t>
         <t>
           <figure>
             <artwork align="center"><![CDATA[
-Error: infile has a line ending with a '\' character
-This file cannot be folded using the '\' strategy.
+Error: infile has a line ending with a '\' character.
+This file cannot be folded using the '\' strategy without
+there being false positives produced in the unfolding
+(i.e., this script does not attempt to proactively
+force-fold such lines, as described in RFC XXXX).
 ]]></artwork>
           </figure>
         </t>

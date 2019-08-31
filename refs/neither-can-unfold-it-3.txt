@@ -1,0 +1,4 @@
+[NOTE: '\\' line wrapping per BCP XXX (RFC XXXX)]
+this file does not contain a blank 2nd line
+
+...

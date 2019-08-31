@@ -79,11 +79,12 @@ type gsed > /dev/null 2>&1 && SED=gsed || SED=sed
 
 # warn if a non-GNU sed utility is used
 "$SED" --version < /dev/null 2> /dev/null \
-| grep GNU >/dev/null 2>&1 || echo 'Warning: not using GNU `sed`.'
+| grep GNU >/dev/null 2>&1 || \
+echo 'Warning: not using GNU `sed` (likely cause if an error occurs)'
 
 # verify the availability of pcregrep
 type pcregrep > /dev/null 2>&1 || {
-  echo 'Error: missing utility `pcregrep`'
+  printf '\nError: missing utility `pcregrep`\n'
   exit 1
 }
 
@@ -100,7 +101,10 @@ fold_it_1() {
       echo
       echo "Error: infile $infile has a line ending with a '\\'"
       echo "character. This file cannot be folded using the '\\'"
-      echo "strategy."
+      echo "strategy without there being false positives produced"
+      echo "in the unfolding (i.e., this script does not attempt"
+      echo "to proactively force-fold such lines, as described"
+      echo "in RFC XXXX)."
       echo
     fi
     return 1
@@ -253,13 +257,26 @@ unfold_it_2() {
 unfold_it() {
   # check if file needs unfolding
   line=`head -n 1 $infile`
+  line2=`$SED -n '2p' $infile`
   result=`echo $line | fgrep "$hdr_txt_1"`
   if [ $? -eq 0 ]; then
+    if [ -n "$line2" ]; then
+      if [[ $quiet -eq 0 ]]; then
+        echo "Error: the second line is not empty."
+      fi
+      return 1
+    fi
     unfold_it_1
     return $?
   fi
   result=`echo $line | fgrep "$hdr_txt_2"`
   if [ $? -eq 0 ]; then
+    if [ -n "$line2" ]; then
+      if [[ $quiet -eq 0 ]]; then
+        echo "Error: the second line is not empty."
+      fi
+      return 1
+    fi
     unfold_it_2
     return $?
   fi
@@ -274,7 +291,7 @@ process_input() {
   while [ "$1" != "" ]; do
     if [ "$1" == "-h" -o "$1" == "--help" ]; then
       print_usage
-      exit 1
+      exit 0
     fi
     if [ "$1" == "-d" ]; then
       debug=1

@@ -31,8 +31,11 @@ test_file() {
   fi
   expected_exit_code=$3
   run_cmd "$command" $expected_exit_code
-  if [ $expected_exit_code -eq 1 ]; then
+  if [ $expected_exit_code -ne 0 ]; then
     printf "okay.\n"
+    if [ $expected_exit_code -eq 255 ]; then
+      rm $2.folded*
+    fi
     return
   fi
 
@@ -46,6 +49,23 @@ test_file() {
 
   printf "okay.\n"
   rm $2.folded*
+}
+
+test_unfoldable_file() {
+  # $1 : strategy: 1, 2  (0 for auto)
+  # $2 : is the file to test
+  # $3 : expected error code
+
+  printf "testing $2..."
+
+  command="../rfcfold -d -r -i $2 -o $2.unfolded 2>&1"
+  expected_exit_code=$3
+  run_cmd "$command" $expected_exit_code
+
+  printf "okay.\n"
+  if [[ $3 -eq 255 ]]; then
+    rm $2.unfolded
+  fi
 }
 
 test_prefolded_file() {
@@ -75,6 +95,14 @@ main() {
   test_file 2 neither-can-fold-it-1.txt 1
   test_file 1 neither-can-fold-it-2.txt 1
   test_file 2 neither-can-fold-it-2.txt 1
+  echo
+  echo "starting unfoldable tests..."
+  test_unfoldable_file 1 neither-can-unfold-it-1.txt 255
+  test_unfoldable_file 2 neither-can-unfold-it-1.txt 255
+  test_unfoldable_file 1 neither-can-unfold-it-2.txt 1
+  test_unfoldable_file 2 neither-can-unfold-it-2.txt 1
+  test_unfoldable_file 1 neither-can-unfold-it-3.txt 1
+  test_unfoldable_file 2 neither-can-unfold-it-3.txt 1
   echo
   echo "starting unfolding smart tests..."
   test_prefolded_file 1 example-3.1.txt.folded.smart example-3.txt
