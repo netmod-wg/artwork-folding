@@ -43,8 +43,8 @@ print_usage() {
   printf "Folds or unfolds the input text file according to BCP XXX"
   printf " (RFC XXXX).\n"
   printf "\n"
-  printf "Usage: rfcfold [-s <strategy>] [-c <col>] [-r] -i <infile>"
-  printf " -o <outfile>\n"
+  printf "Usage: rfcfold [-h] [-d] [-q] [-s <strategy>] [-c <col>]"
+  printf " [-r] -i <infile> -o <outfile>\n"
   printf "\n"
   printf "  -s: strategy to use, '1' or '2' (default: try 1,"
   printf " else 2)\n"
@@ -83,7 +83,7 @@ type gsed > /dev/null 2>&1 && SED=gsed || SED=sed
 echo 'Warning: not using GNU `sed` (likely cause if an error occurs)'
 
 # verify the availability of pcregrep
-type pcregrep > /dev/null 2>&1 || {
+type pcregrep >> /dev/null 2>&1 || {
   printf '\nError: missing utility `pcregrep`\n'
   exit 1
 }
@@ -95,16 +95,15 @@ trap 'cleanup' EXIT
 
 fold_it_1() {
   # ensure input file doesn't contain the fold-sequence already
-  pcregrep -M  "\\\\\n" $infile >> /dev/null 2>&1
+  pcregrep -q -M  "\\\\\n" "$infile"
   if [[ $? -eq 0 ]]; then
     if [[ $quiet -eq 0 ]]; then
       echo
-      echo "Error: infile $infile has a line ending with a '\\'"
-      echo "character. This file cannot be folded using the '\\'"
-      echo "strategy without there being false positives produced"
-      echo "in the unfolding (i.e., this script does not attempt"
-      echo "to proactively force-fold such lines, as described"
-      echo "in RFC XXXX)."
+      echo "Error: infile has a line ending with a '\\' character."
+      echo "This file cannot be folded using the '\\' strategy"
+      echo "without there being false positives produced in the"
+      echo "unfolding (i.e., this script does not force-fold"
+      echo "such lines, as described in BCP XXX, RFC XXXX)."
       echo
     fi
     return 1
@@ -114,11 +113,11 @@ fold_it_1() {
   foldcol=`expr "$maxcol" - 1` # for the inserted '\' char
 
   # ensure input file doesn't contain whitespace on the fold column
-  grep "^.\{$foldcol\} " $infile >> /dev/null 2>&1
+  grep -q "^.\{$foldcol\} " "$infile"
   if [[ $? -eq 0 ]]; then
     if [[ $quiet -eq 0 ]]; then
       echo
-      echo "Error: infile has a space character occuring on the"
+      echo "Error: infile has a space character occurring on the"
       echo "folding column. This file cannot be folded using the"
       echo "'\\' strategy."
       echo
@@ -134,10 +133,10 @@ fold_it_1() {
                    "$hdr_txt_1" "$right_sp" "$equal_chars"`
 
   # generate outfile
-  echo "$header" > $outfile
-  echo "" >> $outfile
+  echo "$header" > "$outfile"
+  echo "" >> "$outfile"
   "$SED" 's/\(.\{'"$foldcol"'\}\)\(..\)/\1\\\n\2/;t M;b;:M;P;D;'\
-    < $infile >> $outfile 2>/dev/null
+    < "$infile" >> "$outfile" 2>/dev/null
   if [[ $? -ne 0 ]]; then
     return 1
   fi
@@ -149,7 +148,7 @@ fold_it_2() {
   foldcol=`expr "$maxcol" - 1` # for the inserted '\' char
 
   # ensure input file doesn't contain the fold-sequence already
-  pcregrep -M  "\\\\\n[\ ]*\\\\" $infile >> /dev/null 2>&1
+  pcregrep -q -M  "\\\\\n[\ ]*\\\\" "$infile"
   if [[ $? -eq 0 ]]; then
     if [[ $quiet -eq 0 ]]; then
       echo
@@ -158,8 +157,8 @@ fold_it_2() {
       echo "character on the next line.  This script cannot fold"
       echo "this file using '\\\\' strategy without there being"
       echo "false positives produced in the unfolding (i.e., this"
-      echo "script does not attempt to proactively force-fold such"
-      echo "lines, as described in RFC XXXX)."
+      echo "script does not force-fold such lines, as described"
+      echo "in BCP XXX, RFC XXXX)."
       echo
     fi
     return 1
@@ -173,10 +172,10 @@ fold_it_2() {
                    "$hdr_txt_2" "$right_sp" "$equal_chars"`
 
   # generate outfile
-  echo "$header" > $outfile
-  echo "" >> $outfile
+  echo "$header" > "$outfile"
+  echo "" >> "$outfile"
   "$SED" 's/\(.\{'"$foldcol"'\}\)\(..\)/\1\\\n\\\2/;t M;b;:M;P;D;'\
-    < $infile >> $outfile 2>/dev/null
+    < "$infile" >> "$outfile" 2>/dev/null
   if [[ $? -ne 0 ]]; then
     return 1
   fi
@@ -185,7 +184,7 @@ fold_it_2() {
 
 fold_it() {
   # ensure input file doesn't contain a TAB
-  grep $'\t' $infile >> /dev/null 2>&1
+  grep -q $'\t' "$infile"
   if [[ $? -eq 0 ]]; then
     if [[ $quiet -eq 0 ]]; then
       echo
@@ -198,12 +197,12 @@ fold_it() {
 
   # check if file needs folding
   testcol=`expr "$maxcol" + 1`
-  grep ".\{$testcol\}" $infile >> /dev/null 2>&1
+  grep -q ".\{$testcol\}" "$infile"
   if [ $? -ne 0 ]; then
     if [[ $debug -eq 1 ]]; then
       echo "nothing to do"
     fi
-    cp $infile $outfile
+    cp "$infile" "$outfile"
     return -1
   fi
 
@@ -234,10 +233,10 @@ unfold_it_1() {
   temp_dir=`mktemp -d`
 
   # output all but the first two lines (the header) to wip file
-  awk "NR>2" $infile > $temp_dir/wip
+  awk "NR>2" "$infile" > "$temp_dir/wip"
 
   # unfold wip file
-  "$SED" '{H;$!d};x;s/^\n//;s/\\\n *//g' $temp_dir/wip > $outfile
+  "$SED" '{H;$!d};x;s/^\n//;s/\\\n *//g' "$temp_dir/wip" > "$outfile"
 
   return 0
 }
@@ -246,19 +245,19 @@ unfold_it_2() {
   temp_dir=`mktemp -d`
 
   # output all but the first two lines (the header) to wip file
-  awk "NR>2" $infile > $temp_dir/wip
+  awk "NR>2" "$infile" > "$temp_dir/wip"
 
   # unfold wip file
-  "$SED" '{H;$!d};x;s/^\n//;s/\\\n *\\//g' $temp_dir/wip > $outfile
+  "$SED" '{H;$!d};x;s/^\n//;s/\\\n *\\//g' "$temp_dir/wip" > "$outfile"
 
   return 0
 }
 
 unfold_it() {
   # check if file needs unfolding
-  line=`head -n 1 $infile`
-  line2=`$SED -n '2p' $infile`
-  result=`echo $line | fgrep "$hdr_txt_1"`
+  line=`head -n 1 "$infile"`
+  line2=`$SED -n '2p' "$infile"`
+  result=`echo "$line" | fgrep "$hdr_txt_1"`
   if [ $? -eq 0 ]; then
     if [ -n "$line2" ]; then
       if [[ $quiet -eq 0 ]]; then
@@ -283,7 +282,7 @@ unfold_it() {
   if [[ $debug -eq 1 ]]; then
     echo "nothing to do"
   fi
-  cp $infile $outfile
+  cp "$infile" "$outfile"
   return -1
 }
 
@@ -349,16 +348,14 @@ process_input() {
   fi
 
   if [[ $strategy -eq 2 ]]; then
-    min_supported=`expr ${#hdr_txt_2} + 8`
+    min_supported=`expr ${#hdr_txt_2} + 9`
   else
-    min_supported=`expr ${#hdr_txt_1} + 8`
+    min_supported=`expr ${#hdr_txt_1} + 9`
   fi
   if [[ $maxcol -lt $min_supported ]]; then
     if [[ $quiet -eq 0 ]]; then
-      echo
-      echo "Error: the folding column cannot be less than"
-      echo "$min_supported."
-      echo
+      printf "\nError: the folding column cannot be less than"
+      printf " $min_supported.\n\n"
     fi
     exit 1
   fi
@@ -368,10 +365,8 @@ process_input() {
        + ${#equal_chars}`
   if [[ $maxcol -gt $max_supported ]]; then
     if [[ $quiet -eq 0 ]]; then
-      echo
-      echo "Error: the folding column cannot be more than"
-      echo "$max_supported."
-      echo
+      printf "\nError: the folding column cannot be more than"
+      printf " $max_supported.\n\n"
     fi
     exit 1
   fi
@@ -383,7 +378,7 @@ main() {
      exit 1
   fi
 
-  process_input $@
+  process_input "$@"
 
   if [[ $reversed -eq 0 ]]; then
     fold_it
