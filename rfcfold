@@ -248,7 +248,8 @@ unfold_it_2() {
   awk "NR>2" "$infile" > "$temp_dir/wip"
 
   # unfold wip file
-  "$SED" '{H;$!d};x;s/^\n//;s/\\\n *\\//g' "$temp_dir/wip" > "$outfile"
+  "$SED" '{H;$!d};x;s/^\n//;s/\\\n *\\//g' "$temp_dir/wip"\
+    > "$outfile"
 
   return 0
 }
