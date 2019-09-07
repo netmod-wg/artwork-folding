@@ -97,7 +97,7 @@ fold_it_1() {
   # ensure input file doesn't contain the fold-sequence already
   pcregrep -q -M  "\\\\\n" "$infile"
   if [[ $? -eq 0 ]]; then
-    if [[ $quiet -eq 0 ]]; then
+    if [[ "$quiet" -eq 0 ]]; then
       echo
       echo "Error: infile has a line ending with a '\\' character."
       echo "This file cannot be folded using the '\\' strategy"
@@ -115,7 +115,7 @@ fold_it_1() {
   # ensure input file doesn't contain whitespace on the fold column
   grep -q "^.\{$foldcol\} " "$infile"
   if [[ $? -eq 0 ]]; then
-    if [[ $quiet -eq 0 ]]; then
+    if [[ "$quiet" -eq 0 ]]; then
       echo
       echo "Error: infile has a space character occurring on the"
       echo "folding column. This file cannot be folded using the"
@@ -150,7 +150,7 @@ fold_it_2() {
   # ensure input file doesn't contain the fold-sequence already
   pcregrep -q -M  "\\\\\n[\ ]*\\\\" "$infile"
   if [[ $? -eq 0 ]]; then
-    if [[ $quiet -eq 0 ]]; then
+    if [[ "$quiet" -eq 0 ]]; then
       echo
       echo "Error: infile has a line ending with a '\\' character"
       echo "followed by a '\\' character as the first non-space"
@@ -186,7 +186,7 @@ fold_it() {
   # ensure input file doesn't contain a TAB
   grep -q $'\t' "$infile"
   if [[ $? -eq 0 ]]; then
-    if [[ $quiet -eq 0 ]]; then
+    if [[ "$quiet" -eq 0 ]]; then
       echo
       echo "Error: infile contains a TAB character, which is"
       echo "not allowed."
@@ -199,28 +199,28 @@ fold_it() {
   testcol=$(expr "$maxcol" + 1)
   grep -q ".\{$testcol\}" "$infile"
   if [ $? -ne 0 ]; then
-    if [[ $debug -eq 1 ]]; then
+    if [[ "$debug" -eq 1 ]]; then
       echo "nothing to do"
     fi
     cp "$infile" "$outfile"
     return -1
   fi
 
-  if [[ $strategy -eq 1 ]]; then
+  if [[ "$strategy" -eq 1 ]]; then
     fold_it_1
     return $?
   fi
-  if [[ $strategy -eq 2 ]]; then
+  if [[ "$strategy" -eq 2 ]]; then
     fold_it_2
     return $?
   fi
-  quiet_sav=$quiet
+  quiet_sav="$quiet"
   quiet=1
   fold_it_1
   result=$?
-  quiet=$quiet_sav
-  if [[ $result -ne 0 ]]; then
-    if [[ $debug -eq 1 ]]; then
+  quiet="$quiet_sav"
+  if [[ "$result" -ne 0 ]]; then
+    if [[ "$debug" -eq 1 ]]; then
       echo "Folding strategy 1 didn't succeed, trying strategy 2..."
     fi
     fold_it_2
@@ -256,11 +256,11 @@ unfold_it_2() {
 unfold_it() {
   # check if file needs unfolding
   line=$(head -n 1 "$infile")
-  line2=$($SED -n '2p' "$infile")
+  line2=$("$SED" -n '2p' "$infile")
   result=$(echo "$line" | fgrep "$hdr_txt_1")
   if [ $? -eq 0 ]; then
     if [ -n "$line2" ]; then
-      if [[ $quiet -eq 0 ]]; then
+      if [[ "$quiet" -eq 0 ]]; then
         echo "Error: the second line is not empty."
       fi
       return 1
@@ -268,10 +268,10 @@ unfold_it() {
     unfold_it_1
     return $?
   fi
-  result=$(echo $line | fgrep "$hdr_txt_2")
+  result=$(echo "$line" | fgrep "$hdr_txt_2")
   if [ $? -eq 0 ]; then
     if [ -n "$line2" ]; then
-      if [[ $quiet -eq 0 ]]; then
+      if [[ "$quiet" -eq 0 ]]; then
         echo "Error: the second line is not empty."
       fi
       return 1
@@ -279,7 +279,7 @@ unfold_it() {
     unfold_it_2
     return $?
   fi
-  if [[ $debug -eq 1 ]]; then
+  if [[ "$debug" -eq 1 ]]; then
     echo "nothing to do"
   fi
   cp "$infile" "$outfile"
@@ -321,7 +321,7 @@ process_input() {
   done
 
   if [[ -z "$infile" ]]; then
-    if [[ $quiet -eq 0 ]]; then
+    if [[ "$quiet" -eq 0 ]]; then
       echo
       echo "Error: infile parameter missing (use -h for help)"
       echo
@@ -330,7 +330,7 @@ process_input() {
   fi
 
   if [[ -z "$outfile" ]]; then
-    if [[ $quiet -eq 0 ]]; then
+    if [[ "$quiet" -eq 0 ]]; then
       echo
       echo "Error: outfile parameter missing (use -h for help)"
       echo
@@ -339,7 +339,7 @@ process_input() {
   fi
 
   if [[ ! -f "$infile" ]]; then
-    if [[ $quiet -eq 0 ]]; then
+    if [[ "$quiet" -eq 0 ]]; then
       echo
       echo "Error: specified file \"$infile\" is does not exist."
       echo
@@ -347,13 +347,13 @@ process_input() {
     fi
   fi
 
-  if [[ $strategy -eq 2 ]]; then
+  if [[ "$strategy" -eq 2 ]]; then
     min_supported=$(expr ${#hdr_txt_2} + 9)
   else
     min_supported=$(expr ${#hdr_txt_1} + 9)
   fi
-  if [[ $maxcol -lt $min_supported ]]; then
-    if [[ $quiet -eq 0 ]]; then
+  if [[ "$maxcol" -lt "$min_supported" ]]; then
+    if [[ "$quiet" -eq 0 ]]; then
       printf "\nError: the folding column cannot be less than"
       printf " $min_supported.\n\n"
     fi
@@ -363,8 +363,8 @@ process_input() {
   # this is only because the code otherwise runs out of equal_chars
   max_supported=$(expr ${#equal_chars} + 1 + ${#hdr_txt_1} + 1\
        + ${#equal_chars})
-  if [[ $maxcol -gt $max_supported ]]; then
-    if [[ $quiet -eq 0 ]]; then
+  if [[ "$maxcol" -gt "$max_supported" ]]; then
+    if [[ "$quiet" -eq 0 ]]; then
       printf "\nError: the folding column cannot be more than"
       printf " $max_supported.\n\n"
     fi
@@ -380,14 +380,14 @@ main() {
 
   process_input "$@"
 
-  if [[ $reversed -eq 0 ]]; then
+  if [[ "$reversed" -eq 0 ]]; then
     fold_it
     code=$?
   else
     unfold_it
     code=$?
   fi
-  exit $code
+  exit "$code"
 }
 
 main "$@"
