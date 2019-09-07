@@ -79,11 +79,11 @@ type gsed > /dev/null 2>&1 && SED=gsed || SED=sed
 
 # warn if a non-GNU sed utility is used
 "$SED" --version < /dev/null 2> /dev/null \
-| grep GNU >/dev/null 2>&1 || \
+| grep GNU > /dev/null 2>&1 || \
 echo 'Warning: not using GNU `sed` (likely cause if an error occurs)'
 
 # verify the availability of pcregrep
-type pcregrep >> /dev/null 2>&1 || {
+type pcregrep > /dev/null 2>&1 || {
   printf '\nError: missing utility `pcregrep`\n'
   exit 1
 }
@@ -136,7 +136,7 @@ fold_it_1() {
   echo "$header" > "$outfile"
   echo "" >> "$outfile"
   "$SED" 's/\(.\{'"$foldcol"'\}\)\(..\)/\1\\\n\2/;t M;b;:M;P;D;'\
-    < "$infile" >> "$outfile" 2>/dev/null
+    < "$infile" >> "$outfile" 2> /dev/null
   if [[ $? -ne 0 ]]; then
     return 1
   fi
@@ -175,7 +175,7 @@ fold_it_2() {
   echo "$header" > "$outfile"
   echo "" >> "$outfile"
   "$SED" 's/\(.\{'"$foldcol"'\}\)\(..\)/\1\\\n\\\2/;t M;b;:M;P;D;'\
-    < "$infile" >> "$outfile" 2>/dev/null
+    < "$infile" >> "$outfile" 2> /dev/null
   if [[ $? -ne 0 ]]; then
     return 1
   fi
