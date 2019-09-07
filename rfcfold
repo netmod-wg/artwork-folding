@@ -373,7 +373,7 @@ process_input() {
 }
 
 main() {
-  if [ "$#" == "0" ]; then
+  if [ "$#" -eq "0" ]; then
      print_usage
      exit 1
   fi
