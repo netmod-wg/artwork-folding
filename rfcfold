@@ -73,6 +73,26 @@ hdr_txt_2="NOTE: '\\\\' line wrapping per BCP XXX (RFC XXXX)"
 equal_chars="======================================================="
 space_chars="                                                       "
 temp_dir=""
+prog_name='rfcfold'
+
+# functions for diagnostic messages
+prog_msg() {
+  format_string="${prog_name}: $1: %s\n"
+  shift
+  printf -- "$format_string" "$@" >&2
+}
+
+err() {
+  prog_msg 'Error' "$@"
+}
+
+warn() {
+  prog_msg 'Warning' "$@"
+}
+
+dbg() {
+  prog_msg 'Debug' "$@"
+}
 
 # determine name of [g]sed binary
 type gsed > /dev/null 2>&1 && SED=gsed || SED=sed
@@ -80,11 +100,11 @@ type gsed > /dev/null 2>&1 && SED=gsed || SED=sed
 # warn if a non-GNU sed utility is used
 "$SED" --version < /dev/null 2> /dev/null \
 | grep GNU > /dev/null 2>&1 || \
-echo 'Warning: not using GNU `sed` (likely cause if an error occurs)'
+warn 'not using GNU `sed` (likely cause if an error occurs)'
 
 # verify the availability of pcregrep
 type pcregrep > /dev/null 2>&1 || {
-  printf '\nError: missing utility `pcregrep`\n'
+  err 'missing utility `pcregrep`'
   exit 1
 }
 
@@ -97,14 +117,12 @@ fold_it_1() {
   # ensure input file doesn't contain the fold-sequence already
   pcregrep -q -M  "\\\\\n" "$infile"
   if [[ $? -eq 0 ]]; then
-    if [[ "$quiet" -eq 0 ]]; then
-      echo
-      echo "Error: infile has a line ending with a '\\' character."
-      echo "This file cannot be folded using the '\\' strategy"
-      echo "without there being false positives produced in the"
-      echo "unfolding (i.e., this script does not force-fold"
-      echo "such lines, as described in BCP XXX, RFC XXXX)."
-      echo
+    if [[ $quiet -eq 0 ]]; then
+      err "infile has a line ending with a '\\' character."\
+          "This file cannot be folded using the '\\' strategy"\
+          "without there being false positives produced in the"\
+          "unfolding (i.e., this script does not force-fold"\
+          "such lines, as described in BCP XXX, RFC XXXX)."
     fi
     return 1
   fi
@@ -116,11 +134,9 @@ fold_it_1() {
   grep -q "^.\{$foldcol\} " "$infile"
   if [[ $? -eq 0 ]]; then
     if [[ "$quiet" -eq 0 ]]; then
-      echo
-      echo "Error: infile has a space character occurring on the"
-      echo "folding column. This file cannot be folded using the"
-      echo "'\\' strategy."
-      echo
+      err "infile has a space character occurring on the"\
+          "folding column. This file cannot be folded using the"\
+          "'\\' strategy."
     fi
     return 1
   fi
@@ -151,15 +167,13 @@ fold_it_2() {
   pcregrep -q -M  "\\\\\n[\ ]*\\\\" "$infile"
   if [[ $? -eq 0 ]]; then
     if [[ "$quiet" -eq 0 ]]; then
-      echo
-      echo "Error: infile has a line ending with a '\\' character"
-      echo "followed by a '\\' character as the first non-space"
-      echo "character on the next line.  This script cannot fold"
-      echo "this file using '\\\\' strategy without there being"
-      echo "false positives produced in the unfolding (i.e., this"
-      echo "script does not force-fold such lines, as described"
-      echo "in BCP XXX, RFC XXXX)."
-      echo
+      err "infile has a line ending with a '\\' character"\
+          "followed by a '\\' character as the first non-space"\
+          "character on the next line.  This script cannot fold"\
+          "this file using '\\\\' strategy without there being"\
+          "false positives produced in the unfolding (i.e., this"\
+          "script does not force-fold such lines, as described"\
+          "in BCP XXX, RFC XXXX)."
     fi
     return 1
   fi
@@ -187,10 +201,7 @@ fold_it() {
   grep -q $'\t' "$infile"
   if [[ $? -eq 0 ]]; then
     if [[ "$quiet" -eq 0 ]]; then
-      echo
-      echo "Error: infile contains a TAB character, which is"
-      echo "not allowed."
-      echo
+      err "infile contains a TAB character, which is not allowed."
     fi
     return 1
   fi
@@ -200,7 +211,7 @@ fold_it() {
   grep -q ".\{$testcol\}" "$infile"
   if [[ $? -ne 0 ]]; then
     if [[ "$debug" -eq 1 ]]; then
-      echo "nothing to do"
+      dbg "nothing to do"
     fi
     cp "$infile" "$outfile"
     return -1
@@ -221,7 +232,7 @@ fold_it() {
   quiet="$quiet_sav"
   if [[ "$result" -ne 0 ]]; then
     if [[ "$debug" -eq 1 ]]; then
-      echo "Folding strategy 1 didn't succeed, trying strategy 2..."
+      dbg "Folding strategy 1 didn't succeed, trying strategy 2..."
     fi
     fold_it_2
     return $?
@@ -262,7 +273,7 @@ unfold_it() {
   if [[ $? -eq 0 ]]; then
     if [[ -n "$line2" ]]; then
       if [[ "$quiet" -eq 0 ]]; then
-        echo "Error: the second line is not empty."
+        err "the second line is not empty."
       fi
       return 1
     fi
@@ -273,7 +284,7 @@ unfold_it() {
   if [[ $? -eq 0 ]]; then
     if [[ -n "$line2" ]]; then
       if [[ "$quiet" -eq 0 ]]; then
-        echo "Error: the second line is not empty."
+        err "the second line is not empty."
       fi
       return 1
     fi
@@ -281,7 +292,7 @@ unfold_it() {
     return $?
   fi
   if [[ "$debug" -eq 1 ]]; then
-    echo "nothing to do"
+    dbg "nothing to do"
   fi
   cp "$infile" "$outfile"
   return -1
@@ -323,27 +334,21 @@ process_input() {
 
   if [[ -z "$infile" ]]; then
     if [[ "$quiet" -eq 0 ]]; then
-      echo
-      echo "Error: infile parameter missing (use -h for help)"
-      echo
+      err "infile parameter missing (use -h for help)"
     fi
     exit 1
   fi
 
   if [[ -z "$outfile" ]]; then
     if [[ "$quiet" -eq 0 ]]; then
-      echo
-      echo "Error: outfile parameter missing (use -h for help)"
-      echo
+      err "outfile parameter missing (use -h for help)"
       exit 1
     fi
   fi
 
   if [[ ! -f "$infile" ]]; then
     if [[ "$quiet" -eq 0 ]]; then
-      echo
-      echo "Error: specified file \"$infile\" is does not exist."
-      echo
+      err "specified file \"$infile\" is does not exist."
       exit 1
     fi
   fi
@@ -355,8 +360,7 @@ process_input() {
   fi
   if [[ "$maxcol" -lt "$min_supported" ]]; then
     if [[ "$quiet" -eq 0 ]]; then
-      printf "\nError: the folding column cannot be less than"
-      printf " $min_supported.\n\n"
+      err "the folding column cannot be less than $min_supported."
     fi
     exit 1
   fi
@@ -366,8 +370,7 @@ process_input() {
        + ${#equal_chars})
   if [[ "$maxcol" -gt "$max_supported" ]]; then
     if [[ "$quiet" -eq 0 ]]; then
-      printf "\nError: the folding column cannot be more than"
-      printf " $max_supported.\n\n"
+      err "the folding column cannot be more than $max_supported."
     fi
     exit 1
   fi
