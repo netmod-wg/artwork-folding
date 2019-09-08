@@ -158,7 +158,8 @@ main() {
   run_cmd "$command" $expected_exit_code
   rm example-3.1.txt.folded.smart.unfolded example-3.2.txt.folded.smart.unfolded
   echo "okay."
-
+  echo
+  echo "all tests passed."
 }
 
 main "$@"
