@@ -303,31 +303,28 @@ process_input() {
     if [[ "$1" == "-h" ]] || [[ "$1" == "--help" ]]; then
       print_usage
       exit 0
-    fi
-    if [[ "$1" == "-d" ]]; then
+    elif [[ "$1" == "-d" ]]; then
       debug=1
-    fi
-    if [[ "$1" == "-q" ]]; then
+    elif [[ "$1" == "-q" ]]; then
       quiet=1
-    fi
-    if [[ "$1" == "-s" ]]; then
+    elif [[ "$1" == "-s" ]]; then
       strategy="$2"
       shift
-    fi
-    if [[ "$1" == "-c" ]]; then
+    elif [[ "$1" == "-c" ]]; then
       maxcol="$2"
       shift
-    fi
-    if [[ "$1" == "-r" ]]; then
+    elif [[ "$1" == "-r" ]]; then
       reversed=1
-    fi
-    if [[ "$1" == "-i" ]]; then
+    elif [[ "$1" == "-i" ]]; then
       infile="$2"
       shift
-    fi
-    if [[ "$1" == "-o" ]]; then
+    elif [[ "$1" == "-o" ]]; then
       outfile="$2"
       shift
+    else
+      if [[ "$quiet" -eq 0 ]]; then
+        warn "ignoring unknown option '$1'"
+      fi
     fi
     shift 
   done
