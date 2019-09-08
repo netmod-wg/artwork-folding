@@ -289,7 +289,7 @@ unfold_it() {
 
 process_input() {
   while [[ "$1" != "" ]]; do
-    if [ "$1" == "-h" -o "$1" == "--help" ]; then
+    if [[ "$1" == "-h" ]] || [[ "$1" == "--help" ]]; then
       print_usage
       exit 0
     fi
