@@ -4,7 +4,7 @@ run_cmd() {
   # $1 is the cmd to run
   # $2 is the expected error code
 
-  output=`$1`
+  output=`$1 2>&1`
   exit_code=$?
   if [[ $exit_code -ne $2 ]]; then
     printf "failed.\n"
@@ -25,9 +25,9 @@ test_file() {
   printf "testing $2..."
 
   if [ -z "$5" ]; then
-    command="../rfcfold -s $1 -d -i $2 -o $2.folded 2>&1"
+    command="../rfcfold -s $1 -d -i $2 -o $2.folded"
   else
-    command="../rfcfold -s $1 -d -c $5 -i $2 -o $2.folded 2>&1"
+    command="../rfcfold -s $1 -d -c $5 -i $2 -o $2.folded"
   fi
   expected_exit_code=$3
   run_cmd "$command" $expected_exit_code
@@ -39,7 +39,7 @@ test_file() {
     return
   fi
 
-  command="../rfcfold -d -r -i $2.folded -o $2.folded.unfolded 2>&1"
+  command="../rfcfold -d -r -i $2.folded -o $2.folded.unfolded"
   expected_exit_code=$4
   run_cmd "$command" $expected_exit_code
 
@@ -58,7 +58,7 @@ test_unfoldable_file() {
 
   printf "testing $2..."
 
-  command="../rfcfold -d -r -i $2 -o $2.unfolded 2>&1"
+  command="../rfcfold -d -r -i $2 -o $2.unfolded"
   expected_exit_code=$3
   run_cmd "$command" $expected_exit_code
 
@@ -75,7 +75,7 @@ test_prefolded_file() {
 
   printf "testing $2..."
 
-  command="../rfcfold -d -r -i $2 -o $2.unfolded 2>&1"
+  command="../rfcfold -d -r -i $2 -o $2.unfolded"
   expected_exit_code=0
   run_cmd "$command" $expected_exit_code
 
@@ -130,7 +130,7 @@ main() {
   test_file 1 only-2-can-fold-it-5.txt 1
   test_file 2 only-2-can-fold-it-5.txt 0   0
   test_file 1 only-2-can-fold-it-6.txt 1
-  test_file 2 only-2-can-fold-it-6.txt 0  0
+  test_file 2 only-2-can-fold-it-6.txt 0   0
   echo
   echo "starting strategy #1 tests..."
   test_file 1 contains-tab.txt         1
@@ -158,7 +158,8 @@ main() {
   run_cmd "$command" $expected_exit_code
   rm example-3.1.txt.folded.smart.unfolded example-3.2.txt.folded.smart.unfolded
   echo "okay."
-
+  echo
+  echo "all tests passed."
 }
 
 main "$@"
