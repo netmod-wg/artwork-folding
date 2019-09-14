@@ -68,6 +68,7 @@ reversed=0
 infile=""
 outfile=""
 maxcol=69  # default, may be overridden by param
+col_gvn=0  # maxcol overridden?
 hdr_txt_1="NOTE: '\\' line wrapping per BCP XXX (RFC XXXX)"
 hdr_txt_2="NOTE: '\\\\' line wrapping per BCP XXX (RFC XXXX)"
 equal_chars="======================================================="
@@ -297,6 +298,7 @@ process_input() {
       strategy="$2"
       shift
     elif [[ "$1" == "-c" ]]; then
+      col_gvn=1
       maxcol="$2"
       shift
     elif [[ "$1" == "-r" ]]; then
@@ -326,6 +328,10 @@ process_input() {
   if [[ ! -f "$infile" ]]; then
     err "specified file \"$infile\" is does not exist."
     exit 1
+  fi
+
+  if [[ "$col_gvn" -eq 1 ]] && [[ "$reversed" -eq 1 ]]; then
+    warn "'-c' option ignored when unfolding (option '-r')"
   fi
 
   if [[ "$strategy" -eq 2 ]]; then
