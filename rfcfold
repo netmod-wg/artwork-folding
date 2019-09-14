@@ -56,8 +56,8 @@ print_usage() {
   printf "  -q: quiet (suppress error and debug messages)\n"
   printf "  -h: show this message\n"
   printf "\n"
-  printf "Exit status code: 1 on error, 0 on success, -1 on no-op.\n"
-  printf "\n"
+  printf "Exit status code: 1 on error, 0 on success, 255 on no-op."
+  printf "\n\n"
 }
 
 # global vars, do not edit
@@ -209,7 +209,7 @@ fold_it() {
   if [[ $? -ne 0 ]]; then
     dbg "nothing to do"
     cp "$infile" "$outfile"
-    return -1
+    return 255
   fi
 
   if [[ "$strategy" -eq 1 ]]; then
@@ -282,7 +282,7 @@ unfold_it() {
   fi
   dbg "nothing to do"
   cp "$infile" "$outfile"
-  return -1
+  return 255
 }
 
 process_input() {
