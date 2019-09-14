@@ -148,6 +148,12 @@ main() {
   test_file 2 nofold-needed.txt        1   x  67
   test_file 2 nofold-needed-again.txt  0   0  67
   echo
+  echo "starting minimum folding column tests..."
+  test_file 1 example-1.txt            1   x  53
+  test_file 1 example-1.txt            0   0  54
+  test_file 2 example-1.txt            1   x  54
+  test_file 2 example-1.txt            0   0  55
+  echo
   printf "testing unfolding of smart folding examples 3.1 and 3.2..."
   expected_exit_code=0
   command="../rfcfold -r -i example-3.1.txt.folded.smart -o example-3.1.txt.folded.smart.unfolded"
