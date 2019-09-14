@@ -171,6 +171,9 @@ main() {
   rm example-3.1.txt.folded.smart.unfolded example-3.2.txt.folded.smart.unfolded
   echo "okay."
   echo
+  echo "verifying that rfcfold itself needs no folding..."
+  test_file 0 ../rfcfold             255
+  echo
   echo "all tests passed."
 }
 
