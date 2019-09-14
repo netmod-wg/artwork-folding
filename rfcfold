@@ -1,9 +1,8 @@
 #!/bin/bash --posix
 
 # This script may need some adjustments to work on a given system.
-# For instance, the utilities `pcregrep` and `gsed` may need to
-# be installed.  Also, please be advised that `bash` (not `sh`)
-# must be used.
+# For instance, the utility `gsed` may need to be installed.
+# Also, please be advised that `bash` (not `sh`) must be used.
 
 # Copyright (c) 2019 IETF Trust, Kent Watsen, and Erik Auerswald.
 # All rights reserved.
@@ -107,12 +106,6 @@ type gsed > /dev/null 2>&1 && SED=gsed || SED=sed
 | grep GNU > /dev/null 2>&1 || \
 warn 'not using GNU `sed` (likely cause if an error occurs)'
 
-# verify the availability of pcregrep
-type pcregrep > /dev/null 2>&1 || {
-  err 'missing utility `pcregrep`'
-  exit 1
-}
-
 cleanup() {
   rm -rf "$temp_dir"
 }
@@ -120,8 +113,7 @@ trap 'cleanup' EXIT
 
 fold_it_1() {
   # ensure input file doesn't contain the fold-sequence already
-  pcregrep -q -M  "\\\\\n" "$infile"
-  if [[ $? -eq 0 ]]; then
+  if [[ -n "$("$SED" -n '/\\$/p' "$infile")" ]]; then
     err "infile has a line ending with a '\\' character."\
         "This file cannot be folded using the '\\' strategy"\
         "without there being false positives produced in the"\
@@ -165,8 +157,8 @@ fold_it_2() {
   foldcol=$(expr "$maxcol" - 1) # for the inserted '\' char
 
   # ensure input file doesn't contain the fold-sequence already
-  pcregrep -q -M  "\\\\\n[\ ]*\\\\" "$infile"
-  if [[ $? -eq 0 ]]; then
+  if [[ -n "$("$SED" -n '/\\$/{N;s/\\\n[ ]*\\/&/p}' "$infile")" ]]
+  then
     err "infile has a line ending with a '\\' character"\
         "followed by a '\\' character as the first non-space"\
         "character on the next line.  This script cannot fold"\
