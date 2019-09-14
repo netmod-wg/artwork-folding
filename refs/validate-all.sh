@@ -154,6 +154,12 @@ main() {
   test_file 2 example-1.txt            1   x  54
   test_file 2 example-1.txt            0   0  55
   echo
+  echo "starting maximum folding column tests..."
+  test_file 1 example-2.txt            0   0 158
+  test_file 1 example-2.txt            1   x 159
+  test_file 2 example-2.txt            0   0 158
+  test_file 2 example-2.txt            1   x 159
+  echo
   printf "testing unfolding of smart folding examples 3.1 and 3.2..."
   expected_exit_code=0
   command="../rfcfold -r -i example-3.1.txt.folded.smart -o example-3.1.txt.folded.smart.unfolded"
