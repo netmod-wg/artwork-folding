@@ -126,7 +126,7 @@ fold_it_1() {
   foldcol=$(expr "$maxcol" - 1) # for the inserted '\' char
 
   # ensure input file doesn't contain whitespace on the fold column
-  grep -q "^.\{$foldcol\} " "$infile"
+  grep -q "^\(.\{$foldcol\}\)\{1,\} " "$infile"
   if [[ $? -eq 0 ]]; then
     err "infile has a space character occurring on the"\
         "folding column. This file cannot be folded using the"\
