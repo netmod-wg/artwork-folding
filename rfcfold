@@ -52,7 +52,7 @@ print_usage() {
   printf "  -r: reverses the operation\n"
   printf "  -i: the input filename\n"
   printf "  -o: the output filename\n"
-  printf "  -d: show debug messages\n"
+  printf "  -d: show debug messages (unless -q is given)\n"
   printf "  -q: quiet (suppress error and debug messages)\n"
   printf "  -h: show this message\n"
   printf "\n"
@@ -93,7 +93,9 @@ warn() {
 }
 
 dbg() {
-  prog_msg 'Debug' "$@"
+  if [[ "$debug" -eq 1 ]]; then
+    prog_msg 'Debug' "$@"
+  fi
 }
 
 # determine name of [g]sed binary
@@ -204,9 +206,7 @@ fold_it() {
   testcol=$(expr "$maxcol" + 1)
   grep -q ".\{$testcol\}" "$infile"
   if [[ $? -ne 0 ]]; then
-    if [[ "$debug" -eq 1 ]]; then
-      dbg "nothing to do"
-    fi
+    dbg "nothing to do"
     cp "$infile" "$outfile"
     return -1
   fi
@@ -225,9 +225,7 @@ fold_it() {
   result=$?
   quiet="$quiet_sav"
   if [[ "$result" -ne 0 ]]; then
-    if [[ "$debug" -eq 1 ]]; then
-      dbg "Folding strategy 1 didn't succeed, trying strategy 2..."
-    fi
+    dbg "Folding strategy 1 didn't succeed, trying strategy 2..."
     fold_it_2
     return $?
   fi
@@ -281,9 +279,7 @@ unfold_it() {
     unfold_it_2
     return $?
   fi
-  if [[ "$debug" -eq 1 ]]; then
-    dbg "nothing to do"
-  fi
+  dbg "nothing to do"
   cp "$infile" "$outfile"
   return -1
 }
