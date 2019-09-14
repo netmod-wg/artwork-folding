@@ -53,7 +53,7 @@ print_usage() {
   printf "  -i: the input filename\n"
   printf "  -o: the output filename\n"
   printf "  -d: show debug messages\n"
-  printf "  -q: quiet (suppress error messages)\n"
+  printf "  -q: quiet (suppress error and debug messages)\n"
   printf "  -h: show this message\n"
   printf "\n"
   printf "Exit status code: 1 on error, 0 on success, -1 on no-op.\n"
@@ -77,9 +77,11 @@ prog_name='rfcfold'
 
 # functions for diagnostic messages
 prog_msg() {
-  format_string="${prog_name}: $1: %s\n"
-  shift
-  printf -- "$format_string" "$@" >&2
+  if [[ "$quiet" -eq 0 ]]; then
+    format_string="${prog_name}: $1: %s\n"
+    shift
+    printf -- "$format_string" "$@" >&2
+  fi
 }
 
 err() {
@@ -117,13 +119,11 @@ fold_it_1() {
   # ensure input file doesn't contain the fold-sequence already
   pcregrep -q -M  "\\\\\n" "$infile"
   if [[ $? -eq 0 ]]; then
-    if [[ $quiet -eq 0 ]]; then
-      err "infile has a line ending with a '\\' character."\
-          "This file cannot be folded using the '\\' strategy"\
-          "without there being false positives produced in the"\
-          "unfolding (i.e., this script does not force-fold"\
-          "such lines, as described in BCP XXX, RFC XXXX)."
-    fi
+    err "infile has a line ending with a '\\' character."\
+        "This file cannot be folded using the '\\' strategy"\
+        "without there being false positives produced in the"\
+        "unfolding (i.e., this script does not force-fold"\
+        "such lines, as described in BCP XXX, RFC XXXX)."
     return 1
   fi
 
@@ -133,11 +133,9 @@ fold_it_1() {
   # ensure input file doesn't contain whitespace on the fold column
   grep -q "^.\{$foldcol\} " "$infile"
   if [[ $? -eq 0 ]]; then
-    if [[ "$quiet" -eq 0 ]]; then
-      err "infile has a space character occurring on the"\
-          "folding column. This file cannot be folded using the"\
-          "'\\' strategy."
-    fi
+    err "infile has a space character occurring on the"\
+        "folding column. This file cannot be folded using the"\
+        "'\\' strategy."
     return 1
   fi
 
@@ -166,15 +164,13 @@ fold_it_2() {
   # ensure input file doesn't contain the fold-sequence already
   pcregrep -q -M  "\\\\\n[\ ]*\\\\" "$infile"
   if [[ $? -eq 0 ]]; then
-    if [[ "$quiet" -eq 0 ]]; then
-      err "infile has a line ending with a '\\' character"\
-          "followed by a '\\' character as the first non-space"\
-          "character on the next line.  This script cannot fold"\
-          "this file using '\\\\' strategy without there being"\
-          "false positives produced in the unfolding (i.e., this"\
-          "script does not force-fold such lines, as described"\
-          "in BCP XXX, RFC XXXX)."
-    fi
+    err "infile has a line ending with a '\\' character"\
+        "followed by a '\\' character as the first non-space"\
+        "character on the next line.  This script cannot fold"\
+        "this file using '\\\\' strategy without there being"\
+        "false positives produced in the unfolding (i.e., this"\
+        "script does not force-fold such lines, as described"\
+        "in BCP XXX, RFC XXXX)."
     return 1
   fi
 
@@ -200,9 +196,7 @@ fold_it() {
   # ensure input file doesn't contain a TAB
   grep -q $'\t' "$infile"
   if [[ $? -eq 0 ]]; then
-    if [[ "$quiet" -eq 0 ]]; then
-      err "infile contains a TAB character, which is not allowed."
-    fi
+    err "infile contains a TAB character, which is not allowed."
     return 1
   fi
 
@@ -272,9 +266,7 @@ unfold_it() {
   result=$(echo "$line" | fgrep "$hdr_txt_1")
   if [[ $? -eq 0 ]]; then
     if [[ -n "$line2" ]]; then
-      if [[ "$quiet" -eq 0 ]]; then
-        err "the second line is not empty."
-      fi
+      err "the second line is not empty."
       return 1
     fi
     unfold_it_1
@@ -283,9 +275,7 @@ unfold_it() {
   result=$(echo "$line" | fgrep "$hdr_txt_2")
   if [[ $? -eq 0 ]]; then
     if [[ -n "$line2" ]]; then
-      if [[ "$quiet" -eq 0 ]]; then
-        err "the second line is not empty."
-      fi
+      err "the second line is not empty."
       return 1
     fi
     unfold_it_2
@@ -322,32 +312,24 @@ process_input() {
       outfile="$2"
       shift
     else
-      if [[ "$quiet" -eq 0 ]]; then
-        warn "ignoring unknown option '$1'"
-      fi
+      warn "ignoring unknown option '$1'"
     fi
     shift 
   done
 
   if [[ -z "$infile" ]]; then
-    if [[ "$quiet" -eq 0 ]]; then
-      err "infile parameter missing (use -h for help)"
-    fi
+    err "infile parameter missing (use -h for help)"
     exit 1
   fi
 
   if [[ -z "$outfile" ]]; then
-    if [[ "$quiet" -eq 0 ]]; then
-      err "outfile parameter missing (use -h for help)"
-      exit 1
-    fi
+    err "outfile parameter missing (use -h for help)"
+    exit 1
   fi
 
   if [[ ! -f "$infile" ]]; then
-    if [[ "$quiet" -eq 0 ]]; then
-      err "specified file \"$infile\" is does not exist."
-      exit 1
-    fi
+    err "specified file \"$infile\" is does not exist."
+    exit 1
   fi
 
   if [[ "$strategy" -eq 2 ]]; then
@@ -356,9 +338,7 @@ process_input() {
     min_supported=$(expr ${#hdr_txt_1} + 9)
   fi
   if [[ "$maxcol" -lt "$min_supported" ]]; then
-    if [[ "$quiet" -eq 0 ]]; then
-      err "the folding column cannot be less than $min_supported."
-    fi
+    err "the folding column cannot be less than $min_supported."
     exit 1
   fi
 
@@ -366,9 +346,7 @@ process_input() {
   max_supported=$(expr ${#equal_chars} + 1 + ${#hdr_txt_1} + 1\
        + ${#equal_chars})
   if [[ "$maxcol" -gt "$max_supported" ]]; then
-    if [[ "$quiet" -eq 0 ]]; then
-      err "the folding column cannot be more than $max_supported."
-    fi
+    err "the folding column cannot be more than $max_supported."
     exit 1
   fi
 }
