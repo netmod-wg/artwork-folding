@@ -46,9 +46,9 @@
           <t>This document defines two strategies for handling long lines in width-bounded
           text content.  One strategy is based on the historical use of a single backslash
           ('\') character to indicate where line-folding has occurred, with the continuation
-          occurring with the first non-space (' ') character on the next line.   The second
+          occurring with the first non-space (' ') character on the next line.  The second
           strategy extends the first strategy by adding a second backslash character to
-          identify where the continuation begins and thereby able to handle cases not
+          identify where the continuation begins and is thereby able to handle cases not
           supported by the first strategy.  Both strategies use a self-describing header
           enabling automated reconstitution of the original content.</t>
         </abstract>
@@ -83,9 +83,9 @@
       <t>This document defines two strategies for handling long lines in width-bounded
         text content.  One strategy is based on the historical use of a single backslash
         ('\') character to indicate where line-folding has occurred, with the continuation
-        occurring with the first non-space (' ') character on the next line.   The second
+        occurring with the first non-space (' ') character on the next line.  The second
         strategy extends the first strategy by adding a second backslash character to
-        identify where the continuation begins and thereby able to handle cases not
+        identify where the continuation begins and is thereby able to handle cases not
         supported by the first strategy.  Both strategies use a self-describing header
         enabling automated reconstitution of the original content.</t>
 
@@ -111,7 +111,7 @@
           and the xml2rfc v2 &lt;artwork&gt; element (Section 2.5 of
           <xref target="RFC7749"/>) that, for lack of a better option, is
           currently used for both source code and artwork.  This work may
-          be also be used for the xml2rfc v3 &lt;artwork&gt; element
+          also be used for the xml2rfc v3 &lt;artwork&gt; element
           (Section 2.5 of <xref target="RFC7991"/>) but, as described in
           <xref target="not-for-art"/>, it is generally not recommended.</t>
       </section>
@@ -249,7 +249,7 @@ NOTE: '\' line wrapping per BCP XXX (RFC XXXX)
                 </postamble>
               </figure>
             </t>
-            <t>The second line is a empty line, containing only the end-of-line
+            <t>The second line is an empty line, containing only the end-of-line
               character sequence.  This line provides visual separation for
               readability.</t>
           </section>
@@ -330,7 +330,7 @@ NOTE: '\' line wrapping per BCP XXX (RFC XXXX)
           <section title="Unfolding">
             <t>Scan the beginning of the text content for the header described in
             <xref target="single-header"/>.  If the header is not present, starting
-            on the first line of the text content, exit (this text contents does not
+            on the first line of the text content, exit (this text content does not
             need to be unfolded).</t>
             <t>Remove the 2-line header from the text content.</t>
             <t>For each line in the text content, from top-to-bottom, if the line has
@@ -368,7 +368,7 @@ NOTE: '\\' line wrapping per BCP XXX (RFC XXXX)
                 </postamble>
               </figure>
             </t>
-            <t>The second line is a empty line, containing only the end-of-line
+            <t>The second line is an empty line, containing only the end-of-line
               character sequence.  This line provides visual separation for
               readability.</t>
           </section>
@@ -478,7 +478,7 @@ NOTE: '\\' line wrapping per BCP XXX (RFC XXXX)
         again be folded. Alas, only the results can be provided.</t>
 
         <section title="Example Showing Boundary Conditions">
-          <t>This example illustrates boundary condition.  The input contains
+          <t>This example illustrates boundary conditions.  The input contains
             seven lines, each line one character longer than the previous line.
             Numbers for counting purposes.  The default desired maximum column
             value "69" is used.</t>
@@ -499,7 +499,7 @@ INSERT_TEXT_FROM_FILE(refs/example-1.2.txt.folded)
         </section>
 
         <section title="Example Showing Multiple Wraps of a Single Line">
-          <t>This example illustrates what happens when very long line needs to
+          <t>This example illustrates what happens when a very long line needs to
             be folded multiple times.  The input contains one line containing
             280 characters.  Numbers for counting purposes.  The default
             desired maximum column value "69" is used.</t>
