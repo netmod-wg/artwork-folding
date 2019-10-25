@@ -131,6 +131,12 @@ main() {
   test_file 2 only-2-can-fold-it-5.txt 0   0
   test_file 1 only-2-can-fold-it-6.txt 1
   test_file 2 only-2-can-fold-it-6.txt 0   0
+  test_file 1 spaces-1.txt             1
+  test_file 2 spaces-1.txt             0   0
+  test_file 1 spaces-2.txt             1
+  test_file 2 spaces-2.txt             0   0
+  test_file 1 spaces-3.txt             1
+  test_file 2 spaces-3.txt             0   0
   echo
   echo "starting strategy #1 tests..."
   test_file 1 contains-tab.txt         1
@@ -148,6 +154,18 @@ main() {
   test_file 2 nofold-needed.txt        1   x  67
   test_file 2 nofold-needed-again.txt  0   0  67
   echo
+  echo "starting minimum folding column tests..."
+  test_file 1 example-1.txt            1   x  53
+  test_file 1 example-1.txt            0   0  54
+  test_file 2 example-1.txt            1   x  54
+  test_file 2 example-1.txt            0   0  55
+  echo
+  echo "starting maximum folding column tests..."
+  test_file 1 example-2.txt            0   0 158
+  test_file 1 example-2.txt            1   x 159
+  test_file 2 example-2.txt            0   0 158
+  test_file 2 example-2.txt            1   x 159
+  echo
   printf "testing unfolding of smart folding examples 3.1 and 3.2..."
   expected_exit_code=0
   command="../rfcfold -r -i example-3.1.txt.folded.smart -o example-3.1.txt.folded.smart.unfolded"
@@ -158,6 +176,9 @@ main() {
   run_cmd "$command" $expected_exit_code
   rm example-3.1.txt.folded.smart.unfolded example-3.2.txt.folded.smart.unfolded
   echo "okay."
+  echo
+  echo "verifying that rfcfold itself needs no folding..."
+  test_file 0 ../rfcfold             255
   echo
   echo "all tests passed."
 }
