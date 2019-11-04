@@ -25,6 +25,12 @@
                 <email>kent+ietf@watsen.net</email>
             </address>
         </author>
+        <author initials="E.A." surname="Erik" fullname="Erik Auerswald">
+            <organization>Individual Contributor</organization>
+            <address>
+                <email>auerswal@unix-ag.uni-kl.de</email>
+            </address>
+        </author>
         <author initials="A." surname="Farrel" fullname="Adrian Farrel" >
             <organization>Old Dog Consulting</organization>
             <address>
@@ -54,7 +60,7 @@
         </abstract>
         <note title="Editorial Note (To be removed by RFC Editor)">
           <t>Please be aware that this document uses throughout the five-character text
-            seqeuence located between the following two double-quotes: "(' ')".  It has been
+            sequence located between the following two double-quotes: "(' ')".  It has been
             observed that some renderings of this text sequence produces a natural
             line break at the space character in the middle, thus causing "('" to appear
             at the end of the first line and "')" to appear at the beginning of the next
@@ -329,9 +335,8 @@ NOTE: '\' line wrapping per BCP XXX (RFC XXXX)
           </section>
           <section title="Unfolding">
             <t>Scan the beginning of the text content for the header described in
-            <xref target="single-header"/>.  If the header is not present, starting
-            on the first line of the text content, exit (this text content does not
-            need to be unfolded).</t>
+              <xref target="single-header"/>.  If the header is not present, exit
+              (this text content does not need to be unfolded).</t>
             <t>Remove the 2-line header from the text content.</t>
             <t>For each line in the text content, from top-to-bottom, if the line has
             a backslash ('\') character immediately followed by the end of line
@@ -450,9 +455,8 @@ NOTE: '\\' line wrapping per BCP XXX (RFC XXXX)
           </section>
           <section title="Unfolding">
             <t>Scan the beginning of the text content for the header described in
-            <xref target="double-header"/>.  If the header is not present, starting
-            on the first line of the text content, exit (this text content does not
-            need to be unfolded).</t>
+              <xref target="double-header"/>.  If the header is not present, exit
+              (this text content does not need to be unfolded).</t>
             <t>Remove the 2-line header from the text content.</t>
             <t>For each line in the text content, from top-to-bottom, if the line has
             a backslash ('\') character immediately followed by the end of line
@@ -604,13 +608,13 @@ INSERT_TEXT_FROM_FILE(refs/example-4.2.txt.folded.forced)
 
       <references title="Normative References">
         <?rfc include="reference.RFC.2119.xml"?>
+        <?rfc include="reference.RFC.7991.xml"?>
         <?rfc include="reference.RFC.8174.xml"?>
       </references>
 
       <references title="Informative References">
         <?rfc include="reference.RFC.7950.xml"?>
         <?rfc include="reference.RFC.7749.xml"?>
-        <?rfc include="reference.RFC.7991.xml"?>
         <?rfc include="reference.RFC.7994.xml"?>
         <?rfc include="reference.RFC.8340.xml"?>
         <reference anchor="yang-doctors-thread" target="https://mailarchive.ietf.org/arch/msg/yang-doctors/DCfBqgfZPAD7afzeDFlQ1Xm2X3g">
@@ -656,15 +660,58 @@ INSERT_TEXT_FROM_FILE(refs/example-4.2.txt.folded.forced)
           <xref target="double-header"/> so as to ensure that the header
           can be wrapped by a space (' ') character and three equal ('=')
           characters on each side of the raw header text.</t>
-        <t>This script does not implement the whitespace-avoidance logic
-          described in <xref target="single-folding"/>.  In such case,
-          the script will exit with one of the following message:</t>
+        <t>When a TAB character is detected in the input file, this script 
+          exits with the error message:</t>
         <t>
           <figure>
-            <artwork align="center"><![CDATA[
-Error: infile has a space character occurring on the
-folding column. This file cannot be folded using the
-'\' strategy.
+            <artwork><![CDATA[
+    Error: infile contains a TAB character, which is not allowed.
+]]></artwork>
+          </figure>
+        </t>
+        <t>This script tests for the availability of GNU awk (gawk), in
+          order to test for ASCII-based control characters and non-ASCII
+          characters in the input file (see below).  Note that testing
+          revealed flaws in the default version of `awk` on some platforms.
+          As the use of `gawk` is only used to issue warning messages,
+          if `gawk` of not found, this script issues the debug message:
+        </t>
+        <t>
+          <figure>
+            <artwork><![CDATA[
+    Debug: no GNU Awk, skipping checks for special characters.
+]]></artwork>
+          </figure>
+        </t>
+        <t>When `gawk` is available (see above) and ASCII-based control
+          characters are detected in the input file, this script issues
+          the warning message:</t>
+        <t>
+          <figure>
+            <artwork><![CDATA[
+    Warning: infile contains ASCII control characters (unsupported).
+]]></artwork>
+          </figure>
+        </t>
+        <t>When `gawk` is available (see above) and non-ASCII characters
+          are detected in the input file, this script issues the warning
+          message:</t>
+        <t>
+          <figure>
+            <artwork><![CDATA[
+    Warning: infile contains non-ASCII characters (unsupported).
+]]></artwork>
+          </figure>
+        </t>
+        <t>This script does not implement the whitespace-avoidance logic
+          described in <xref target="single-folding"/>.  In such case,
+          the script will exit with the following message:</t>
+        <t>
+          <figure>
+            <artwork><![CDATA[
+    Error: infile has a space character occurring on the
+    folding column. This file cannot be folded using the
+    '\' strategy.
 ]]></artwork>
           </figure>
         </t>
@@ -673,28 +720,30 @@ folding column. This file cannot be folded using the
           folding is described in <xref target="single-folding"/> and
           <xref target="double-folding"/>.  When being asked to fold a file
           that would require forced folding, the script will instead exit
-          with one of the following messages:</t>
+          with the following message:</t>
         <t>
           <figure>
-            <artwork align="center"><![CDATA[
-Error: infile has a line ending with a '\' character.
-This file cannot be folded using the '\' strategy without
-there being false positives produced in the unfolding
-(i.e., this script does not force-fold such lines, as
-described in BCP XXX, RFC XXXX).
+            <preamble>For '\':</preamble>
+            <artwork><![CDATA[
+    Error: infile has a line ending with a '\' character.
+    This file cannot be folded using the '\' strategy without
+    there being false positives produced in the unfolding
+    (i.e., this script does not force-fold such lines, as
+    described in BCP XXX, RFC XXXX).
 ]]></artwork>
           </figure>
         </t>
         <t>
           <figure>
-            <artwork align="center"><![CDATA[
-Error: infile has a line ending with a '\' character
-followed by a '\' character as the first non-space
-character on the next line.  This script cannot fold
-this file using '\\' strategy without there being
-false positives produced in the unfolding (i.e., this
-script does not force-fold such lines, as described
-in BCP XXX, RFC XXXX).
+            <preamble>For '\\':</preamble>
+            <artwork><![CDATA[
+    Error: infile has a line ending with a '\' character
+    followed by a '\' character as the first non-space
+    character on the next line.  This script cannot fold
+    this file using '\\' strategy without there being
+    false positives produced in the unfolding (i.e., this
+    script does not force-fold such lines, as described
+    in BCP XXX, RFC XXXX).
 ]]></artwork>
           </figure>
         </t>
@@ -725,7 +774,6 @@ INSERT_TEXT_FROM_FILE(rfcfold)
         <t>The authors thank the following folks for their various
           contributions while producing this document (sorted by first name):
           Benoît Claise,
-          Erik Auerswald,
           Gianmarco Bruno,
           Italo Busi,
           Joel Jaeggli,

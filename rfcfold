@@ -199,11 +199,11 @@ fold_it() {
   # may result in a wrong folding column and is not supported
   if type gawk > /dev/null 2>&1; then
     env LC_ALL=C gawk '/[\000-\014\016-\037\177]/{exit 1}' "$infile"\
-    || warn 'infile contains ASCII control characters (unsupported)'
+    || warn 'infile contains ASCII control characters (unsupported).'
     env LC_ALL=C gawk '/[^\000-\177]/{exit 1}' "$infile"\
-    || warn 'infile contains non-ASCII characters (unsupported)'
+    || warn 'infile contains non-ASCII characters (unsupported).'
   else
-    dbg 'no GNU Awk, skipping checks for special characters'
+    dbg 'no GNU Awk, skipping checks for special characters.'
   fi
 
   # check if file needs folding
