@@ -345,7 +345,7 @@ process_input() {
   fi
 
   if [[ ! -f "$infile" ]]; then
-    err "specified file \"$infile\" is does not exist."
+    err "specified file \"$infile\" does not exist."
     exit 1
   fi
 
