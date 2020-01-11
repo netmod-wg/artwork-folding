@@ -298,18 +298,34 @@ process_input() {
     elif [[ "$1" == "-q" ]]; then
       quiet=1
     elif [[ "$1" == "-s" ]]; then
+      if [[ "$#" -eq "1" ]]; then
+        err "option '-s' needs an argument (use -h for help)"
+        exit 1
+      fi
       strategy="$2"
       shift
     elif [[ "$1" == "-c" ]]; then
+      if [[ "$#" -eq "1" ]]; then
+        err "option '-c' needs an argument (use -h for help)"
+        exit 1
+      fi
       col_gvn=1
       maxcol="$2"
       shift
     elif [[ "$1" == "-r" ]]; then
       reversed=1
     elif [[ "$1" == "-i" ]]; then
+      if [[ "$#" -eq "1" ]]; then
+        err "option '-i' needs an argument (use -h for help)"
+        exit 1
+      fi
       infile="$2"
       shift
     elif [[ "$1" == "-o" ]]; then
+      if [[ "$#" -eq "1" ]]; then
+        err "option '-o' needs an argument (use -h for help)"
+        exit 1
+      fi
       outfile="$2"
       shift
     else
