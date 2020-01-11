@@ -95,6 +95,8 @@ main() {
   test_file 2 neither-can-fold-it-1.txt 1
   test_file 1 neither-can-fold-it-2.txt 1
   test_file 2 neither-can-fold-it-2.txt 1
+  test_file 1 neither-can-fold-it-3.txt 1
+  test_file 2 neither-can-fold-it-3.txt 1
   echo
   echo "starting unfoldable tests..."
   test_unfoldable_file 1 neither-can-unfold-it-1.txt 255
