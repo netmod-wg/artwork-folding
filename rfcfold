@@ -157,7 +157,7 @@ fold_it_2() {
   foldcol=$(expr "$maxcol" - 1) # for the inserted '\' char
 
   # ensure input file doesn't contain the fold-sequence already
-  if [[ -n "$("$SED" -n '/\\$/{N;s/\\\n[ ]*\\/&/p}' "$infile")" ]]
+  if [[ -n "$("$SED" -n '/\\$/{N;s/\\\n[ ]*\\/&/p;D}' "$infile")" ]]
   then
     err "infile has a line ending with a '\\' character"\
         "followed by a '\\' character as the first non-space"\
