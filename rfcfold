@@ -102,8 +102,7 @@ dbg() {
 type gsed > /dev/null 2>&1 && SED=gsed || SED=sed
 
 # warn if a non-GNU sed utility is used
-"$SED" --version < /dev/null 2> /dev/null \
-| grep GNU > /dev/null 2>&1 || \
+"$SED" --version < /dev/null 2> /dev/null | grep -q GNU || \
 warn 'not using GNU `sed` (likely cause if an error occurs)'
 
 cleanup() {
@@ -157,7 +156,7 @@ fold_it_2() {
   foldcol=$(expr "$maxcol" - 1) # for the inserted '\' char
 
   # ensure input file doesn't contain the fold-sequence already
-  if [[ -n "$("$SED" -n '/\\$/{N;s/\\\n[ ]*\\/&/p}' "$infile")" ]]
+  if [[ -n "$("$SED" -n '/\\$/{N;s/\\\n[ ]*\\/&/p;D}' "$infile")" ]]
   then
     err "infile has a line ending with a '\\' character"\
         "followed by a '\\' character as the first non-space"\
@@ -298,18 +297,34 @@ process_input() {
     elif [[ "$1" == "-q" ]]; then
       quiet=1
     elif [[ "$1" == "-s" ]]; then
+      if [[ "$#" -eq "1" ]]; then
+        err "option '-s' needs an argument (use -h for help)"
+        exit 1
+      fi
       strategy="$2"
       shift
     elif [[ "$1" == "-c" ]]; then
+      if [[ "$#" -eq "1" ]]; then
+        err "option '-c' needs an argument (use -h for help)"
+        exit 1
+      fi
       col_gvn=1
       maxcol="$2"
       shift
     elif [[ "$1" == "-r" ]]; then
       reversed=1
     elif [[ "$1" == "-i" ]]; then
+      if [[ "$#" -eq "1" ]]; then
+        err "option '-i' needs an argument (use -h for help)"
+        exit 1
+      fi
       infile="$2"
       shift
     elif [[ "$1" == "-o" ]]; then
+      if [[ "$#" -eq "1" ]]; then
+        err "option '-o' needs an argument (use -h for help)"
+        exit 1
+      fi
       outfile="$2"
       shift
     else
@@ -329,7 +344,7 @@ process_input() {
   fi
 
   if [[ ! -f "$infile" ]]; then
-    err "specified file \"$infile\" is does not exist."
+    err "specified file \"$infile\" does not exist."
     exit 1
   fi
 
