@@ -103,7 +103,7 @@ type gsed > /dev/null 2>&1 && SED=gsed || SED=sed
 
 # warn if a non-GNU sed utility is used
 "$SED" --version < /dev/null 2> /dev/null | grep -q GNU || \
-warn 'not using GNU `sed` (likely cause if an error occurs)'
+warn 'not using GNU `sed` (likely cause if an error occurs).'
 
 cleanup() {
   rm -rf "$temp_dir"
@@ -113,7 +113,7 @@ trap 'cleanup' EXIT
 fold_it_1() {
   # ensure input file doesn't contain the fold-sequence already
   if [[ -n "$("$SED" -n '/\\$/p' "$infile")" ]]; then
-    err "infile has a line ending with a '\\' character."\
+    err "infile '$infile' has a line ending with a '\\' character."\
         "This file cannot be folded using the '\\' strategy"\
         "without there being false positives produced in the"\
         "unfolding (i.e., this script does not force-fold"\
@@ -127,7 +127,7 @@ fold_it_1() {
   # ensure input file doesn't contain whitespace on the fold column
   grep -q "^\(.\{$foldcol\}\)\{1,\} " "$infile"
   if [[ $? -eq 0 ]]; then
-    err "infile has a space character occurring on the"\
+    err "infile '$infile' has a space character occurring on the"\
         "folding column. This file cannot be folded using the"\
         "'\\' strategy."
     return 1
@@ -158,7 +158,7 @@ fold_it_2() {
   # ensure input file doesn't contain the fold-sequence already
   if [[ -n "$("$SED" -n '/\\$/{N;s/\\\n[ ]*\\/&/p;D}' "$infile")" ]]
   then
-    err "infile has a line ending with a '\\' character"\
+    err "infile '$infile' has a line ending with a '\\' character"\
         "followed by a '\\' character as the first non-space"\
         "character on the next line.  This script cannot fold"\
         "this file using '\\\\' strategy without there being"\
@@ -190,7 +190,8 @@ fold_it() {
   # ensure input file doesn't contain a TAB
   grep -q $'\t' "$infile"
   if [[ $? -eq 0 ]]; then
-    err "infile contains a TAB character, which is not allowed."
+    err "infile '$infile' contains a TAB character, which is not"\
+        "allowed."
     return 1
   fi
 
@@ -198,18 +199,20 @@ fold_it() {
   # may result in a wrong folding column and is not supported
   if type gawk > /dev/null 2>&1; then
     env LC_ALL=C gawk '/[\000-\014\016-\037\177]/{exit 1}' "$infile"\
-    || warn 'infile contains ASCII control characters (unsupported).'
+    || warn "infile '$infile' contains ASCII control characters"\
+            "(unsupported)."
     env LC_ALL=C gawk '/[^\000-\177]/{exit 1}' "$infile"\
-    || warn 'infile contains non-ASCII characters (unsupported).'
+    || warn "infile '$infile' contains non-ASCII characters"\
+            "(unsupported)."
   else
-    dbg 'no GNU Awk, skipping checks for special characters.'
+    dbg "no GNU Awk, skipping checks for special characters."
   fi
 
   # check if file needs folding
   testcol=$(expr "$maxcol" + 1)
   grep -q ".\{$testcol\}" "$infile"
   if [[ $? -ne 0 ]]; then
-    dbg "nothing to do"
+    dbg "nothing to do; copying infile to outfile."
     cp "$infile" "$outfile"
     return 255
   fi
@@ -228,7 +231,7 @@ fold_it() {
   result=$?
   quiet="$quiet_sav"
   if [[ "$result" -ne 0 ]]; then
-    dbg "Folding strategy 1 didn't succeed, trying strategy 2..."
+    dbg "Folding strategy '1' didn't succeed, trying strategy '2'..."
     fold_it_2
     return $?
   fi
@@ -267,7 +270,7 @@ unfold_it() {
   result=$(echo "$line" | fgrep "$hdr_txt_1")
   if [[ $? -eq 0 ]]; then
     if [[ -n "$line2" ]]; then
-      err "the second line is not empty."
+      err "the second line in '$infile' is not empty."
       return 1
     fi
     unfold_it_1
@@ -276,13 +279,13 @@ unfold_it() {
   result=$(echo "$line" | fgrep "$hdr_txt_2")
   if [[ $? -eq 0 ]]; then
     if [[ -n "$line2" ]]; then
-      err "the second line is not empty."
+      err "the second line in '$infile' is not empty."
       return 1
     fi
     unfold_it_2
     return $?
   fi
-  dbg "nothing to do"
+  dbg "nothing to do; copying infile to outfile."
   cp "$infile" "$outfile"
   return 255
 }
@@ -298,14 +301,14 @@ process_input() {
       quiet=1
     elif [[ "$1" == "-s" ]]; then
       if [[ "$#" -eq "1" ]]; then
-        err "option '-s' needs an argument (use -h for help)"
+        err "option '-s' needs an argument (use -h for help)."
         exit 1
       fi
       strategy="$2"
       shift
     elif [[ "$1" == "-c" ]]; then
       if [[ "$#" -eq "1" ]]; then
-        err "option '-c' needs an argument (use -h for help)"
+        err "option '-c' needs an argument (use -h for help)."
         exit 1
       fi
       col_gvn=1
@@ -315,41 +318,41 @@ process_input() {
       reversed=1
     elif [[ "$1" == "-i" ]]; then
       if [[ "$#" -eq "1" ]]; then
-        err "option '-i' needs an argument (use -h for help)"
+        err "option '-i' needs an argument (use -h for help)."
         exit 1
       fi
       infile="$2"
       shift
     elif [[ "$1" == "-o" ]]; then
       if [[ "$#" -eq "1" ]]; then
-        err "option '-o' needs an argument (use -h for help)"
+        err "option '-o' needs an argument (use -h for help)."
         exit 1
       fi
       outfile="$2"
       shift
     else
-      warn "ignoring unknown option '$1'"
+      warn "ignoring unknown option '$1'."
     fi
     shift 
   done
 
   if [[ -z "$infile" ]]; then
-    err "infile parameter missing (use -h for help)"
+    err "infile parameter missing (use -h for help)."
     exit 1
   fi
 
   if [[ -z "$outfile" ]]; then
-    err "outfile parameter missing (use -h for help)"
+    err "outfile parameter missing (use -h for help)."
     exit 1
   fi
 
   if [[ ! -f "$infile" ]]; then
-    err "specified file \"$infile\" does not exist."
+    err "specified file '$infile' does not exist."
     exit 1
   fi
 
   if [[ "$col_gvn" -eq 1 ]] && [[ "$reversed" -eq 1 ]]; then
-    warn "'-c' option ignored when unfolding (option '-r')"
+    warn "'-c' option ignored when unfolding (option '-r')."
   fi
 
   if [[ "$strategy" -eq 0 ]] || [[ "$strategy" -eq 2 ]]; then
