@@ -114,10 +114,9 @@ fold_it_1() {
   # ensure input file doesn't contain the fold-sequence already
   if [[ -n "$("$SED" -n '/\\$/p' "$infile")" ]]; then
     err "infile '$infile' has a line ending with a '\\' character."\
-        "This file cannot be folded using the '\\' strategy"\
+        "This script cannot fold this file using the '\\' strategy"\
         "without there being false positives produced in the"\
-        "unfolding (i.e., this script does not force-fold"\
-        "such lines, as described in BCP XXX, RFC XXXX)."
+        "unfolding."
     return 1
   fi
 
@@ -162,9 +161,7 @@ fold_it_2() {
         "followed by a '\\' character as the first non-space"\
         "character on the next line.  This script cannot fold"\
         "this file using '\\\\' strategy without there being"\
-        "false positives produced in the unfolding (i.e., this"\
-        "script does not force-fold such lines, as described"\
-        "in BCP XXX, RFC XXXX)."
+        "false positives produced in the unfolding."
     return 1
   fi
 
