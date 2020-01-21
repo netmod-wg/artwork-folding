@@ -774,6 +774,7 @@ INSERT_TEXT_FROM_FILE(rfcfold)
         <t>The authors thank the following folks for their various
           contributions while producing this document (sorted by first name):
           Benoît Claise,
+          Ben Kaduk,
           Gianmarco Bruno,
           Italo Busi,
           Joel Jaeggli,
@@ -781,10 +782,6 @@ INSERT_TEXT_FROM_FILE(rfcfold)
           Lou Berger,
           Martin Bjorklund,
           and Rob Wilton.</t>
-
-        <t>Special acknowledgement to Erik Auerswald for his contributions
-          to the `rfcfold` script, especially for greatly improving the
-          `sed` one-liners used therein.</t>
 
       </section>
     </back>
