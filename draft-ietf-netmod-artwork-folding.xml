@@ -651,12 +651,12 @@ INSERT_TEXT_FROM_FILE(refs/example-4.2.txt.folded.forced)
           <xref target="double-header"/> so as to ensure that the header
           can be wrapped by a space (' ') character and three equal ('=')
           characters on each side of the raw header text.</t>
-        <t>When a TAB character is detected in the input file, this script 
+        <t>When a tab character is detected in the input file, this script
           exits with the error message:</t>
         <t>
           <figure>
             <artwork><![CDATA[
-    Error: infile contains a TAB character, which is not allowed.
+    Error: infile contains a tab character, which is not allowed.
 ]]></artwork>
           </figure>
         </t>

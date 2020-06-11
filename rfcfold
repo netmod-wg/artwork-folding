@@ -184,10 +184,10 @@ fold_it_2() {
 }
 
 fold_it() {
-  # ensure input file doesn't contain a TAB
+  # ensure input file doesn't contain a tab
   grep -q $'\t' "$infile"
   if [[ $? -eq 0 ]]; then
-    err "infile '$infile' contains a TAB character, which is not"\
+    err "infile '$infile' contains a tab character, which is not"\
         "allowed."
     return 1
   fi
