@@ -644,7 +644,7 @@ INSERT_TEXT_FROM_FILE(refs/example-4.2.txt.folded.forced)
           within a larger document (e.g., an Internet draft or RFC), then
           another tool must be used to extract the content from the larger
           document before utilizing this script.</t>
-        <t>For readability purposes, this script forces the minimally
+        <t>For readability purposes, this script forces the minimum
           supported line length to be eight characters longer than the
           raw header text defined in <xref target="single-header"/> and
           <xref target="double-header"/> so as to ensure that the header
