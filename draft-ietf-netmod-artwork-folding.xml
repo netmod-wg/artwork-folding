@@ -731,7 +731,7 @@ INSERT_TEXT_FROM_FILE(refs/example-4.2.txt.folded.forced)
     Error: infile has a line ending with a '\' character
     followed by a '\' character as the first non-space
     character on the next line.  This script cannot fold
-    this file using '\\' strategy without there being
+    this file using the '\\' strategy without there being
     false positives produced in the unfolding (i.e., this
     script does not force-fold such lines, as described
     in RFC 8792).
