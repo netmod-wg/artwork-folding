@@ -116,7 +116,7 @@
           &lt;sourcecode&gt; element (Section 2.48 of <xref target="RFC7991"/>)
           and the xml2rfc v2 &lt;artwork&gt; element (Section 2.5 of
           <xref target="RFC7749"/>) that, for lack of a better option, is
-          currently used for both source code and artwork.  This work may
+          used in xml2rfc v2 for both source code and artwork.  This work may
           also be used for the xml2rfc v3 &lt;artwork&gt; element
           (Section 2.5 of <xref target="RFC7991"/>) but, as described in
           <xref target="not-for-art"/>, it is generally not recommended.</t>
