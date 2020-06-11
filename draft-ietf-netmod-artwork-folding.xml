@@ -663,13 +663,14 @@ INSERT_TEXT_FROM_FILE(refs/example-4.2.txt.folded.forced)
           order to test for ASCII-based control characters and non-ASCII
           characters in the input file (see below).  Note that testing
           revealed flaws in the default version of `awk` on some platforms.
-          As the use of `gawk` is only used to issue warning messages,
-          if `gawk` of not found, this script issues the debug message:
+          As this script uses `gawk` only to issue warning messages,
+          if `gawk` is not found, this script issues the following debug
+          message:
         </t>
         <t>
           <figure>
             <artwork><![CDATA[
-    Debug: no GNU Awk, skipping checks for special characters.
+    Debug: no GNU awk, skipping checks for special characters.
 ]]></artwork>
           </figure>
         </t>

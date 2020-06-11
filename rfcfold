@@ -202,7 +202,7 @@ fold_it() {
     || warn "infile '$infile' contains non-ASCII characters"\
             "(unsupported)."
   else
-    dbg "no GNU Awk, skipping checks for special characters."
+    dbg "no GNU awk, skipping checks for special characters."
   fi
 
   # check if file needs folding
@@ -228,7 +228,7 @@ fold_it() {
   result=$?
   quiet="$quiet_sav"
   if [[ "$result" -ne 0 ]]; then
-    dbg "Folding strategy '1' didn't succeed, trying strategy '2'..."
+    dbg "Folding strategy '1' didn't succeed; trying strategy '2'..."
     fold_it_2
     return $?
   fi
