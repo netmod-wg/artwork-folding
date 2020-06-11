@@ -241,18 +241,13 @@
            MUST adhere to the following structure.</t>
           <section title="Header" anchor="single-header">
             <t>The header is two lines long.</t>
-            <t>The first line is the following 46-character string that
+            <t>The first line is the following 36-character string that
             MAY be surrounded by any number of printable characters.
             This first line cannot itself be folded.
               <figure>
                 <artwork><![CDATA[
-NOTE: '\' line wrapping per BCP XXX (RFC XXXX)
+NOTE: '\' line wrapping per RFC 8792
 ]]></artwork>
-                <postamble>
-                  [Note to RFC Editor: Please replace XXX and XXXX with the numbers
-                  assigned to this document and delete this note.  Please make this
-                  change in multiple places in this document.]
-                </postamble>
               </figure>
             </t>
             <t>The second line is an empty line, containing only the end-of-line
@@ -285,7 +280,7 @@ NOTE: '\' line wrapping per BCP XXX (RFC XXXX)
             parameter.  If no value is explicitly specified, the value "69"
             SHOULD be used.</t>
             <t>Ensure that the desired maximum line length is not less than
-            the minimum header, which is 46 characters.  If the desired
+            the minimum header, which is 36 characters.  If the desired
             maximum line length is less than this minimum, exit (this text-based
             content cannot be folded).</t>
             <t>Scan the text content for horizontal tab characters.  If any
@@ -359,18 +354,13 @@ NOTE: '\' line wrapping per BCP XXX (RFC XXXX)
            MUST adhere to the following structure.</t>
           <section title="Header" anchor="double-header">
             <t>The header is two lines long.</t>
-            <t>The first line is the following 47-character string that
+            <t>The first line is the following 37-character string that
             MAY be surrounded by any number of printable characters.
             This first line cannot itself be folded.
               <figure>
                 <artwork><![CDATA[
-NOTE: '\\' line wrapping per BCP XXX (RFC XXXX)
+NOTE: '\\' line wrapping per RFC 8792
 ]]></artwork>
-                <postamble>
-                  [Note to RFC Editor: Please replace XXX and XXXX with the numbers
-                  assigned to this document and delete this note.  Please make this
-                  change in multiple places in this document.]
-                </postamble>
               </figure>
             </t>
             <t>The second line is an empty line, containing only the end-of-line
@@ -405,7 +395,7 @@ NOTE: '\\' line wrapping per BCP XXX (RFC XXXX)
             parameter.  If no value is explicitly specified, the value "69"
             SHOULD be used.</t>
             <t>Ensure that the desired maximum line length is not less than
-            the minimum header, which is 47 characters.  If the desired
+            the minimum header, which is 37 characters.  If the desired
             maximum line length is less than this minimum, exit (this text-based
             content cannot be folded).</t>
             <t>Scan the text content for horizontal tab characters.  If any
@@ -595,11 +585,11 @@ INSERT_TEXT_FROM_FILE(refs/example-4.2.txt.folded.forced)
       </section>
 
       <section title="Security Considerations" anchor="sec-cons">
-        <t>This BCP has no Security Considerations.</t>
+        <t>This RFC has no Security Considerations.</t>
       </section>
 
       <section title="IANA Considerations" anchor="iana-cons">
-        <t>This BCP has no IANA Considerations.</t>
+        <t>This RFC has no IANA Considerations.</t>
       </section>
 
     </middle>
@@ -729,7 +719,7 @@ INSERT_TEXT_FROM_FILE(refs/example-4.2.txt.folded.forced)
     This file cannot be folded using the '\' strategy without
     there being false positives produced in the unfolding
     (i.e., this script does not force-fold such lines, as
-    described in BCP XXX, RFC XXXX).
+    described in RFC 8792).
 ]]></artwork>
           </figure>
         </t>
@@ -743,7 +733,7 @@ INSERT_TEXT_FROM_FILE(refs/example-4.2.txt.folded.forced)
     this file using '\\' strategy without there being
     false positives produced in the unfolding (i.e., this
     script does not force-fold such lines, as described
-    in BCP XXX, RFC XXXX).
+    in RFC 8792).
 ]]></artwork>
           </figure>
         </t>
