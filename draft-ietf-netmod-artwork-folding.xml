@@ -151,7 +151,7 @@
             output, typically from an external process operating on the
             same source files discussed in the previous paragraph.  For
             instance, such processes may translate the input format to
-            another format or render a report over or a view of the input
+            another format, or may render a report on, or a view of, the input
             file.  In some cases, the dynamically generated output may
             contain lines exceeding the `xml2rfc` line length limits.</t>
           <t>In both cases, folding is required and SHOULD be automated 
