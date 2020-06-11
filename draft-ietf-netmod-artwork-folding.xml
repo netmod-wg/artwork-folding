@@ -104,8 +104,8 @@
 
         <t>Note that text files are represented as lines having their first
         character in column 1, and a line length of N where the last
-        character is in the Nth column and is immediately followed by an end
-        of line character sequence.</t>
+        character is in the Nth column and is immediately followed by an
+        end-of-line character sequence.</t>
       </section>
 
       <section title="Applicability Statement">
@@ -308,11 +308,11 @@ NOTE: '\' line wrapping per RFC 8792
                 <t>Determine where the fold will occur.  This location MUST be before
                   or at the desired maximum column, and MUST NOT be chosen such that
                   the character immediately after the fold is a space (' ') character.
-                  For forced foldings, the location is between the '\' and the end of
-                  line sequence.  If no such location can be found, then exit (this
-                  text content cannot be folded).</t>
+                  For forced foldings, the location is between the '\' and the
+                  end-of-line character sequence.  If no such location can be
+                  found, then exit (this text content cannot be folded).</t>
                 <t>At the location where the fold is to occur, insert a backslash
-                  ('\') character followed by the end of line character sequence.</t>
+                  ('\') character followed by the end-of-line character sequence.</t>
                 <t>On the following line, insert any number of space (' ') characters,
                   subject to the resulting line not exceeding the desired maximum.</t>
               </list>
@@ -334,9 +334,9 @@ NOTE: '\' line wrapping per RFC 8792
               (this text content does not need to be unfolded).</t>
             <t>Remove the 2-line header from the text content.</t>
             <t>For each line in the text content, from top-to-bottom, if the line has
-            a backslash ('\') character immediately followed by the end of line
+            a backslash ('\') character immediately followed by the end-of-line
             character sequence, then the line can be unfolded.
-            Remove the backslash ('\') character, the end of line character
+            Remove the backslash ('\') character, the end-of-line character
             sequence, and any leading space (' ') characters, which will bring up
             the next line.  Then continue to scan each line in the text content
             starting with the current line (in case it was multiply folded).</t>
@@ -372,7 +372,7 @@ NOTE: '\\' line wrapping per RFC 8792
             of <xref target="RFC7994"/>, except that, per <xref target="RFC7991"/>,
             tab characters are prohibited.</t>
             <t>Lines that have a backslash ('\') occurring as the last character in
-            a line immediately followed by the end of line character sequence, when
+            a line immediately followed by the end-of-line character sequence, when
             the subsequent line starts with a backslash ('\') as the first non-space
             (' ') character, are considered "folded".</t>
             <t>Exceptionally long lines may be folded multiple times.</t>
@@ -423,9 +423,10 @@ NOTE: '\\' line wrapping per RFC 8792
               <list style="numbers">
                 <t>Determine where the fold will occur.  This location MUST be before
                   or at the desired maximum column.  For forced foldings, the location
-                  is between the '\' and the end of line sequence on the first line.</t>
+                  is between the '\' and the end-of-line character sequence on
+                  the first line.</t>
                 <t>At the location where the fold is to occur, insert a first
-                  backslash ('\') character followed by the end of line character
+                  backslash ('\') character followed by the end-of-line character
                   sequence.</t>
                 <t>On the following line, insert any number of space (' ') characters,
                   subject to the resulting line not exceeding the desired maximum,
@@ -449,10 +450,10 @@ NOTE: '\\' line wrapping per RFC 8792
               (this text content does not need to be unfolded).</t>
             <t>Remove the 2-line header from the text content.</t>
             <t>For each line in the text content, from top-to-bottom, if the line has
-            a backslash ('\') character immediately followed by the end of line
+            a backslash ('\') character immediately followed by the end-of-line
             character sequence, and if the next line has a backslash ('\') character
             as the first non-space (' ') character, then the lines can be unfolded.
-            Remove the first backslash ('\') character, the end of line character
+            Remove the first backslash ('\') character, the end-of-line character
             sequence, any leading space (' ') characters, and the second backslash
             ('\') character, which will bring up the next line.  Then continue to
             scan each line in the text content starting with the current line (in case
