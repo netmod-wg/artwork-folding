@@ -18,7 +18,7 @@
      ipr="trust200902"
      docName="draft-ietf-netmod-artwork-folding-latest">
     <front>
-      <title abbrev="Handling Long Lines in Inclusions">Handling Long Lines in Inclusions in Internet-Drafts and RFCs</title>
+      <title abbrev="Handling Long Lines in Content">Handling Long Lines in Content of Internet-Drafts and RFCs</title>
         <author initials="K." surname="Watsen" fullname="Kent Watsen">
             <organization>Watsen Networks</organization>
             <address>
