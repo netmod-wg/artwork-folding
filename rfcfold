@@ -330,7 +330,7 @@ process_input() {
     else
       warn "ignoring unknown option '$1'."
     fi
-    shift 
+    shift
   done
 
   if [[ -z "$infile" ]]; then
