@@ -1,8 +1,8 @@
 #!/bin/bash --posix
 
 # This script may need some adjustments to work on a given system.
-# For instance, the utility `gsed` may need to be installed.
-# Also, please be advised that `bash` (not `sh`) must be used.
+# For instance, the utility 'gsed' may need to be installed.
+# Also, please be advised that 'bash' (not 'sh') must be used.
 
 # Copyright (c) 2019 IETF Trust, Kent Watsen, and Erik Auerswald.
 # All rights reserved.
@@ -27,7 +27,7 @@
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 # "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 # LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
-# FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+# FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE
 # COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
 # INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
 # (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
@@ -39,8 +39,8 @@
 
 print_usage() {
   printf "\n"
-  printf "Folds or unfolds the input text file according to "
-  printf "RFC 8792.\n"
+  printf "Folds or unfolds the input text file according to"
+  printf " RFC 8792.\n"
   printf "\n"
   printf "Usage: rfcfold [-h] [-d] [-q] [-s <strategy>] [-c <col>]"
   printf " [-r] -i <infile> -o <outfile>\n"
@@ -127,7 +127,7 @@ fold_it_1() {
   grep -q "^\(.\{$foldcol\}\)\{1,\} " "$infile"
   if [[ $? -eq 0 ]]; then
     err "infile '$infile' has a space character occurring on the"\
-        "folding column. This file cannot be folded using the"\
+        "folding column.  This file cannot be folded using the"\
         "'\\' strategy."
     return 1
   fi
@@ -202,7 +202,7 @@ fold_it() {
     || warn "infile '$infile' contains non-ASCII characters"\
             "(unsupported)."
   else
-    dbg "no GNU awk, skipping checks for special characters."
+    dbg "no GNU awk; skipping checks for special characters."
   fi
 
   # check if file needs folding

@@ -671,7 +671,7 @@ INSERT_TEXT_FROM_FILE(refs/example-4.2.txt.folded.forced)
         <t>
           <figure>
             <artwork><![CDATA[
-    Debug: no GNU awk, skipping checks for special characters.
+    Debug: no GNU awk; skipping checks for special characters.
 ]]></artwork>
           </figure>
         </t>
