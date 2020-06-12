@@ -78,7 +78,7 @@
 
         <t>Internet-Drafts and RFCs often include example text or code
         fragments.  Many times the example text or code
-        exceeds the 72 character line-length limit.  The `xml2rfc` <xref target="xml2rfc"/>
+        exceeds the 72 character line-length limit.  The 'xml2rfc' <xref target="xml2rfc"/>
         utility, at the time of this document's publication, does not
         attempt to wrap the content of such inclusions, simply issuing
         a warning whenever lines exceed 69 characters.  Historically,
@@ -145,15 +145,15 @@
             to be able to process the files, the files must be in their
             original/natural state, which may entail them having some long
             lines.  Thus, these source files need to be folded before
-            inclusion into the XML document, in order to satisfy `xml2rfc`
-            line length limits.</t>
+            inclusion into the XML document, in order to satisfy 'xml2rfc'
+            line-length limits.</t>
           <t>Similarly, drafts sometimes contain dynamically generated
             output, typically from an external process operating on the
             same source files discussed in the previous paragraph.  For
             instance, such processes may translate the input format to
-            another format, or may render a report on, or a view of, the input
+            another format, or they may render a report on, or a view of, the input
             file.  In some cases, the dynamically generated output may
-            contain lines exceeding the `xml2rfc` line length limits.</t>
+            contain lines exceeding the 'xml2rfc' line-length limits.</t>
           <t>In both cases, folding is required and SHOULD be automated 
             to reduce effort and errors resulting from manual processing.</t>
         </section>
@@ -186,8 +186,8 @@
           for all text-based content, as it only views content as plain
           text.  However, various formats sometimes have built-in mechanisms
           that are better suited to prevent long lines.</t>
-          <t>For instance, both the `pyang` <xref target="pyang"/> and `yanglint` <xref target="yanglint"/> utilities
-          have the command line option "--tree-line-length" that can
+          <t>For instance, both the 'pyang' <xref target="pyang"/> and 'yanglint' <xref target="yanglint"/> utilities
+          have the command line option "tree-line-length" that can
           be used to indicate a desired maximum line length for when
           generating tree diagrams <xref target="RFC8340"/>.</t>
           <t>In another example, some source formats (e.g., YANG
@@ -273,7 +273,7 @@ NOTE: '\' line wrapping per RFC 8792
             that may need to be folded or unfolded, another process must
             insert/extract the individual text content instances to/from the
             larger document prior to utilizing the algorithms described in this
-            section.  For example, the `xiax` utility <xref target="xiax"/> does this.</t>
+            section.  For example, the 'xiax' utility <xref target="xiax"/> does this.</t>
           <section title="Folding" anchor="single-folding">
             <t>Determine the desired maximum line length from input to the
             line-wrapping process, such as from a command line
@@ -388,7 +388,7 @@ NOTE: '\\' line wrapping per RFC 8792
             that may need to be folded or unfolded, another process must
             insert/extract the individual text content instances to/from the
             larger document prior to utilizing the algorithms described in this
-            section.  For example, the `xiax` utility <xref target="xiax"/> does this.</t>
+            section.  For example, the 'xiax' utility <xref target="xiax"/> does this.</t>
           <section title="Folding" anchor="double-folding">
             <t>Determine the desired maximum line length from input to the
             line-wrapping process, such as from a command line
@@ -619,7 +619,7 @@ INSERT_TEXT_FROM_FILE(refs/example-4.2.txt.folded.forced)
           <front><title>GNU Bash Manual</title><author/><date/></front>
         </reference>
         <reference anchor="xiax" target="https://pypi.org/project/xiax/">
-          <front><title>The `xiax` Python Package</title><author/><date/></front>
+          <front><title>The 'xiax' Python Package</title><author/><date/></front>
         </reference>
         <reference anchor="pyang" target="https://pypi.org/project/pyang/">
           <front><title>An extensible YANG (RFC 6020/7950) validator.</title><author/><date/></front>
@@ -663,9 +663,9 @@ INSERT_TEXT_FROM_FILE(refs/example-4.2.txt.folded.forced)
         <t>This script tests for the availability of GNU awk (gawk), in
           order to test for ASCII-based control characters and non-ASCII
           characters in the input file (see below).  Note that testing
-          revealed flaws in the default version of `awk` on some platforms.
-          As this script uses `gawk` only to issue warning messages,
-          if `gawk` is not found, this script issues the following debug
+          revealed flaws in the default version of 'awk' on some platforms.
+          As this script uses 'gawk' only to issue warning messages,
+          if 'gawk' is not found, this script issues the following debug
           message:
         </t>
         <t>
@@ -675,7 +675,7 @@ INSERT_TEXT_FROM_FILE(refs/example-4.2.txt.folded.forced)
 ]]></artwork>
           </figure>
         </t>
-        <t>When `gawk` is available (see above) and ASCII-based control
+        <t>When 'gawk' is available (see above) and ASCII-based control
           characters are detected in the input file, this script issues
           the warning message:</t>
         <t>
@@ -685,7 +685,7 @@ INSERT_TEXT_FROM_FILE(refs/example-4.2.txt.folded.forced)
 ]]></artwork>
           </figure>
         </t>
-        <t>When `gawk` is available (see above) and non-ASCII characters
+        <t>When 'gawk' is available (see above) and non-ASCII characters
           are detected in the input file, this script issues the warning
           message:</t>
         <t>
