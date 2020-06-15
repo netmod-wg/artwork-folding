@@ -1,8 +1,8 @@
 #!/bin/bash --posix
 
 # This script may need some adjustments to work on a given system.
-# For instance, the utility `gsed` may need to be installed.
-# Also, please be advised that `bash` (not `sh`) must be used.
+# For instance, the utility 'gsed' may need to be installed.
+# Also, please be advised that 'bash' (not 'sh') must be used.
 
 # Copyright (c) 2019 IETF Trust, Kent Watsen, and Erik Auerswald.
 # All rights reserved.
@@ -27,7 +27,7 @@
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 # "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 # LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
-# FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+# FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE
 # COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
 # INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
 # (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
@@ -39,8 +39,8 @@
 
 print_usage() {
   printf "\n"
-  printf "Folds or unfolds the input text file according to BCP XXX"
-  printf " (RFC XXXX).\n"
+  printf "Folds or unfolds the input text file according to"
+  printf " RFC 8792.\n"
   printf "\n"
   printf "Usage: rfcfold [-h] [-d] [-q] [-s <strategy>] [-c <col>]"
   printf " [-r] -i <infile> -o <outfile>\n"
@@ -68,8 +68,8 @@ infile=""
 outfile=""
 maxcol=69  # default, may be overridden by param
 col_gvn=0  # maxcol overridden?
-hdr_txt_1="NOTE: '\\' line wrapping per BCP XXX (RFC XXXX)"
-hdr_txt_2="NOTE: '\\\\' line wrapping per BCP XXX (RFC XXXX)"
+hdr_txt_1="NOTE: '\\' line wrapping per RFC 8792"
+hdr_txt_2="NOTE: '\\\\' line wrapping per RFC 8792"
 equal_chars="======================================================="
 space_chars="                                                       "
 temp_dir=""
@@ -127,7 +127,7 @@ fold_it_1() {
   grep -q "^\(.\{$foldcol\}\)\{1,\} " "$infile"
   if [[ $? -eq 0 ]]; then
     err "infile '$infile' has a space character occurring on the"\
-        "folding column. This file cannot be folded using the"\
+        "folding column.  This file cannot be folded using the"\
         "'\\' strategy."
     return 1
   fi
@@ -160,7 +160,7 @@ fold_it_2() {
     err "infile '$infile' has a line ending with a '\\' character"\
         "followed by a '\\' character as the first non-space"\
         "character on the next line.  This script cannot fold"\
-        "this file using '\\\\' strategy without there being"\
+        "this file using the '\\\\' strategy without there being"\
         "false positives produced in the unfolding."
     return 1
   fi
@@ -184,10 +184,10 @@ fold_it_2() {
 }
 
 fold_it() {
-  # ensure input file doesn't contain a TAB
+  # ensure input file doesn't contain a tab
   grep -q $'\t' "$infile"
   if [[ $? -eq 0 ]]; then
-    err "infile '$infile' contains a TAB character, which is not"\
+    err "infile '$infile' contains a tab character, which is not"\
         "allowed."
     return 1
   fi
@@ -202,7 +202,7 @@ fold_it() {
     || warn "infile '$infile' contains non-ASCII characters"\
             "(unsupported)."
   else
-    dbg "no GNU Awk, skipping checks for special characters."
+    dbg "no GNU awk; skipping checks for special characters."
   fi
 
   # check if file needs folding
@@ -228,7 +228,7 @@ fold_it() {
   result=$?
   quiet="$quiet_sav"
   if [[ "$result" -ne 0 ]]; then
-    dbg "Folding strategy '1' didn't succeed, trying strategy '2'..."
+    dbg "Folding strategy '1' didn't succeed; trying strategy '2'..."
     fold_it_2
     return $?
   fi
@@ -330,7 +330,7 @@ process_input() {
     else
       warn "ignoring unknown option '$1'."
     fi
-    shift 
+    shift
   done
 
   if [[ -z "$infile" ]]; then

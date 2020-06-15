@@ -157,16 +157,16 @@ main() {
   test_file 2 nofold-needed-again.txt  0   0  67
   echo
   echo "starting minimum folding column tests..."
-  test_file 1 example-1.txt            1   x  53
-  test_file 1 example-1.txt            0   0  54
-  test_file 2 example-1.txt            1   x  54
-  test_file 2 example-1.txt            0   0  55
+  test_file 1 example-1.txt            1   x  43
+  test_file 1 example-1.txt            0   0  44
+  test_file 2 example-1.txt            1   x  44
+  test_file 2 example-1.txt            0   0  45
   echo
   echo "starting maximum folding column tests..."
-  test_file 1 example-2.txt            0   0 158
-  test_file 1 example-2.txt            1   x 159
-  test_file 2 example-2.txt            0   0 158
-  test_file 2 example-2.txt            1   x 159
+  test_file 1 example-2.txt            0   0 148
+  test_file 1 example-2.txt            1   x 149
+  test_file 2 example-2.txt            0   0 148
+  test_file 2 example-2.txt            1   x 149
   echo
   printf "testing unfolding of smart folding examples 3.1 and 3.2..."
   expected_exit_code=0

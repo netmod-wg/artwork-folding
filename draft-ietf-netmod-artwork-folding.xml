@@ -18,7 +18,7 @@
      ipr="trust200902"
      docName="draft-ietf-netmod-artwork-folding-latest">
     <front>
-      <title abbrev="Handling Long Lines in Inclusions">Handling Long Lines in Inclusions in Internet-Drafts and RFCs</title>
+      <title abbrev="Handling Long Lines in Content">Handling Long Lines in Content of Internet-Drafts and RFCs</title>
         <author initials="K." surname="Watsen" fullname="Kent Watsen">
             <organization>Watsen Networks</organization>
             <address>
@@ -50,10 +50,12 @@
         <keyword>artwork</keyword>
         <abstract>
           <t>This document defines two strategies for handling long lines in width-bounded
-          text content.  One strategy is based on the historical use of a single backslash
+          text content.  One strategy, called the "single backslash" strategy,
+          is based on the historical use of a single backslash
           ('\') character to indicate where line-folding has occurred, with the continuation
-          occurring with the first non-space (' ') character on the next line.  The second
-          strategy extends the first strategy by adding a second backslash character to
+          occurring with the first character that is not a space character (' ') on the next line.  The second
+          strategy, called the "double backslash" strategy,
+          extends the first strategy by adding a second backslash character to
           identify where the continuation begins and is thereby able to handle cases not
           supported by the first strategy.  Both strategies use a self-describing header
           enabling automated reconstitution of the original content.</t>
@@ -78,7 +80,7 @@
 
         <t>Internet-Drafts and RFCs often include example text or code
         fragments.  Many times the example text or code
-        exceeds the 72 character line-length limit.  The `xml2rfc` <xref target="xml2rfc"/>
+        exceeds the 72 character line-length limit.  The 'xml2rfc' <xref target="xml2rfc"/>
         utility, at the time of this document's publication, does not
         attempt to wrap the content of such inclusions, simply issuing
         a warning whenever lines exceed 69 characters.  Historically,
@@ -89,7 +91,7 @@
       <t>This document defines two strategies for handling long lines in width-bounded
         text content.  One strategy is based on the historical use of a single backslash
         ('\') character to indicate where line-folding has occurred, with the continuation
-        occurring with the first non-space (' ') character on the next line.  The second
+        occurring with the first first character that is not a space (' ') character on the next line.  The second
         strategy extends the first strategy by adding a second backslash character to
         identify where the continuation begins and is thereby able to handle cases not
         supported by the first strategy.  Both strategies use a self-describing header
@@ -104,8 +106,8 @@
 
         <t>Note that text files are represented as lines having their first
         character in column 1, and a line length of N where the last
-        character is in the Nth column and is immediately followed by an end
-        of line character sequence.</t>
+        character is in the Nth column and is immediately followed by an
+        end-of-line character sequence.</t>
       </section>
 
       <section title="Applicability Statement">
@@ -116,7 +118,7 @@
           &lt;sourcecode&gt; element (Section 2.48 of <xref target="RFC7991"/>)
           and the xml2rfc v2 &lt;artwork&gt; element (Section 2.5 of
           <xref target="RFC7749"/>) that, for lack of a better option, is
-          currently used for both source code and artwork.  This work may
+          used in xml2rfc v2 for both source code and artwork.  This work may
           also be used for the xml2rfc v3 &lt;artwork&gt; element
           (Section 2.5 of <xref target="RFC7991"/>) but, as described in
           <xref target="not-for-art"/>, it is generally not recommended.</t>
@@ -145,15 +147,15 @@
             to be able to process the files, the files must be in their
             original/natural state, which may entail them having some long
             lines.  Thus, these source files need to be folded before
-            inclusion into the XML document, in order to satisfy `xml2rfc`
-            line length limits.</t>
+            inclusion into the XML document, in order to satisfy 'xml2rfc'
+            line-length limits.</t>
           <t>Similarly, drafts sometimes contain dynamically generated
             output, typically from an external process operating on the
             same source files discussed in the previous paragraph.  For
             instance, such processes may translate the input format to
-            another format or render a report over or a view of the input
+            another format, or they may render a report on, or a view of, the input
             file.  In some cases, the dynamically generated output may
-            contain lines exceeding the `xml2rfc` line length limits.</t>
+            contain lines exceeding the 'xml2rfc' line-length limits.</t>
           <t>In both cases, folding is required and SHOULD be automated 
             to reduce effort and errors resulting from manual processing.</t>
         </section>
@@ -186,8 +188,8 @@
           for all text-based content, as it only views content as plain
           text.  However, various formats sometimes have built-in mechanisms
           that are better suited to prevent long lines.</t>
-          <t>For instance, both the `pyang` <xref target="pyang"/> and `yanglint` <xref target="yanglint"/> utilities
-          have the command line option "--tree-line-length" that can
+          <t>For instance, both the 'pyang' <xref target="pyang"/> and 'yanglint' <xref target="yanglint"/> utilities
+          have the command line option "tree-line-length" that can
           be used to indicate a desired maximum line length for when
           generating tree diagrams <xref target="RFC8340"/>.</t>
           <t>In another example, some source formats (e.g., YANG
@@ -207,7 +209,7 @@
             <t hangText="   The Single Backslash Strategy ('\'):">Uses a backslash
               ('\') character at the end of the line where folding occurs, and
               assumes that the continuation begins at the first character that is not
-              a space character (' ') on the following line.</t>
+              a space (' ') character on the following line.</t>
             <t hangText="   The Double Backslash Strategy ('\\'):">Uses a backslash
               ('\') character at the end of the line where folding occurs, and
               assumes that the continuation begins after a second backslash ('\')
@@ -241,18 +243,13 @@
            MUST adhere to the following structure.</t>
           <section title="Header" anchor="single-header">
             <t>The header is two lines long.</t>
-            <t>The first line is the following 46-character string that
+            <t>The first line is the following 36-character string that
             MAY be surrounded by any number of printable characters.
             This first line cannot itself be folded.
               <figure>
                 <artwork><![CDATA[
-NOTE: '\' line wrapping per BCP XXX (RFC XXXX)
+NOTE: '\' line wrapping per RFC 8792
 ]]></artwork>
-                <postamble>
-                  [Note to RFC Editor: Please replace XXX and XXXX with the numbers
-                  assigned to this document and delete this note.  Please make this
-                  change in multiple places in this document.]
-                </postamble>
               </figure>
             </t>
             <t>The second line is an empty line, containing only the end-of-line
@@ -278,14 +275,14 @@ NOTE: '\' line wrapping per BCP XXX (RFC XXXX)
             that may need to be folded or unfolded, another process must
             insert/extract the individual text content instances to/from the
             larger document prior to utilizing the algorithms described in this
-            section.  For example, the `xiax` utility <xref target="xiax"/> does this.</t>
+            section.  For example, the 'xiax' utility <xref target="xiax"/> does this.</t>
           <section title="Folding" anchor="single-folding">
             <t>Determine the desired maximum line length from input to the
             line-wrapping process, such as from a command line
             parameter.  If no value is explicitly specified, the value "69"
             SHOULD be used.</t>
             <t>Ensure that the desired maximum line length is not less than
-            the minimum header, which is 46 characters.  If the desired
+            the minimum header, which is 36 characters.  If the desired
             maximum line length is less than this minimum, exit (this text-based
             content cannot be folded).</t>
             <t>Scan the text content for horizontal tab characters.  If any
@@ -313,13 +310,13 @@ NOTE: '\' line wrapping per BCP XXX (RFC XXXX)
                 <t>Determine where the fold will occur.  This location MUST be before
                   or at the desired maximum column, and MUST NOT be chosen such that
                   the character immediately after the fold is a space (' ') character.
-                  For forced foldings, the location is between the '\' and the end of
-                  line sequence.  If no such location can be found, then exit (this
-                  text content cannot be folded).</t>
+                  For forced foldings, the location is between the '\' and the
+                  end-of-line character sequence.  If no such location can be
+                  found, then exit (this text content cannot be folded).</t>
                 <t>At the location where the fold is to occur, insert a backslash
-                  ('\') character followed by the end of line character sequence.</t>
+                  ('\') character followed by the end-of-line character sequence.</t>
                 <t>On the following line, insert any number of space (' ') characters,
-                  subject to the resulting line not exceeding the desired maximum.</t>
+                  provided that the resulting line does not exceed the desired maximum.</t>
               </list>
             </t>
             <t>The result of the previous operation is that the next line starts
@@ -339,9 +336,9 @@ NOTE: '\' line wrapping per BCP XXX (RFC XXXX)
               (this text content does not need to be unfolded).</t>
             <t>Remove the 2-line header from the text content.</t>
             <t>For each line in the text content, from top-to-bottom, if the line has
-            a backslash ('\') character immediately followed by the end of line
+            a backslash ('\') character immediately followed by the end-of-line
             character sequence, then the line can be unfolded.
-            Remove the backslash ('\') character, the end of line character
+            Remove the backslash ('\') character, the end-of-line character
             sequence, and any leading space (' ') characters, which will bring up
             the next line.  Then continue to scan each line in the text content
             starting with the current line (in case it was multiply folded).</t>
@@ -359,18 +356,13 @@ NOTE: '\' line wrapping per BCP XXX (RFC XXXX)
            MUST adhere to the following structure.</t>
           <section title="Header" anchor="double-header">
             <t>The header is two lines long.</t>
-            <t>The first line is the following 47-character string that
+            <t>The first line is the following 37-character string that
             MAY be surrounded by any number of printable characters.
             This first line cannot itself be folded.
               <figure>
                 <artwork><![CDATA[
-NOTE: '\\' line wrapping per BCP XXX (RFC XXXX)
+NOTE: '\\' line wrapping per RFC 8792
 ]]></artwork>
-                <postamble>
-                  [Note to RFC Editor: Please replace XXX and XXXX with the numbers
-                  assigned to this document and delete this note.  Please make this
-                  change in multiple places in this document.]
-                </postamble>
               </figure>
             </t>
             <t>The second line is an empty line, containing only the end-of-line
@@ -382,8 +374,8 @@ NOTE: '\\' line wrapping per BCP XXX (RFC XXXX)
             of <xref target="RFC7994"/>, except that, per <xref target="RFC7991"/>,
             tab characters are prohibited.</t>
             <t>Lines that have a backslash ('\') occurring as the last character in
-            a line immediately followed by the end of line character sequence, when
-            the subsequent line starts with a backslash ('\') as the first non-space
+            a line immediately followed by the end-of-line character sequence, when
+            the subsequent line starts with a backslash ('\') as the first first character that is not a space
             (' ') character, are considered "folded".</t>
             <t>Exceptionally long lines may be folded multiple times.</t>
           </section>
@@ -398,14 +390,14 @@ NOTE: '\\' line wrapping per BCP XXX (RFC XXXX)
             that may need to be folded or unfolded, another process must
             insert/extract the individual text content instances to/from the
             larger document prior to utilizing the algorithms described in this
-            section.  For example, the `xiax` utility <xref target="xiax"/> does this.</t>
+            section.  For example, the 'xiax' utility <xref target="xiax"/> does this.</t>
           <section title="Folding" anchor="double-folding">
             <t>Determine the desired maximum line length from input to the
             line-wrapping process, such as from a command line
             parameter.  If no value is explicitly specified, the value "69"
             SHOULD be used.</t>
             <t>Ensure that the desired maximum line length is not less than
-            the minimum header, which is 47 characters.  If the desired
+            the minimum header, which is 37 characters.  If the desired
             maximum line length is less than this minimum, exit (this text-based
             content cannot be folded).</t>
             <t>Scan the text content for horizontal tab characters.  If any
@@ -417,7 +409,7 @@ NOTE: '\\' line wrapping per BCP XXX (RFC XXXX)
             need to be folded).</t>
             <t>Scan the text content to ensure no existing lines already end with a
             backslash ('\') character while the subsequent line starts with a
-            backslash ('\') character as the first non-space (' ') character,
+            backslash ('\') character as the first first character that is not a space (' ') character,
             as this could lead to an ambiguous result.  If such a line is found,
             and its width is less than the desired maximum, then it SHOULD be
             flagged for forced folding (folding even though unnecessary).  If
@@ -433,12 +425,13 @@ NOTE: '\\' line wrapping per BCP XXX (RFC XXXX)
               <list style="numbers">
                 <t>Determine where the fold will occur.  This location MUST be before
                   or at the desired maximum column.  For forced foldings, the location
-                  is between the '\' and the end of line sequence on the first line.</t>
+                  is between the '\' and the end-of-line character sequence on
+                  the first line.</t>
                 <t>At the location where the fold is to occur, insert a first
-                  backslash ('\') character followed by the end of line character
+                  backslash ('\') character followed by the end-of-line character
                   sequence.</t>
                 <t>On the following line, insert any number of space (' ') characters,
-                  subject to the resulting line not exceeding the desired maximum,
+                  provided that the resulting line does not exceed the desired maximum,
                   followed by a second backslash ('\') character.</t>
               </list>
             </t>
@@ -459,10 +452,10 @@ NOTE: '\\' line wrapping per BCP XXX (RFC XXXX)
               (this text content does not need to be unfolded).</t>
             <t>Remove the 2-line header from the text content.</t>
             <t>For each line in the text content, from top-to-bottom, if the line has
-            a backslash ('\') character immediately followed by the end of line
+            a backslash ('\') character immediately followed by the end-of-line
             character sequence, and if the next line has a backslash ('\') character
-            as the first non-space (' ') character, then the lines can be unfolded.
-            Remove the first backslash ('\') character, the end of line character
+            as the first first character that is not a space (' ') character, then the lines can be unfolded.
+            Remove the first backslash ('\') character, the end-of-line character
             sequence, any leading space (' ') characters, and the second backslash
             ('\') character, which will bring up the next line.  Then continue to
             scan each line in the text content starting with the current line (in case
@@ -595,11 +588,11 @@ INSERT_TEXT_FROM_FILE(refs/example-4.2.txt.folded.forced)
       </section>
 
       <section title="Security Considerations" anchor="sec-cons">
-        <t>This BCP has no Security Considerations.</t>
+        <t>This RFC has no Security Considerations.</t>
       </section>
 
       <section title="IANA Considerations" anchor="iana-cons">
-        <t>This BCP has no IANA Considerations.</t>
+        <t>This RFC has no IANA Considerations.</t>
       </section>
 
     </middle>
@@ -628,7 +621,7 @@ INSERT_TEXT_FROM_FILE(refs/example-4.2.txt.folded.forced)
           <front><title>GNU Bash Manual</title><author/><date/></front>
         </reference>
         <reference anchor="xiax" target="https://pypi.org/project/xiax/">
-          <front><title>The `xiax` Python Package</title><author/><date/></front>
+          <front><title>The 'xiax' Python Package</title><author/><date/></front>
         </reference>
         <reference anchor="pyang" target="https://pypi.org/project/pyang/">
           <front><title>An extensible YANG (RFC 6020/7950) validator.</title><author/><date/></front>
@@ -654,36 +647,37 @@ INSERT_TEXT_FROM_FILE(refs/example-4.2.txt.folded.forced)
           within a larger document (e.g., an Internet draft or RFC), then
           another tool must be used to extract the content from the larger
           document before utilizing this script.</t>
-        <t>For readability purposes, this script forces the minimally
+        <t>For readability purposes, this script forces the minimum
           supported line length to be eight characters longer than the
           raw header text defined in <xref target="single-header"/> and
           <xref target="double-header"/> so as to ensure that the header
           can be wrapped by a space (' ') character and three equal ('=')
           characters on each side of the raw header text.</t>
-        <t>When a TAB character is detected in the input file, this script 
+        <t>When a tab character is detected in the input file, this script
           exits with the error message:</t>
         <t>
           <figure>
             <artwork><![CDATA[
-    Error: infile contains a TAB character, which is not allowed.
+    Error: infile contains a tab character, which is not allowed.
 ]]></artwork>
           </figure>
         </t>
         <t>This script tests for the availability of GNU awk (gawk), in
           order to test for ASCII-based control characters and non-ASCII
           characters in the input file (see below).  Note that testing
-          revealed flaws in the default version of `awk` on some platforms.
-          As the use of `gawk` is only used to issue warning messages,
-          if `gawk` of not found, this script issues the debug message:
+          revealed flaws in the default version of 'awk' on some platforms.
+          As this script uses 'gawk' only to issue warning messages,
+          if 'gawk' is not found, this script issues the following debug
+          message:
         </t>
         <t>
           <figure>
             <artwork><![CDATA[
-    Debug: no GNU Awk, skipping checks for special characters.
+    Debug: no GNU awk; skipping checks for special characters.
 ]]></artwork>
           </figure>
         </t>
-        <t>When `gawk` is available (see above) and ASCII-based control
+        <t>When 'gawk' is available (see above) and ASCII-based control
           characters are detected in the input file, this script issues
           the warning message:</t>
         <t>
@@ -693,7 +687,7 @@ INSERT_TEXT_FROM_FILE(refs/example-4.2.txt.folded.forced)
 ]]></artwork>
           </figure>
         </t>
-        <t>When `gawk` is available (see above) and non-ASCII characters
+        <t>When 'gawk' is available (see above) and non-ASCII characters
           are detected in the input file, this script issues the warning
           message:</t>
         <t>
@@ -729,7 +723,7 @@ INSERT_TEXT_FROM_FILE(refs/example-4.2.txt.folded.forced)
     This file cannot be folded using the '\' strategy without
     there being false positives produced in the unfolding
     (i.e., this script does not force-fold such lines, as
-    described in BCP XXX, RFC XXXX).
+    described in RFC 8792).
 ]]></artwork>
           </figure>
         </t>
@@ -740,10 +734,10 @@ INSERT_TEXT_FROM_FILE(refs/example-4.2.txt.folded.forced)
     Error: infile has a line ending with a '\' character
     followed by a '\' character as the first non-space
     character on the next line.  This script cannot fold
-    this file using '\\' strategy without there being
+    this file using the '\\' strategy without there being
     false positives produced in the unfolding (i.e., this
     script does not force-fold such lines, as described
-    in BCP XXX, RFC XXXX).
+    in RFC 8792).
 ]]></artwork>
           </figure>
         </t>
