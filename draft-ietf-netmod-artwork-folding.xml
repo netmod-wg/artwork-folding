@@ -91,7 +91,7 @@
       <t>This document defines two strategies for handling long lines in width-bounded
         text content.  One strategy is based on the historical use of a single backslash
         ('\') character to indicate where line-folding has occurred, with the continuation
-        occurring with the first first character that is not a space (' ') character on the next line.  The second
+        occurring with the first character that is not a space (' ') character on the next line.  The second
         strategy extends the first strategy by adding a second backslash character to
         identify where the continuation begins and is thereby able to handle cases not
         supported by the first strategy.  Both strategies use a self-describing header
@@ -375,7 +375,7 @@ NOTE: '\\' line wrapping per RFC 8792
             tab characters are prohibited.</t>
             <t>Lines that have a backslash ('\') occurring as the last character in
             a line immediately followed by the end-of-line character sequence, when
-            the subsequent line starts with a backslash ('\') as the first first character that is not a space
+            the subsequent line starts with a backslash ('\') as the first character that is not a space
             (' ') character, are considered "folded".</t>
             <t>Exceptionally long lines may be folded multiple times.</t>
           </section>
@@ -409,7 +409,7 @@ NOTE: '\\' line wrapping per RFC 8792
             need to be folded).</t>
             <t>Scan the text content to ensure no existing lines already end with a
             backslash ('\') character while the subsequent line starts with a
-            backslash ('\') character as the first first character that is not a space (' ') character,
+            backslash ('\') character as the first character that is not a space (' ') character,
             as this could lead to an ambiguous result.  If such a line is found,
             and its width is less than the desired maximum, then it SHOULD be
             flagged for forced folding (folding even though unnecessary).  If
@@ -454,7 +454,7 @@ NOTE: '\\' line wrapping per RFC 8792
             <t>For each line in the text content, from top-to-bottom, if the line has
             a backslash ('\') character immediately followed by the end-of-line
             character sequence, and if the next line has a backslash ('\') character
-            as the first first character that is not a space (' ') character, then the lines can be unfolded.
+            as the first character that is not a space (' ') character, then the lines can be unfolded.
             Remove the first backslash ('\') character, the end-of-line character
             sequence, any leading space (' ') characters, and the second backslash
             ('\') character, which will bring up the next line.  Then continue to
